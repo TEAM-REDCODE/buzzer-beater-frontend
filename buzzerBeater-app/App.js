@@ -4,6 +4,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import {commonHeaderOptions, myPageHeaderOptions,loginHeaderOptions, signUpHeaderOptions} from './src/components/UI/Header';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import SignIn from "./src/components/screen/SignIn";
 
 function StartScreen({navigation}) {
   return (
@@ -57,15 +58,18 @@ const Stack = createNativeStackNavigator();
 export default function App() {
 
   return (
-    <NavigationContainer>
-        <Stack.Navigator initialRouteName='StartScreen'> 
-          <Stack.Screen name='startScreen' component={StartScreen} options={{headerShown: false}}/>
-          <Stack.Screen name='LoginScreen' component={LoginScreen} options={loginHeaderOptions}/>
-          <Stack.Screen name='SignUpScreen' component={SignUpScreen} options={signUpHeaderOptions}/>
-          <Stack.Screen name='MyPageScreen' component={MyPageScreen} options={myPageHeaderOptions}/>
-          <Stack.Screen name='HomeScreen' component={HomeScreen} options={commonHeaderOptions}/>
-
-        </Stack.Navigator>
-    </NavigationContainer>
+      <View>
+          <SignIn />
+      </View>
+    // <NavigationContainer>
+    //     <Stack.Navigator initialRouteName='StartScreen'>
+    //       <Stack.Screen name='startScreen' component={StartScreen} options={{headerShown: false}}/>
+    //       <Stack.Screen name='LoginScreen' component={LoginScreen} options={loginHeaderOptions}/>
+    //       <Stack.Screen name='SignUpScreen' component={SignUpScreen} options={signUpHeaderOptions}/>
+    //       <Stack.Screen name='MyPageScreen' component={MyPageScreen} options={myPageHeaderOptions}/>
+    //       <Stack.Screen name='HomeScreen' component={HomeScreen} options={commonHeaderOptions}/>
+    //
+    //     </Stack.Navigator>
+    // </NavigationContainer>
   );
 }
