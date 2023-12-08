@@ -1,10 +1,38 @@
-import React, {useState} from 'react';
-import { Button, Text, View } from 'react-native';
+import React from 'react';
+import { Button, Text, View} from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import {commonHeaderOptions, myPageHeaderOptions,loginHeaderOptions, signUpHeaderOptions} from './src/components/UI/Header';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-// icons
-import { Ionicons, MaterialIcons } from '@expo/vector-icons';
+
+function StartScreen({navigation}) {
+  return (
+    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', }}>
+      <Text>StartScreen!</Text>
+      <Button title="로그인!!" onPress={()=>navigation.navigate('LoginScreen')}></Button>
+      <Button title="회원가입!!" onPress={()=>navigation.navigate('SignUpScreen')}></Button>
+    </View>
+  );
+}
+function LoginScreen({navigation}) {
+  
+  return (
+    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', }}>
+      <Text>LoginScreen!</Text>
+      <Button title="로그인하기!!" onPress={()=>navigation.navigate('HomeScreen')}></Button>
+    </View>
+  );
+}
+
+function SignUpScreen({navigation}) {
+  
+  return (
+    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', }}>
+      <Text>SignUpScreen!</Text>
+      <Button title="회원가입하기!!" onPress={()=>navigation.navigate('LoginScreen')}></Button>
+    </View>
+  );
+}
 function HomeScreen() {
   return (
     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
@@ -13,73 +41,31 @@ function HomeScreen() {
   );
 }
 
-function StartScreen(props) {
-  const mode = props.mode
-  return (
-    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      <Text>StartScreen!</Text>
-      <Button title="move screen!!" onPress={()=>mode(true)}></Button>
-    </View>
-  );
-}
-
-function PartyScreen() {
-  return (
-    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      <Text>partyScreen!</Text>
-      
-    </View>
-  );
-}
-
 function MyPageScreen() {
   return (
     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      <Text>Settings!</Text>
+      <Text>MyPageScreen!</Text>
     </View>
   );
 }
 
 const Tab = createBottomTabNavigator();
 
-function MyTabs() {
-  return (
-    <Tab.Navigator>
-      <Tab.Screen
-       name="BasketBall" 
-       component={PartyScreen}
-       options={{
-        tabBarIcon: ()=>(
-          <MaterialIcons name="sports-basketball" size={24} color="black" />
-        ),
-       }}
-       />
-      <Tab.Screen
-       name="Home" 
-       component={HomeScreen}
-       options={{
-        tabBarIcon: ()=>(
-          <MaterialIcons name="home" size={24} color="black" />
-        ),
-       }}
-       />
-      <Tab.Screen name="MyPage" component={MyPageScreen} 
-        options={{
-          tabBarIcon: ()=>(
-            <MaterialIcons name="settings" size={24} color="black" />
-          ),
-         }}
-      />
-    </Tab.Navigator>
-  );
-}
+
+
+const Stack = createNativeStackNavigator();
 export default function App() {
-  const [tapMode, setTapMode] = useState(false);
 
   return (
     <NavigationContainer>
-        {tapMode === true &&<MyTabs />}
-        {tapMode !== true &&<StartScreen mode={setTapMode} />}
+        <Stack.Navigator initialRouteName='StartScreen'> 
+          <Stack.Screen name='startScreen' component={StartScreen} options={{headerShown: false}}/>
+          <Stack.Screen name='LoginScreen' component={LoginScreen} options={loginHeaderOptions}/>
+          <Stack.Screen name='SignUpScreen' component={SignUpScreen} options={signUpHeaderOptions}/>
+          <Stack.Screen name='MyPageScreen' component={MyPageScreen} options={myPageHeaderOptions}/>
+          <Stack.Screen name='HomeScreen' component={HomeScreen} options={commonHeaderOptions}/>
+
+        </Stack.Navigator>
     </NavigationContainer>
   );
 }
