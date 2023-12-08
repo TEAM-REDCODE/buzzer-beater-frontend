@@ -1,7 +1,7 @@
 import Colors from "../../Common/Colors";
 import { TouchableOpacity , Text, View, Image } from 'react-native';
 
-let logoImg = require('../../../assets/logo.png')
+let logoImg = require('../../../assets/Buzzer-Beater_small_logo.png')
 let notifiyIcon = require('../../../assets/notifiy_icon.png')
 let requestIcon = require('../../../assets/requestIcon.png')
 let myPageIcon = require('../../../assets/mypage_icon.png')
@@ -13,8 +13,8 @@ const commonHeaderOptions = ({ navigation }) => ({
     backgroundColor: Colors.black,
   },
   headerLeft: () => (
-    <View style={{ marginLeft: 10 }}>
-      <Image source={logoImg} style={{}} resizeMode="contain" />
+    <View style={{ height: 60, width: 60,  marginTop: -10,}}>
+      <Image source={logoImg} style={{ height: '100%', width: '100%' }} resizeMode="contain" />
     </View>
   ),
   headerRight: () => (
@@ -34,8 +34,8 @@ const myPageHeaderOptions = ({ navigation }) => ({
     backgroundColor: Colors.black,
   },
   headerLeft: () => (
-    <View style={{ marginLeft: 10 }}>
-      <Image source={logoImg} style={{}} resizeMode="contain" />
+    <View style={{ height: 60, width: 60,  marginTop: -10,}}>
+      <Image source={logoImg} style={{ height: '100%', width: '100%' }} resizeMode="contain" />
     </View>
   ),
   headerRight: () => (
