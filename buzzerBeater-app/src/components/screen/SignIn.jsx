@@ -4,7 +4,7 @@ import colors from "../../Common/Colors";
 
 let bigLogoImg = require('../../../assets/Buzzer-Beater_big_logo.png')
 
-const SignIn = () => {
+const SignIn = ({navigation}) => {
     const [email, onChangeEmail] = React.useState('');
     const [password, onChangePassword] = React.useState('');
 
@@ -28,7 +28,7 @@ const SignIn = () => {
                             placeholder="비밀번호를 입력하세요."
                             keyboardType="visible-password"
                         />
-                        <TouchableOpacity style={styles.button}>
+                        <TouchableOpacity style={styles.button } onPress={() => navigation.navigate('HomeScreen')}>
                             <Text style={styles.loginText}>로그인하기</Text>
                         </TouchableOpacity>
                     </View>

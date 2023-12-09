@@ -10,7 +10,7 @@ function StartScreen({navigation}) {
   return (
     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', }}>
       <Text>StartScreen!</Text>
-      <Button title="로그인!!" onPress={()=>navigation.navigate('LoginScreen')}></Button>
+      <Button title="로그인!!" onPress={()=>navigation.navigate('SignIn')}></Button>
       <Button title="회원가입!!" onPress={()=>navigation.navigate('SignUpScreen')}></Button>
     </View>
   );
@@ -30,7 +30,7 @@ function SignUpScreen({navigation}) {
   return (
     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', }}>
       <Text>SignUpScreen!</Text>
-      <Button title="회원가입하기!!" onPress={()=>navigation.navigate('LoginScreen')}></Button>
+      <Button title="회원가입하기!!" onPress={()=>navigation.navigate('SignIn')}></Button>
     </View>
   );
 }
@@ -58,18 +58,18 @@ const Stack = createNativeStackNavigator();
 export default function App() {
 
   return (
-      <View>
-          <SignIn />
-      </View>
-    // <NavigationContainer>
-    //     <Stack.Navigator initialRouteName='StartScreen'>
-    //       <Stack.Screen name='startScreen' component={StartScreen} options={{headerShown: false}}/>
-    //       <Stack.Screen name='LoginScreen' component={LoginScreen} options={loginHeaderOptions}/>
-    //       <Stack.Screen name='SignUpScreen' component={SignUpScreen} options={signUpHeaderOptions}/>
-    //       <Stack.Screen name='MyPageScreen' component={MyPageScreen} options={myPageHeaderOptions}/>
-    //       <Stack.Screen name='HomeScreen' component={HomeScreen} options={commonHeaderOptions}/>
-    //
-    //     </Stack.Navigator>
-    // </NavigationContainer>
+      // <View>
+      //     <SignIn />
+      // </View>
+    <NavigationContainer>
+        <Stack.Navigator initialRouteName='StartScreen'>
+          <Stack.Screen name='startScreen' component={StartScreen} options={{headerShown: false}}/>
+          <Stack.Screen name='SignIn' component={SignIn} options={loginHeaderOptions}/>
+          <Stack.Screen name='SignUpScreen' component={SignUpScreen} options={signUpHeaderOptions}/>
+          <Stack.Screen name='MyPageScreen' component={MyPageScreen} options={myPageHeaderOptions}/>
+          <Stack.Screen name='HomeScreen' component={HomeScreen} options={commonHeaderOptions}/>
+    
+        </Stack.Navigator>
+    </NavigationContainer>
   );
 }
