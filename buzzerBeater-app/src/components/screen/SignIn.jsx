@@ -25,6 +25,7 @@ const SignIn = ({navigation}) => {
                             style={styles.input}
                             onChangeText={onChangePassword}
                             value={password}
+                            secureTextEntry={true}
                             placeholder="비밀번호를 입력하세요."
                             keyboardType="visible-password"
                         />
