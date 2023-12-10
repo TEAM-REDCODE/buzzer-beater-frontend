@@ -5,7 +5,8 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import {commonHeaderOptions, myPageHeaderOptions,loginHeaderOptions, signUpHeaderOptions} from './src/components/UI/Header';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import SignIn from "./src/components/screen/SignIn";
-import SignUp from "./src/components/screen/SignUp"
+import MercenaryList from "./src/components/screen/MercenaryList";
+import SignUp from "./src/components/screen/SignUp";
 
 function StartScreen({navigation}) {
   return (
@@ -60,7 +61,7 @@ export default function App() {
 
   return (
       <View>
-          <SignUp />
+          <MercenaryList />
       </View>
     // <NavigationContainer>
     //     <Stack.Navigator initialRouteName='StartScreen'>
