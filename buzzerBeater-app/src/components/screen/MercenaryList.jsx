@@ -9,7 +9,7 @@ const MercenaryList = ({navigation}) => {
         <SafeAreaView style={styles.safeArea}>
             <View style={styles.container}>
                 <View style={styles.wrapper}>
-                    <View style={styles.List}>
+                    <ScrollView style={styles.List}>
                         <View style={styles.topLine} />
                         <View style={styles.listCol}>
                             <Text style={styles.bigText}>들어간 농구팟</Text>
@@ -78,7 +78,7 @@ const MercenaryList = ({navigation}) => {
                                 </TouchableOpacity>
                             </View>
                         </View>
-                    </View>
+                    </ScrollView>
                 </View>
             </View>
         </SafeAreaView>
@@ -106,7 +106,7 @@ const styles = StyleSheet.create({
     List : {
         width : '100%',
         height : 820,
-        marginTop : 22,
+        marginTop : 15,
     },
 
     topLine : {
@@ -117,7 +117,7 @@ const styles = StyleSheet.create({
 
     listCol : {
       width : '95%',
-      height : '40%',
+      height : '46%',
       marginLeft : 25,
       marginBottom : 10,
     },

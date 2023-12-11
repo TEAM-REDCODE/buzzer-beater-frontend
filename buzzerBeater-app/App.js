@@ -8,6 +8,7 @@ import SignIn from "./src/components/screen/SignIn";
 import MercenaryList from "./src/components/screen/MercenaryList";
 import SignUp from "./src/components/screen/SignUp";
 import MyPageScreen from './src/components/screen/MyPageScreen';
+
 function StartScreen({navigation}) {
   return (
     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', }}>
