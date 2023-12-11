@@ -20,7 +20,9 @@ const commonHeaderOptions = ({ navigation }) => ({
   headerRight: () => (
     <View style={{ flexDirection: 'row', gap: 10, marginRight: 10 }}>
       <Image source={notifiyIcon} style={{}} resizeMode="contain" />
-      <Image source={requestIcon} style={{}} resizeMode="contain" />
+      <TouchableOpacity onPress={() => navigation.navigate('MercenaryList')}>
+        <Image source={requestIcon} style={{}} resizeMode="contain" />
+      </TouchableOpacity>
       <TouchableOpacity onPress={() => navigation.navigate('MyPageScreen')}>
         <Image source={myPageIcon} style={{}} resizeMode="contain" />
       </TouchableOpacity>
@@ -41,7 +43,9 @@ const myPageHeaderOptions = ({ navigation }) => ({
   headerRight: () => (
     <View style={{ flexDirection: 'row', gap: 10, marginRight: 10 }}>
       <Image source={notifiyIcon} style={{}} resizeMode="contain" />
-      <Image source={requestIcon} style={{}} resizeMode="contain" />
+      <TouchableOpacity onPress={() => navigation.navigate('MercenaryList')}>
+        <Image source={requestIcon} style={{}} resizeMode="contain" />
+      </TouchableOpacity>
       <TouchableOpacity onPress={() => navigation.goBack()}>
         {/* Use TouchableOpacity for the closeBtn with onPress */}
         <Image source={closeBtn} style={{}} resizeMode="contain" />

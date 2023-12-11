@@ -3,7 +3,7 @@ import {Image, SafeAreaView, ScrollView, StyleSheet, Text, TextInput, TouchableO
 import colors from "../../Common/Colors";
 import { Iconify } from 'react-native-iconify';
 
-const MercenaryList = () => {
+const MercenaryList = ({navigation}) => {
 
     return (
         <SafeAreaView style={styles.safeArea}>
@@ -73,7 +73,7 @@ const MercenaryList = () => {
                         <View style={styles.topLine} />
                         <View style={styles.setRight}>
                             <View style={styles.button}>
-                                <TouchableOpacity style={styles.homeButton}>
+                                <TouchableOpacity style={styles.homeButton} onPress={() => navigation.navigate('HomeScreen')}>
                                     <Text style={styles.homeText}>홈으로 돌아가기</Text>
                                 </TouchableOpacity>
                             </View>
