@@ -7,67 +7,62 @@ import {
   Image,
 } from 'react-native'
 import Colors from '../../Common/Colors'
+import { Iconify } from 'react-native-iconify';
 
-let defaultProfile =require('../../../assets/mypage-profile.png');
-let nicknameIcon =require('../../../assets/mypage-nickname.png');
-let passwordIcon = require('../../../assets/mypage-password.png');
-let pysicalIcon =require('../../../assets/mypage-pysical.png');
-let mercenaryIcon =require('../../../assets/mypage-mercenary.png');
-let positionIcon =require('../../../assets/mypage-position.png');
 export default function MyPageScreen() {
   return (
       <View style={styles.container}>
         <View style={styles.wrapper}>
-          <View style={{width:'80%', height: '10%', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}>
-            <Image source={defaultProfile}></Image>
-            <Text style={{fontSize: 24, color: Colors.white, flexGrow: 0.7, fontWeight: 700}}>UserName</Text>
-            <TouchableOpacity>
+          <View style={styles.mypage}>
+            <Iconify icon="solar:basketball-bold-duotone" size={80} color = {Colors.white} />
+            <Text style={styles.mypageText}>UserName</Text>
+            <TouchableOpacity style={styles.logout}>
               <Text style={styles.logoutbtn}>로그아웃</Text>
             </TouchableOpacity>
           </View>
 
-          <Text style={{color:Colors.white, fontSize: 20, fontWeight: '700', width: '80%', marginTop: 34, marginBottom: 14}}>개인정보</Text>
+          <Text style={styles.subtitle}>개인 정보</Text>
           <View style={styles.iconList}>
-            <View style={{flexDirection: 'column', alignItems:'center'}}>
-            <TouchableOpacity>
-              <Image source={nicknameIcon}  style={{marginBottom: '7%'}}/>
-            </TouchableOpacity>
-              <Text style={{fontSize: 13,color: Colors.white}}>닉네임변경</Text>
-            </View>
-             <View style={{flexDirection: 'column', alignItems:'center'}}>
+            <View style={styles.iconBtn}>
               <TouchableOpacity>
-                <Image source={passwordIcon} style={{marginBottom: '7%'}}/>
+                <Iconify icon="mdi:rename-outline" size={50} style={styles.iconStyle} />
               </TouchableOpacity>
-              <Text style={{fontSize: 13,color: Colors.white}}>비밀번호 변경</Text>
+                <Text style={styles.iconText}>닉네임 변경</Text>
             </View>
-            <View style={{flexDirection: 'column', alignItems:'center'}}>
+            <View style={styles.iconBtn}>
               <TouchableOpacity>
-                <Image source={pysicalIcon} style={{marginBottom: '7%'}}/>
+                <Iconify icon="mdi:password-outline" size={50} style={styles.iconStyle} />
               </TouchableOpacity>
-              <Text style={{fontSize: 13, color: Colors.white}}>피지컬 수정</Text>
+              <Text style={styles.iconText}>비밀번호 변경</Text>
+            </View>
+            <View style={styles.iconBtn}>
+              <TouchableOpacity>
+                <Iconify icon="mdi:human-male-height" size={50} style={styles.iconStyle} />
+              </TouchableOpacity>
+              <Text style={styles.iconText}>피지컬 수정</Text>
             </View>
           </View>
           
-          <Text style={{color:Colors.white, fontSize: 20, fontWeight: '700', width: '80%', marginTop: 44, marginBottom: 24}}>용병등록/주 포지션</Text>
+          <Text style={styles.subtitle}>용병등록 / 주 포지션</Text>
           <View style={styles.iconList}>
-            <View style={{flexDirection: 'column', alignItems:'center'}}>
+            <View style={styles.iconBtn}>
               <TouchableOpacity>
-               <Image source={mercenaryIcon} style={{marginBottom: '15%'}}/>
+                <Iconify icon="fa6-solid:basketball" size={45} style={styles.iconStyle} />
               </TouchableOpacity>
-              <Text style={{fontSize: 13,color: Colors.white, fontWeight: '700',}}>닉네임변경</Text>
+              <Text style={styles.iconText}>용병 등록 확인</Text>
             </View>
-            <View style={{flexDirection: 'column', alignItems:'center'}}>
+            <View style={styles.iconBtn}>
               <TouchableOpacity>
-                <Image source={positionIcon} style={{marginBottom: '11%'}}/>
+                <Iconify icon="gis:position-man" size={45} style={styles.iconStyle} />
               </TouchableOpacity>
-              <Text style={{fontSize: 13,color: Colors.white, fontWeight: '700',}}>비밀번호 변경</Text>
+              <Text style={styles.iconText}>주 포지션 변경</Text>
             </View>
           </View> 
 
-          <View style={{flexGrow: 0.9, width: '80%', display: 'flex', justifyContent: 'flex-end', alignItems: 'flex-end'}}>
+          <View style={styles.leave}>
             <TouchableOpacity>
               <View style={styles.leavebtn}>
-                <Text style={{color: Colors.white, paddingHorizontal: 3, paddingVertical: 2}}>회원탈퇴하기</Text>
+                <Text style={styles.leavetext}>회원 탈퇴하기</Text>
               </View>
             </TouchableOpacity>
           </View>
@@ -77,48 +72,106 @@ export default function MyPageScreen() {
 };
 
 const styles = StyleSheet.create({
+
   container : {
     width : '100%',
     height : '100%',
     display : 'flex',
     backgroundColor : Colors.black,
-    
-    
   },
 
   wrapper : {
-    marginTop: '4%',
+    marginTop : '4%',
     flexGrow : 1,
     justifyContent : 'flex-start',
     alignItems : 'center',
-    paddingVertical: '4%',
-    // borderColor: Colors.mainRed,
-    // borderWidth: 2,
-    
   },
 
-  iconList:{
-    width:'80%', 
-    height: '10%',
-    display: 'flex',
-    flexDirection: 'row',
-    gap: 22,
+  mypage : {
+    width :'84%',
+    flexDirection : 'row',
+    justifyContent : 'space-between',
+    alignItems : 'center',
+    marginTop : 10,
+  },
+
+  mypageText : {
+    fontSize : 25,
+    color : Colors.white,
+    flexGrow : 0.7,
+    fontWeight : 'bold',
+  },
+
+  logout : {
+    width : '23%',
   },
 
   logoutbtn:{
-    color: Colors.mainRed,
-    borderColor: Colors.mainRed,
-    paddingHorizontal: '2%',
-    paddingVertical: '2%',
-    borderWidth: 2,
-    borderRadius: 10,
-    textAlign: 'center',
+    color : Colors.mainRed,
+    fontWeight : 'bold',
+    fontSize : 12,
+    textAlign : 'center',
+    borderColor : Colors.mainRed,
+    borderWidth : 2,
+    borderRadius : 15,
+    padding : 7,
   },
-  leavebtn:{
-    backgroundColor: Colors.mainRed, 
-    paddingHorizontal: '4%',
-    paddingVertical: '3%',
-    borderRadius: 10,
+
+  subtitle : {
+    width : '80%',
+    color :Colors.white,
+    fontSize : 20,
+    fontWeight : 'bold',
+    marginTop : '10%',
+    marginBottom : '5%',
+  },
+
+  iconList : {
+    width :'80%',
+    display : 'flex',
+    flexDirection : 'row',
+    gap : 22,
+  },
+
+  iconBtn : {
+    flexDirection : 'column',
+    alignItems : 'center',
+  },
+
+  iconStyle : {
+    color : Colors.white,
+    marginBottom : '10%',
+  },
+
+  iconText : {
+    fontSize : 13,
+    color : Colors.white,
+    marginTop : '10%',
+  },
+
+  leave : {
+    flexGrow : 0.8,
+    width : '84%',
+    display : 'flex',
+    justifyContent : 'flex-end',
+    alignItems : 'flex-end'
+  },
+
+  leavebtn : {
+    width : '50%',
+    borderRadius : 20,
+    padding : 8,
+    backgroundColor : Colors.mainRed,
+  },
+
+  leavetext : {
+    color : Colors.white,
+    fontWeight : 'bold',
+    fontSize : 13,
+    textAlign : 'center',
+    marginLeft : 10,
+    marginRight : 10,
+    padding : 3,
   }
   
 });

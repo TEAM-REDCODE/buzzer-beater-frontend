@@ -19,12 +19,7 @@ const MercenaryList = ({navigation}) => {
                                     <Iconify
                                         icon="solar:basketball-bold-duotone"
                                         size={40}
-                                        color={colors.mainRed}
-                                        style={{
-                                            marginTop : 20,
-                                            marginLeft : 15,
-                                            marginBottom : 5,
-                                        }}
+                                        style={styles.iconStyle}
                                     />
                                     <Text style={styles.title}>title</Text>
                                     <View style={styles.titleUnderbar}></View>
@@ -49,12 +44,7 @@ const MercenaryList = ({navigation}) => {
                                     <Iconify
                                         icon="solar:basketball-bold-duotone"
                                         size={40}
-                                        color={colors.mainRed}
-                                        style={{
-                                            marginTop : 20,
-                                            marginLeft : 15,
-                                            marginBottom : 5,
-                                        }}
+                                        style={styles.iconStyle}
                                     />
                                     <Text style={styles.title}>title</Text>
                                     <View style={styles.titleUnderbar}></View>
@@ -142,6 +132,13 @@ const styles = StyleSheet.create({
         marginTop : 20,
         marginRight : 10,
         backgroundColor : colors.white,
+    },
+
+    iconStyle : {
+        marginTop : 20,
+        marginLeft : 15,
+        marginBottom : 5,
+        color : colors.mainRed,
     },
 
     title : {

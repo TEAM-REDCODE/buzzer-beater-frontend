@@ -13,6 +13,7 @@ import {
 import colors from "../../Common/Colors";
 import { Iconify } from 'react-native-iconify';
 
+
 let bigLogoImg = require('../../../assets/Buzzer-Beater_big_logo.png')
 
 const SignUp = () => {
@@ -29,7 +30,7 @@ const SignUp = () => {
                 <View style={styles.wrapper}>
                     <Image style={styles.image} source={bigLogoImg} />
                     <View style={styles.signUpInput}>
-                        <Text style={[styles.subtitle, styles.setRight]}>
+                        <Text style={styles.subtitle}>
                             닉네임 입력 <Text style={styles.star}>*</Text>
                         </Text>
                         <TextInput
@@ -39,7 +40,7 @@ const SignUp = () => {
                             placeholder="닉네임을 입력하세요."
                             keyboardType="ascii-capable"
                         />
-                        <Text style={[styles.subtitle, styles.setLeft]}>
+                        <Text style={styles.subtitle}>
                             이메일 / 비밀번호 입력 <Text style={styles.star}>*</Text>
                         </Text>
                         <TextInput
@@ -50,7 +51,7 @@ const SignUp = () => {
                             keyboardType="url"
                         />
                         <TextInput
-                            style={styles.input}
+                            style={[styles.input, styles.topMargin]}
                             onChangeText={onChangePassword}
                             value={password}
                             secureTextEntry={true}
@@ -80,7 +81,7 @@ const SignUp = () => {
                             </View>
                         </View>
                         <TextInput
-                            style={styles.input}
+                            style={[styles.input, styles.topMargin]}
                             onChangeText={onChangePW_Check}
                             value={password_Check}
                             secureTextEntry={true}
@@ -97,7 +98,7 @@ const SignUp = () => {
                             placeholder="키를 입력하세요."
                             keyboardType="number-pad"
                         />
-                        <Text style={[styles.subtitle, styles.setLeft2]}>
+                        <Text style={styles.subtitle}>
                             주 포지션 입력 <Text style={styles.star}>*</Text>
                         </Text>
                         <TextInput
@@ -108,7 +109,9 @@ const SignUp = () => {
                             keyboardType="default"
                         />
                         <TouchableOpacity style={styles.button}>
-                            <Text style={styles.signUpText}>회원가입하기</Text>
+                            <View style={styles.signUpBtn}>
+                                <Text style={styles.signUpText}>회원가입하기</Text>
+                            </View>
                         </TouchableOpacity>
                     </View>
                 </View>
@@ -133,37 +136,26 @@ const styles = StyleSheet.create({
         flexGrow : 1,
         justifyContent : 'center',
         alignItems : 'center',
+        marginTop : 30,
     },
 
     image : {
         width : 330,
         height : 60,
-        marginBottom : 15,
     },
 
     signUpInput : {
         justifyContent : 'center',
         alignItems : 'center',
+        margin : 25,
     },
 
     subtitle : {
+        width : 300,
         fontWeight : 'bold',
         fontSize : 16,
         color : colors.white,
         justifyContent : 'flex-start',
-        marginRight : 200,
-    },
-
-    setRight : {
-        marginLeft : -25,
-    },
-
-    setLeft : {
-        marginLeft : 35,
-    },
-
-    setLeft2 : {
-        marginLeft : -10,
     },
 
     star : {
@@ -173,15 +165,20 @@ const styles = StyleSheet.create({
     input: {
         width : 300,
         height : 45,
-        margin : 10,
+        margin : 15,
         borderRadius : 5,
         padding : 10,
         textAlignVertical : 'top',
         backgroundColor : colors.white,
     },
 
+    topMargin : {
+        marginTop : '2%',
+        marginBottom : '4%',
+    },
+
     validation : {
-      height : 75,
+      height : 85,
       display : 'flex',
       flexWrap : 'wrap',
       justifyContent : 'center',
@@ -193,12 +190,12 @@ const styles = StyleSheet.create({
     },
 
     valiButton : {
-      width : 135,
+      width : 150,
       height : 20,
       flexDirection : 'row',
-      justifyContent : 'ceter',
       alignItems : 'center',
       marginTop : 13,
+      left : 7,
     },
 
     valiText : {
@@ -209,10 +206,9 @@ const styles = StyleSheet.create({
 
     button : {
         width : 300,
-        height : 45,
         margin : 20,
         borderRadius : 5,
-        padding : 10,
+        padding : 15,
         backgroundColor : colors.mainRed,
     },
 
@@ -221,7 +217,7 @@ const styles = StyleSheet.create({
         fontWeight : 'bold',
         fontSize : 16,
         textAlign : 'center',
-        paddingTop : 5,
+        marginBottom : 3,
     }
 
 });

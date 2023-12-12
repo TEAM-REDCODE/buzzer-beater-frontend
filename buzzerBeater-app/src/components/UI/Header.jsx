@@ -1,11 +1,8 @@
 import Colors from "../../Common/Colors";
-import { TouchableOpacity , Text, View, Image } from 'react-native';
+import {TouchableOpacity, Text, View, Image, StyleSheet} from 'react-native';
+import { Iconify } from "react-native-iconify";
 
 let logoImg = require('../../../assets/Buzzer-Beater_small_logo.png')
-let notifiyIcon = require('../../../assets/notifiy_icon.png')
-let requestIcon = require('../../../assets/requestIcon.png')
-let myPageIcon = require('../../../assets/mypage_icon.png')
-let closeBtn = require('../../../assets/closeBtn.png')
 
 const commonHeaderOptions = ({ navigation }) => ({
   title: '',
@@ -13,18 +10,18 @@ const commonHeaderOptions = ({ navigation }) => ({
     backgroundColor: Colors.black,
   },
   headerLeft: () => (
-    <View style={{ height: 60, width: 60,  marginTop: -10,}}>
-      <Image source={logoImg} style={{ height: '100%', width: '100%' }} resizeMode="contain" />
+    <View style={styles.logoimg}>
+      <Image source={logoImg} style={styles.logo}  resizeMode="contain" />
     </View>
   ),
   headerRight: () => (
-    <View style={{ flexDirection: 'row', gap: 10, marginRight: 10 }}>
-      <Image source={notifiyIcon} style={{}} resizeMode="contain" />
+    <View style={styles.rightHead}>
+        <Iconify icon="mingcute:announcement-line" size = {30} color = {Colors.white} />
       <TouchableOpacity onPress={() => navigation.navigate('MercenaryList')}>
-        <Image source={requestIcon} style={{}} resizeMode="contain" />
+          <Iconify icon="fluent:task-list-square-person-20-regular" size = {30} color = {Colors.white} />
       </TouchableOpacity>
       <TouchableOpacity onPress={() => navigation.navigate('MyPageScreen')}>
-        <Image source={myPageIcon} style={{}} resizeMode="contain" />
+          <Iconify icon="eva:person-fill" size = {30} color = {Colors.white} />
       </TouchableOpacity>
     </View>
   ),
@@ -36,19 +33,19 @@ const myPageHeaderOptions = ({ navigation }) => ({
     backgroundColor: Colors.black,
   },
   headerLeft: () => (
-    <View style={{ height: 60, width: 60,  marginTop: -10,}}>
-      <Image source={logoImg} style={{ height: '100%', width: '100%' }} resizeMode="contain" />
-    </View>
+      <View style={styles.logoimg}>
+          <Image source={logoImg} style={styles.logo} resizeMode="contain" />
+      </View>
   ),
   headerRight: () => (
-    <View style={{ flexDirection: 'row', gap: 10, marginRight: 10 }}>
-      <Image source={notifiyIcon} style={{}} resizeMode="contain" />
+    <View style={styles.rightHead}>
+        <Iconify icon="mingcute:announcement-line" size={30} color ={Colors.white} />
       <TouchableOpacity onPress={() => navigation.navigate('MercenaryList')}>
-        <Image source={requestIcon} style={{}} resizeMode="contain" />
+          <Iconify icon="fluent:task-list-square-person-20-regular" size={30} color ={Colors.white} />
       </TouchableOpacity>
       <TouchableOpacity onPress={() => navigation.goBack()}>
         {/* Use TouchableOpacity for the closeBtn with onPress */}
-        <Image source={closeBtn} style={{}} resizeMode="contain" />
+          <Iconify icon="majesticons:close-line" size={35} color = {Colors.white} />
       </TouchableOpacity>
     </View>
   ),
@@ -60,15 +57,15 @@ const loginHeaderOptions = ({ navigation }) => ({
     backgroundColor: Colors.black,
   },
   headerLeft: () => (
-    <View style={{ marginLeft: 10 }}>
-      <Text style={{color:Colors.white}}>로그인</Text>
+    <View style={{ marginLeft: 23 }}>
+      <Text style={styles.signText}>로그인</Text>
     </View>
   ),
   headerRight: () => (
-    <View style={{marginRight: 10 }}>
+    <View style={{marginRight: 15 }}>
       <TouchableOpacity onPress={() => navigation.goBack()}>
         {/* Use TouchableOpacity for the closeBtn with onPress */}
-        <Image source={closeBtn} style={{}} resizeMode="contain" />
+          <Iconify icon="majesticons:close-line" size={30} color = {Colors.white} />
       </TouchableOpacity>
     </View>
   ),
@@ -80,19 +77,47 @@ const signUpHeaderOptions = ({ navigation }) => ({
     backgroundColor: Colors.black,
   },
   headerLeft: () => (
-    <View style={{ marginLeft: 10 }}>
-      <Text style={{color:Colors.white}}>회원가입</Text>
+    <View style={{ marginLeft: 25 }}>
+      <Text style={styles.signText}>회원가입</Text>
     </View>
   ),
   headerRight: () => (
-    <View style={{marginRight: 10 }}>
+    <View style={{marginRight: 15 }}>
       <TouchableOpacity onPress={() => navigation.goBack()}>
         {/* Use TouchableOpacity for the closeBtn with onPress */}
-        <Image source={closeBtn} style={{}} resizeMode="contain" />
+          <Iconify icon="majesticons:close-line" size={30} color ={Colors.white} />
       </TouchableOpacity>
     </View>
   ),
 });
+
+const styles = StyleSheet.create({
+
+    logoimg : {
+        height : 70,
+    },
+
+    logo : {
+        width : 55,
+        height : 55,
+        marginLeft : 15,
+    },
+
+    rightHead : {
+        flexDirection : 'row',
+        justifyContent : 'center',
+        gap : 10,
+        marginRight : 10,
+    },
+
+    signText : {
+        color : Colors.white,
+        fontSize : 23,
+        fontWeight : 'bold',
+    },
+
+});
+
 
 export {commonHeaderOptions, myPageHeaderOptions, loginHeaderOptions, signUpHeaderOptions};
 

@@ -71,7 +71,7 @@ const styles = StyleSheet.create({
     input: {
         width : 300,
         height : 45,
-        margin : 10,
+        margin : 13,
         borderRadius : 5,
         padding : 10,
         textAlignVertical : 'top',
@@ -80,10 +80,9 @@ const styles = StyleSheet.create({
 
     button : {
         width : 300,
-        height : 45,
         margin : 20,
         borderRadius : 5,
-        padding : 10,
+        padding : 14,
         backgroundColor : colors.mainRed,
     },
 
@@ -92,7 +91,7 @@ const styles = StyleSheet.create({
         fontWeight : 'bold',
         fontSize : 16,
         textAlign : 'center',
-        paddingTop : 5,
+        marginBottom : 3,
     }
 
 });

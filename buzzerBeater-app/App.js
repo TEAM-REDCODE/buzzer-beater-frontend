@@ -8,6 +8,7 @@ import SignIn from "./src/components/screen/SignIn";
 import MercenaryList from "./src/components/screen/MercenaryList";
 import SignUp from "./src/components/screen/SignUp";
 import MyPageScreen from './src/components/screen/MyPageScreen';
+import colors from './src/Common/Colors';
 
 function StartScreen({navigation}) {
   return (
@@ -39,7 +40,7 @@ function SignUpScreen({navigation}) {
 }
 function HomeScreen() {
   return (
-    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor : colors.black}}>
       <Text>Home!!</Text>
     </View>
   );
@@ -61,6 +62,7 @@ const Stack = createNativeStackNavigator();
 export default function App() {
 
   return (
+
     <NavigationContainer>
         <Stack.Navigator initialRouteName='StartScreen'>
           <Stack.Screen name='startScreen' component={StartScreen} options={{headerShown: false}}/>
