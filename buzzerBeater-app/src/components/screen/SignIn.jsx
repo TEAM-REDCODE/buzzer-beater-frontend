@@ -19,7 +19,7 @@ const SignIn = ({navigation}) => {
             if (response === true) {
                 // Handle successful login, e.g., navigate to another page
                 console.log('Login successful', response);
-                alert('홈화면으로 이동');
+                navigation.navigate('HomeScreen')
             } else {
                 // Handle unsuccessful login, show an alert or perform other actions
                 console.error('Login failed', response.error);

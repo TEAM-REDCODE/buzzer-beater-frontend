@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useContext, useEffect, useState} from 'react'
 import { 
   View, 
   Text, 
@@ -8,15 +8,30 @@ import {
 } from 'react-native'
 import Colors from '../../Common/Colors'
 import { Iconify } from 'react-native-iconify';
-
+import { UserContext } from '../../Common/UserContext';
+import { logout } from '../../APIs/signAPI';
+import { setNickname, setHeight, getUserInfo, getBelong, refresh} from '../../APIs/userAPI';
 export default function MyPageScreen() {
+  const { user, setUserData } = useContext(UserContext);
+  const [newName, setNewname] = useState("gyural");
+  const [newHeight, setNewHeight] = useState(188.0);
+  useEffect(() => {
+    console.log(user);
+  }, [user]);
+    
+  const  handleNickName = async () =>{
+    await setNickname(newName)
+  }
+  const handleHeight = async() =>{
+    await setHeight(newHeight)
+  }
   return (
       <View style={styles.container}>
         <View style={styles.wrapper}>
           <View style={styles.mypage}>
             <Iconify icon="solar:basketball-bold-duotone" size={80} color = {Colors.white} />
-            <Text style={styles.mypageText}>UserName</Text>
-            <TouchableOpacity style={styles.logout}>
+            <Text style={styles.mypageText}>{user.name}</Text>
+            <TouchableOpacity style={styles.logout} onPress={logout}>
               <Text style={styles.logoutbtn}>로그아웃</Text>
             </TouchableOpacity>
           </View>
@@ -24,19 +39,19 @@ export default function MyPageScreen() {
           <Text style={styles.subtitle}>개인 정보</Text>
           <View style={styles.iconList}>
             <View style={styles.iconBtn}>
-              <TouchableOpacity>
+              <TouchableOpacity onPress={async ()=>{await handleNickName()}}>
                 <Iconify icon="mdi:rename-outline" size={50} style={styles.iconStyle} />
-              </TouchableOpacity>
+              </TouchableOpacity >
                 <Text style={styles.iconText}>닉네임 변경</Text>
             </View>
             <View style={styles.iconBtn}>
-              <TouchableOpacity>
+              <TouchableOpacity onPress={()=>{(getBelong())}}>
                 <Iconify icon="mdi:password-outline" size={50} style={styles.iconStyle} />
-              </TouchableOpacity>
+              </TouchableOpacity >
               <Text style={styles.iconText}>비밀번호 변경</Text>
             </View>
             <View style={styles.iconBtn}>
-              <TouchableOpacity>
+              <TouchableOpacity onPress={()=>{(handleHeight())}}>
                 <Iconify icon="mdi:human-male-height" size={50} style={styles.iconStyle} />
               </TouchableOpacity>
               <Text style={styles.iconText}>피지컬 수정</Text>
@@ -46,7 +61,7 @@ export default function MyPageScreen() {
           <Text style={styles.subtitle}>용병등록 / 주 포지션</Text>
           <View style={styles.iconList}>
             <View style={styles.iconBtn}>
-              <TouchableOpacity>
+              <TouchableOpacity onPress={()=>{refresh()}}>
                 <Iconify icon="fa6-solid:basketball" size={45} style={styles.iconStyle} />
               </TouchableOpacity>
               <Text style={styles.iconText}>용병 등록 확인</Text>
@@ -60,7 +75,7 @@ export default function MyPageScreen() {
           </View> 
 
           <View style={styles.leave}>
-            <TouchableOpacity>
+            <TouchableOpacity onPress={()=>{getUserInfo()}}>
               <View style={styles.leavebtn}>
                 <Text style={styles.leavetext}>회원 탈퇴하기</Text>
               </View>

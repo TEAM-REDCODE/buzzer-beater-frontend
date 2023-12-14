@@ -1,7 +1,11 @@
 import axios from "axios";
+import instance from "./instance";
 
+const baseURL = 'http://192.168.219.112:5000/'
 const signIn = async (email, password) => {
-    const apiURL = 'http://172.16.3.243:5000/v1/users/login'
+    // const apiURL = 'http://172.16.7.235:5000/v1/users/login'
+    const endPoint = 'v1/users/login'
+    const apiURL = baseURL + endPoint
     const requestData = {
         'email' : email,
         'password' : password,
@@ -15,6 +19,7 @@ const signIn = async (email, password) => {
         withCredentials : true
     })
     .then((res) => {
+        console.log(res)
         const status = res.status
         console.log(status)
         console.log(res.headers["set-cookie"][0])
@@ -68,7 +73,18 @@ const signUp = async (nickname, email, password, height, mainPosition) => {
 
 };
 
-export {signIn, signUp};
+const logout = async()=>{
+    endPoint = 'v1/users/logout'
+    apiURL = baseURL+endPoint
+    instance.get(apiURL)
+    .then((res)=>{
+        console.log(res)
+    })
+    .catch((error)=>{
+        console.log(error)
+    })
+}
+export {signIn, signUp, logout};
 
 
 
