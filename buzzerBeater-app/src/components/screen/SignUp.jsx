@@ -12,6 +12,7 @@ import {
 } from 'react-native';
 import colors from "../../Common/Colors";
 import { Iconify } from 'react-native-iconify';
+import {signIn, signUp} from "../../APIs/signAPI";
 
 
 let bigLogoImg = require('../../../assets/Buzzer-Beater_big_logo.png')
@@ -22,7 +23,31 @@ const SignUp = () => {
     const [password, onChangePassword] = React.useState('');
     const [password_Check, onChangePW_Check] = React.useState('');
     const [height, onChangeHeight] = React.useState('');
-    const [position, onChangePosition] = React.useState('');
+    const [mainPosition, onChangePosition] = React.useState('');
+
+    const handleSignUp = async (nickname, email, password, height, mainPosition) => {
+        height = parseFloat(height);
+        try {
+
+            const response = await signUp(nickname, email, password, height, mainPosition);
+            console.log(response)
+
+            if (response === true) {
+                // Handle successful login, e.g., navigate to another page
+                console.log('Register successful', response.data);
+                alert('로그인 창으로 이동');
+            } else {
+                // Handle unsuccessful login, show an alert or perform other actions
+                console.error('Register failed', response.error);
+                alert('회원가입 실패');
+            }
+        } catch (error) {
+            // Handle other errors
+            console.error('signup error:', error);
+            alert('에러 발생');
+        }
+
+    }
 
     return (
         <SafeAreaView style={styles.safeArea}>
@@ -104,12 +129,12 @@ const SignUp = () => {
                         <TextInput
                             style={styles.input}
                             onChangeText={onChangePosition}
-                            value={position}
+                            value={mainPosition}
                             placeholder="주 포지션을 입력하세요."
                             keyboardType="default"
                         />
-                        <TouchableOpacity style={styles.button}>
-                            <View style={styles.signUpBtn}>
+                        <TouchableOpacity style={styles.button} onPress = {() => {handleSignUp(nickname, email, password, height, mainPosition)}}>
+                            <View>
                                 <Text style={styles.signUpText}>회원가입하기</Text>
                             </View>
                         </TouchableOpacity>

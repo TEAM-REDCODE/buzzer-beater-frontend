@@ -1,12 +1,37 @@
 import React from 'react';
 import {Image, SafeAreaView, StyleSheet, Text, TextInput, TouchableOpacity, View} from 'react-native';
 import colors from "../../Common/Colors";
+import { signIn } from "../../APIs/signAPI"
 
 let bigLogoImg = require('../../../assets/Buzzer-Beater_big_logo.png')
 
 const SignIn = ({navigation}) => {
     const [email, onChangeEmail] = React.useState('');
     const [password, onChangePassword] = React.useState('');
+
+    const handleSignIn = async (email, password) => {
+
+        try {
+
+            const response = await signIn(email, password);
+            console.log(response);
+
+            if (response === true) {
+                // Handle successful login, e.g., navigate to another page
+                console.log('Login successful', response);
+                alert('홈화면으로 이동');
+            } else {
+                // Handle unsuccessful login, show an alert or perform other actions
+                console.error('Login failed', response.error);
+                alert('로그인 실패');
+            }
+        } catch (error) {
+                // Handle other errors
+                console.error('Login error:', error);
+                alert('이메일과 비밀번호를 확인해주세요.');
+            }
+    };
+
 
     return (
         <SafeAreaView style={styles.safeArea}>
@@ -29,7 +54,7 @@ const SignIn = ({navigation}) => {
                             placeholder="비밀번호를 입력하세요."
                             keyboardType="visible-password"
                         />
-                        <TouchableOpacity style={styles.button } onPress={() => navigation.navigate('HomeScreen')}>
+                        <TouchableOpacity style={styles.button} onPress = {() => {handleSignIn(email, password)}}>
                             <Text style={styles.loginText}>로그인하기</Text>
                         </TouchableOpacity>
                     </View>
