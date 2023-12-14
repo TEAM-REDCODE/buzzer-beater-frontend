@@ -9,35 +9,44 @@ import MercenaryList from "./src/components/screen/MercenaryList";
 import SignUp from "./src/components/screen/SignUp";
 import MyPageScreen from './src/components/screen/MyPageScreen';
 import colors from './src/Common/Colors';
-
-function StartScreen({navigation}) {
-  return (
-    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', }}>
-      <Text>StartScreen!</Text>
-      <Button title="로그인!!" onPress={()=>navigation.navigate('SignIn')}></Button>
-      <Button title="회원가입!!" onPress={()=>navigation.navigate('SignUp')}></Button>
-    </View>
-  );
-}
-function LoginScreen({navigation}) {
+import Start from './src/components/screen/Start';
+// function Start({navigation}) {
+//   return (
+//     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', }}>
+//       <Text>StartScreen!</Text>
+//       <Button title="로그인!!" onPress={()=>navigation.navigate('SignIn')}></Button>
+//       <Button title="회원가입!!" onPress={()=>navigation.navigate('SignUp')}></Button>
+//     </View>
+//   );
+// }
+// function StartScreen({navigation}) {
+//   return (
+//     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', }}>
+//       <Text>StartScreen!</Text>
+//       <Button title="로그인!!" onPress={()=>navigation.navigate('SignIn')}></Button>
+//       <Button title="회원가입!!" onPress={()=>navigation.navigate('SignUp')}></Button>
+//     </View>
+//   );
+// }
+// function LoginScreen({navigation}) {
   
-  return (
-    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', }}>
-      <Text>LoginScreen!</Text>
-      <Button title="로그인하기!!" onPress={()=>navigation.navigate('HomeScreen')}></Button>
-    </View>
-  );
-}
+//   return (
+//     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', }}>
+//       <Text>LoginScreen!</Text>
+//       <Button title="로그인하기!!" onPress={()=>navigation.navigate('HomeScreen')}></Button>
+//     </View>
+//   );
+// }
 
-function SignUpScreen({navigation}) {
+// function SignUpScreen({navigation}) {
   
-  return (
-    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', }}>
-      <Text>SignUpScreen!</Text>
-      <Button title="회원가입하기!!" onPress={()=>navigation.navigate('SignIn')}></Button>
-    </View>
-  );
-}
+//   return (
+//     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', }}>
+//       <Text>SignUpScreen!</Text>
+//       <Button title="회원가입하기!!" onPress={()=>navigation.navigate('SignIn')}></Button>
+//     </View>
+//   );
+// }
 function HomeScreen() {
   return (
     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor : colors.black}}>
@@ -64,8 +73,8 @@ export default function App() {
   return (
 
     <NavigationContainer>
-        <Stack.Navigator initialRouteName='StartScreen'>
-          <Stack.Screen name='startScreen' component={StartScreen} options={{headerShown: false}}/>
+        <Stack.Navigator initialRouteName='Start'>
+          <Stack.Screen name='Start' component={Start} options={{headerShown: false}}/>
           <Stack.Screen name='SignIn' component={SignIn} options={loginHeaderOptions}/>
           <Stack.Screen name='SignUp' component={SignUp} options={signUpHeaderOptions}/>
           <Stack.Screen name='MyPageScreen' component={MyPageScreen} options={myPageHeaderOptions}/>
