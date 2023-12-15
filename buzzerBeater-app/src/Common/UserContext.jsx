@@ -1,9 +1,10 @@
 import React, { createContext, useState } from 'react';
-
 const initialUserState = {
-  name: 'testContext',
-  height: -1.0,
-  position: 'test contextpositon'
+  email: 'undefined',
+  height: -1,
+  isMercenary: 'undefined',
+  mainPosition: 'undefined',
+  nickname: "undefined"
 };
 
 const UserContext = createContext();
@@ -16,7 +17,6 @@ const UserProvider = ({ children }) => {
   };
 
   const value = { user, setUserData };
-
   return <UserContext.Provider value={value}>{children}</UserContext.Provider>;
 };
 

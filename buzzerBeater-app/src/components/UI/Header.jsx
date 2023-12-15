@@ -1,7 +1,6 @@
 import Colors from "../../Common/Colors";
 import {TouchableOpacity, Text, View, Image, StyleSheet} from 'react-native';
 import { Iconify } from "react-native-iconify";
-
 let logoImg = require('../../../assets/Buzzer-Beater_small_logo.png')
 
 const commonHeaderOptions = ({ navigation }) => ({

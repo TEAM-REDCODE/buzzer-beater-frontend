@@ -1,7 +1,6 @@
 import axios from "axios";
 import instance from "./instance";
-
-const baseURL = 'http://192.168.219.112:5000/'
+import baseURL from "../Common/baseURL";
 const signIn = async (email, password) => {
     // const apiURL = 'http://172.16.7.235:5000/v1/users/login'
     const endPoint = 'v1/users/login'
@@ -19,10 +18,7 @@ const signIn = async (email, password) => {
         withCredentials : true
     })
     .then((res) => {
-        console.log(res)
         const status = res.status
-        console.log(status)
-        console.log(res.headers["set-cookie"][0])
 
         // console.log(res.cookie);
         if (status === 200){

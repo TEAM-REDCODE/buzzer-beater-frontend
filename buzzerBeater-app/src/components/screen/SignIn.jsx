@@ -1,11 +1,15 @@
-import React from 'react';
+import React ,{useContext}from 'react';
 import {Image, SafeAreaView, StyleSheet, Text, TextInput, TouchableOpacity, View} from 'react-native';
 import colors from "../../Common/Colors";
 import { signIn } from "../../APIs/signAPI"
+import { getUserInfo } from '../../APIs/userAPI';
+import { UserContext } from '../../Common/UserContext';
 
 let bigLogoImg = require('../../../assets/Buzzer-Beater_big_logo.png')
 
 const SignIn = ({navigation}) => {
+    const { user, setUserData } = useContext(UserContext);
+
     const [email, onChangeEmail] = React.useState('');
     const [password, onChangePassword] = React.useState('');
 
@@ -14,11 +18,19 @@ const SignIn = ({navigation}) => {
         try {
 
             const response = await signIn(email, password);
-            console.log(response);
 
             if (response === true) {
-                // Handle successful login, e.g., navigate to another page
-                console.log('Login successful', response);
+                // context에 userData 반영해주기
+                const userResponse =  await getUserInfo()
+                console.log('여기!!!!!')
+                console.log(userResponse)
+                setUserData({
+                    email: userResponse.email,
+                    height: userResponse.height,
+                    isMercenary: userResponse.isMercenary,
+                    mainPosition: userResponse.mainPosition,
+                    nickname: userResponse.nickname
+                })
                 navigation.navigate('HomeScreen')
             } else {
                 // Handle unsuccessful login, show an alert or perform other actions
