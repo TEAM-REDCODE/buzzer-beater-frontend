@@ -1,294 +1,248 @@
 import React from 'react';
-import { View, Text, ScrollView, StyleSheet, TouchableOpacity, Image } from 'react-native';
+import {View, Text, ScrollView, StyleSheet, TouchableOpacity, Image, SafeAreaView} from 'react-native';
 import colors from "../../Common/Colors";
 import { Iconify } from 'react-native-iconify';
 
+let court = require('../../../assets/court.png');
 const Homes = () => {
     return (
-        <View style={styles.screenContainer}>
-            {/* 모집 중인 농구팟 섹션 */}
-            <View style={styles.sectionContainer}>
-                <View style={styles.header}>
-                    <Text style={styles.headerTitle}>모집 중인 농구팟</Text>
-                    <TouchableOpacity style={styles.createButton}>
-                        <Text style={styles.createButtonText}>농구팟 생성하기</Text>
-                    </TouchableOpacity>
-                </View>
-                <Text style={styles.description}>참여하고 싶은 농구팟을 확인하고 참여해보세요 !!!</Text>
-                <ScrollView
-                    horizontal={true}
-                    showsHorizontalScrollIndicator={false}
-                    contentContainerStyle={styles.cardsContainer}
-                >
-                    {/* 여기에 카드를 추가합니다. */}
-                    <View style={styles.card}>
-                        <View style={styles.cardContentContainer}>
-                            <Iconify
-                                icon="solar:basketball-bold-duotone"
-                                size={50}
-                                color={colors.mainRed}
-                            />
-                            <View style={styles.cardTextContainer}>
-                                <Text style={styles.cardTitle}>초보 환영</Text>
-                                <View style={styles.titleUnderbar}></View>
-                                <Text style={styles.cardContent}>생성자: slrspdla</Text>
-                                <Text style={styles.cardContent}>장소: 고려대학교 농구장</Text>
-                                <Text style={styles.cardContent}>시간: 16:00</Text>
+        <SafeAreaView style={styles.screenContainer}>
+            <ScrollView>
+                {/* 모집 중인 농구팟 섹션 */}
+                <View style={styles.sectionContainer}>
+                    <View style={styles.header}>
+                        <View style={styles.listHeader}>
+                            <Text style={styles.headerTitle}>모집 중인 농구팟</Text>
+                            <TouchableOpacity style={styles.createButton}>
+                                <Text style={styles.createButtonText}>농구팟 생성하기</Text>
+                            </TouchableOpacity>
+                        </View>
+                        <Text style={styles.description}>
+                            참여하고 싶은 농구팟을 확인하고 참여해보세요 !!!
+                        </Text>
+                    </View>
+                    <ScrollView horizontal={true}>
+                        {/* 여기에 카드를 추가합니다. */}
+                        <View style={styles.card}>
+                            <View style={styles.cardContentContainer}>
+                                <Iconify
+                                    icon="solar:basketball-bold-duotone"
+                                    size={60}
+                                    color={colors.mainRed}
+                                />
+                                <View style={styles.cardTextContainer}>
+                                    <View style={styles.cardTitle}>
+                                        <Text style={styles.cardTitleText}>초보 환영</Text>
+                                    </View>
+                                    <View style={styles.cardContent}>
+                                        <Text style={styles.cardContentText}>생성자 : slrspdla</Text>
+                                        <Text style={styles.cardContentText}>장소 : 고려대학교 농구장</Text>
+                                        <Text style={styles.cardContentText}>시간 : 16:00</Text>
+                                    </View>
+                                </View>
+                            </View>
+                            <View style={styles.maxPerson}>
+                                <Text style={styles.maxNum}>4/6</Text>
+                                <Iconify
+                                    icon="ion:person"
+                                    size={20}
+                                    color={colors.mainRed}
+                                />
                             </View>
                         </View>
-                        <View style={styles.maxPerson}>
-                            <Text style={styles.maxNum}>4/6</Text>
-                            <Iconify
-                                icon="ion:person"
-                                size={20}
-                                color={colors.mainRed}
-                            />
+                    </ScrollView>
+                </View>
+                {/* 랜덤 용병 섹션 */}
+                <View style={styles.sectionContainer}>
+                    <View style={styles.header}>
+                        <Text style={styles.headerTitle}>랜덤 용병</Text>
+                        <Text style={styles.description}>
+                            등록된 용병을 확인하고 함께 농구를 즐겨보세요 !!!
+                        </Text>
+                    </View>
+                    <View style={styles.courtContainer}>
+                        <Image source={court} style={styles.courtImage}/>
+                        <View style={[styles.positionButtonContainer, styles.pgButton]}>
+                            <TouchableOpacity>
+                                <Iconify icon='ic:round-person-pin' size={40}/>
+                            </TouchableOpacity>
+                            <Text style={styles.positionButtonText}>PG</Text>
+                        </View>
+                        <View style={[styles.positionButtonContainer, styles.sgButton]}>
+                            <TouchableOpacity>
+                                <Iconify icon='ic:round-person-pin' size={40}/>
+                            </TouchableOpacity>
+                            <Text style={styles.positionButtonText}>SG</Text>
+                        </View>
+                        <View style={[styles.positionButtonContainer, styles.sfButton]}>
+                            <TouchableOpacity>
+                                <Iconify icon='ic:round-person-pin' size={40}/>
+                            </TouchableOpacity>
+                            <Text style={styles.positionButtonText}>SF</Text>
+                        </View>
+                        <View style={[styles.positionButtonContainer, styles.pfButton]}>
+                            <TouchableOpacity>
+                                <Iconify icon='ic:round-person-pin' size={40}/>
+                            </TouchableOpacity>
+                            <Text style={styles.positionButtonText}>PF</Text>
+                        </View>
+                        <View style={[styles.positionButtonContainer, styles.cButton]}>
+                            <TouchableOpacity>
+                                <Iconify icon='ic:round-person-pin' size={40}/>
+                            </TouchableOpacity>
+                            <Text style={styles.positionButtonText}>C</Text>
                         </View>
                     </View>
-                </ScrollView>
-            </View>
-            {/* 랜덤 용병 섹션 */}
-            <View style={styles.sectionContainer}>
-                <View style={styles.titleContainer}>
-                    <Text style={styles.headerTitle}>랜덤 용병</Text>
                 </View>
-                <Text style={styles.description}>
-                    등록된 용병을 확인하고 함께 농구를 즐겨보세요 !!!
-                </Text>
-                <View style={styles.courtContainer}>
-                    <Image
-                        source={require('../../../assets/court.png')}
-                        style={styles.courtImage}
-                    />
-                    <View style={[styles.positionButtonContainer, styles.pgButton]}>
-                        <TouchableOpacity>
-                            <Image
-                                source={require('../../../assets/position.png')} 
-                                style={styles.positionButton}
-                            />
-                        </TouchableOpacity>
-                        <Text style={styles.positionButtonText}>PG</Text>
+                <View style={styles.sectionContainer}>
+                    <View style={styles.header}>
+                        <Text style={styles.headerTitle}>용병 등록하기</Text>
+                        <Text style={styles.description}>
+                            용병 등록을 통해서 새로운 사람들과 농구를 즐겨보세요 !!!
+                        </Text>
                     </View>
-                    <View style={[styles.positionButtonContainer, styles.sgButton]}>
-                        <TouchableOpacity>
-                            <Image
-                                source={require('../../../assets/position.png')} 
-                                style={styles.positionButton}
-                            />
-                        </TouchableOpacity>
-                        <Text style={styles.positionButtonText}>SG</Text>
-                    </View>
-                    <View style={[styles.positionButtonContainer, styles.sfButton]}>
-                        <TouchableOpacity>
-                            <Image
-                                source={require('../../../assets/position.png')} 
-                                style={styles.positionButton}
-                            />
-                        </TouchableOpacity>
-                        <Text style={styles.positionButtonText}>SF</Text>
-                    </View>
-                    <View style={[styles.positionButtonContainer, styles.pfButton]}>
-                        <TouchableOpacity>
-                            <Image
-                                source={require('../../../assets/position.png')} 
-                                style={styles.positionButton}
-                            />
-                        </TouchableOpacity>
-                        <Text style={styles.positionButtonText}>PF</Text>
-                    </View>
-                    <View style={[styles.positionButtonContainer, styles.cButton]}>
-                        <TouchableOpacity>
-                            <Image
-                                source={require('../../../assets/position.png')} 
-                                style={styles.positionButton}
-                            />
-                        </TouchableOpacity>
-                        <Text style={styles.positionButtonText}>C</Text>
-                    </View>
+                    <TouchableOpacity style={styles.registerButton}>
+                        <Text style={styles.registerButtonText}>용병 등록하러 가기{' ➜'} </Text>
+                    </TouchableOpacity>
                 </View>
-            </View>
-            <View style={styles.sectionContainer}>
-                <View style={styles.titleContainer}>
-                    <Text style={styles.headerTitle}>용병 등록하기</Text>
-                </View>
-                <Text style={styles.description}>
-                    용병 등록을 통해서 새로운 사람들과 농구를 즐겨보세요 !!!
-                </Text>
-                <TouchableOpacity style={styles.registerButton}>
-                    <Text style={styles.registerButtonText}>용병 등록하러 가기{' ➜'} </Text>
-                </TouchableOpacity>
-            </View>
-        </View>
+            </ScrollView>
+        </SafeAreaView>
     );
 };
 
 const styles = StyleSheet.create({
-    screenContainer: {
-        flex: 1,
-        backgroundColor: '#222222',
+    screenContainer : {
+        flex : 1,
+        backgroundColor : colors.black,
     },
-    sectionContainer: {
-        marginTop: 20,
-        marginBottom: 20,
+    sectionContainer : {
+        marginLeft : 28,
+        marginTop : 20,
     },
-    header: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        paddingHorizontal: 15,
+    listHeader : {
+      flexDirection : 'row',
+      alignItems : 'center',
     },
-    titleContainer: {
-        marginLeft: 15,
-        marginBottom: 3,
+    header : {
+        justifyContent : 'center',
     },
-    createButtonText: {
-        color: 'white',
-        fontWeight: 'bold',
+    headerTitle : {
+        fontSize : 20,
+        fontWeight : 'bold',
+        color : colors.white,
     },
-    description: {
-        color: 'white',
-        paddingHorizontal: 15,
-        paddingBottom: 10,
-    },
-    cardsContainer: {
-        paddingHorizontal: 15,
-    },
+    createButton : {
+        backgroundColor : colors.mainRed,
+        padding : 5,
+        marginLeft : 15,
+        borderRadius : 5,
 
-    titleUnderbar: {
-        height: 3,
-        backgroundColor: colors.mainRed,
-        width: '100%',
-        marginBottom: 5,
     },
-    cardContent: {
-        fontSize: 10,
-        color: 'black',
-        alignSelf: 'flex-start',
-        marginBottom: 5,
+    createButtonText : {
+        color : colors.white,
+        fontWeight : 'bold',
+        fontSize : 12,
     },
-    personContainer: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        marginTop: 5,
+    description : {
+        color : colors.white,
+        paddingTop : 10,
+        paddingBottom : 10,
     },
-    personCount: {
-        fontSize: 14,
-        fontWeight: 'bold',
-        color: colors.mainRed,
-        marginRight: 5,
-    },
-    positionButtonContainer: {
-        position: 'absolute',
-        alignItems: 'center', 
-    },
-    positionButton: {
-        width: 33, 
-        height: 33, 
-    },
-    pgButton: {
-        top: '10%', 
-        left: '50%', 
-        transform: [{ translateX: -25 }], 
-    },
-    positionButtonText: {
-        marginTop: 5, 
-        color: 'black',
-        fontWeight: 'bold',
-    },
-    sgButton: {
-        top: '30%',
-        left: '25%',
-    },
-    sfButton: {
-        top: '30%',
-        right: '25%',
-    },
-    pfButton: {
-        bottom: '10%',
-        left: '30%',
-    },
-    cButton: {
-        bottom: '10%',
-        right: '30%',
-    },
-    buttonText: {
-        color: 'white',
-    },
-    headerTitle: {
-        fontSize: 18,
-        fontWeight: 'bold',
-        color: colors.white,
-    },
-    createButton: {
-        backgroundColor: colors.mainRed,
-        paddingHorizontal: 10,
-        paddingVertical: 5,
-        borderRadius: 15,
-        marginRight: 10,
-    },
-    card: {
+    card : {
         backgroundColor: colors.white,
-        borderRadius: 8,
-        width: 230,
-        height: 100,
+        borderRadius: 5,
+        width: 220,
+        height: 130,
         marginRight: 15,
         padding: 10,
-        flexDirection: 'row', 
-        alignItems: 'center',
-    },
-    cardContentContainer: {
         flexDirection: 'row',
         alignItems: 'center',
     },
-    cardTextContainer: {
-        marginLeft: 20, 
+    cardContentContainer : {
+        flexDirection : 'row',
+        alignItems : 'center',
     },
-    cardTitle: {
-        fontSize: 14,
-        fontWeight: 'bold',
-        color: colors.black,
-        marginBottom: 3,
+    cardTextContainer : {
+        marginLeft : 12,
     },
-
-    maxPerson: {
-        position: 'absolute',
-        right: 10,
-        bottom: 10,
-        flexDirection: 'row',
-        alignItems: 'center',
+    cardTitle : {
+        borderBottomWidth : 1.5,
+        borderBottomColor : colors.mainRed,
+        borderStyle : 'solid',
     },
-    maxNum: {
-        fontSize: 10,
-        color: colors.black,
-        marginRight: 5,
+    cardTitleText : {
+        fontSize : 16,
+        fontWeight : 'bold',
+        color : colors.black,
+        marginBottom : 3,
+    },
+    cardContent : {
+        marginTop : 7,
+    },
+    cardContentText : {
+        fontSize : 12,
+        color : colors.black,
+        alignSelf : 'flex-start',
+        marginBottom : 3,
+    },
+    maxPerson : {
+        position : 'absolute',
+        right : 10,
+        bottom : 10,
+        flexDirection : 'row',
+        alignItems : 'center',
+    },
+    maxNum : {
+        fontSize : 12,
+        color : colors.black,
+        marginRight : 5,
     },
     courtContainer: {
-        position: 'relative',
-        alignSelf: 'center',
-        marginTop: 5,
-        width: '100%', 
-        height: 200, 
+        width : 336,
     },
     courtImage: {
-        width: '100%',
-        height: '100%',
-        resizeMode: 'contain',
+        width : '95%',
+        resizeMode : 'contain',
+    },
+    positionButtonContainer: {
+        position : 'absolute',
+        alignItems : 'center',
+    },
+    positionButtonText: {
+        color : colors.black,
+        fontWeight : 'bold',
+    },
+    pgButton: {
+        top : '18%',
+        left : '41%',
+    },
+    sgButton: {
+        top : '33%',
+        left : '13%',
+    },
+    sfButton: {
+        top : '33%',
+        right : '19%',
+    },
+    pfButton: {
+        bottom : '25%',
+        left : '23%',
+    },
+    cButton: {
+        bottom : '25%',
+        right : '28%',
     },
     registerButton: {
-        backgroundColor: colors.white, 
-        paddingVertical: 8, 
-        paddingHorizontal: 8, 
-        width: '35%',
-        marginLeft: 15,
-        borderRadius: 20, 
-        alignItems: 'center',
-        justifyContent: 'center',
-        marginTop: 1, 
+        backgroundColor : colors.white,
+        width : '40%',
+        borderRadius : 20,
+        padding : 10,
     },
     registerButtonText: {
-        color: colors.black, 
-        fontSize: 11, 
-        fontWeight: 'bold', 
+        color : colors.black,
+        fontSize : 12,
+        fontWeight : 'bold',
+        textAlign : 'center',
     },
 });
 

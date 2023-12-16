@@ -2,7 +2,6 @@ import axios from "axios";
 import instance from "./instance";
 import baseURL from "../Common/baseURL";
 const signIn = async (email, password) => {
-    // const apiURL = 'http://172.16.7.235:5000/v1/users/login'
     const endPoint = 'v1/users/login'
     const apiURL = baseURL + endPoint
     const requestData = {
@@ -70,8 +69,8 @@ const signUp = async (nickname, email, password, height, mainPosition) => {
 };
 
 const logout = async()=>{
-    endPoint = 'v1/users/logout'
-    apiURL = baseURL+endPoint
+    const endPoint = 'v1/users/logout'
+    const apiURL = baseURL+endPoint
     instance.get(apiURL)
     .then((res)=>{
         console.log(res)

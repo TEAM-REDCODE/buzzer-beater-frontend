@@ -8,18 +8,9 @@ import SignIn from "./src/components/screen/SignIn";
 import MercenaryList from "./src/components/screen/MercenaryList";
 import SignUp from "./src/components/screen/SignUp";
 import MyPageScreen from './src/components/screen/MyPageScreen';
-import colors from './src/Common/Colors';
 import Start from './src/components/screen/Start';
 import Homes from './src/components/screen/Homes';
 import { UserProvider } from './src/Common/UserContext';
-
-// function HomeScreen() {
-//   return (
-//     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor : colors.black}}>
-//       <Text>Home!!</Text>
-//     </View>
-//   );
-// }
 
 
 const Tab = createBottomTabNavigator();
