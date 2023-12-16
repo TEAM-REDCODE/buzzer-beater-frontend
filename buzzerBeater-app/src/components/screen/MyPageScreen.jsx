@@ -68,7 +68,7 @@ export default function MyPageScreen() {
           <Text style={styles.subtitle}>용병등록 / 주 포지션</Text>
           <View style={styles.iconList}>
             <View style={styles.iconBtn}>
-              <TouchableOpacity onPress={()=>{setMeet(2, "newtitle", 10, "newPlace", time, user.name)}}>
+              <TouchableOpacity onPress={()=>{setMeet(1, "newtitle", 10, "newPlace", time, user.name)}}>
                 <Iconify icon="fa6-solid:basketball" size={45} style={styles.iconStyle} />
               </TouchableOpacity>
               <Text style={styles.iconText}>용병 등록 확인</Text>

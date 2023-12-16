@@ -11,6 +11,7 @@ import MyPageScreen from './src/components/screen/MyPageScreen';
 import colors from './src/Common/Colors';
 import Start from './src/components/screen/Start';
 import Homes from './src/components/screen/Homes';
+import { UserProvider } from './src/Common/UserContext';
 
 // function HomeScreen() {
 //   return (
@@ -27,16 +28,18 @@ const Stack = createNativeStackNavigator();
 export default function App() {
 
   return (
-    <NavigationContainer>
-        <Stack.Navigator initialRouteName='Start'>
-          <Stack.Screen name='Start' component={Start} options={{headerShown: false}}/>
-          <Stack.Screen name='SignIn' component={SignIn} options={loginHeaderOptions}/>
-          <Stack.Screen name='SignUp' component={SignUp} options={signUpHeaderOptions}/>
-          <Stack.Screen name='MyPageScreen' component={MyPageScreen} options={myPageHeaderOptions}/>
-          <Stack.Screen name='Homes' component={Homes} options={commonHeaderOptions}/>
-          <Stack.Screen name='MercenaryList' component={MercenaryList} options={commonHeaderOptions}/>
-        </Stack.Navigator>
-    </NavigationContainer>
+    <UserProvider>
+      <NavigationContainer>
+          <Stack.Navigator initialRouteName='Start'>
+            <Stack.Screen name='Start' component={Start} options={{headerShown: false}}/>
+            <Stack.Screen name='SignIn' component={SignIn} options={loginHeaderOptions}/>
+            <Stack.Screen name='SignUp' component={SignUp} options={signUpHeaderOptions}/>
+            <Stack.Screen name='MyPageScreen' component={MyPageScreen} options={myPageHeaderOptions}/>
+            <Stack.Screen name='Homes' component={Homes} options={commonHeaderOptions}/>
+            <Stack.Screen name='MercenaryList' component={MercenaryList} options={commonHeaderOptions}/>
+          </Stack.Navigator>
+      </NavigationContainer>
+    </UserProvider>
 
   );
 }

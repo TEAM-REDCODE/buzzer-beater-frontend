@@ -31,7 +31,7 @@ const SignIn = ({navigation}) => {
                     mainPosition: userResponse.mainPosition,
                     nickname: userResponse.nickname
                 })
-                navigation.navigate('HomeScreen')
+                navigation.navigate('Homes')
             } else {
                 // Handle unsuccessful login, show an alert or perform other actions
                 console.error('Login failed', response.error);
