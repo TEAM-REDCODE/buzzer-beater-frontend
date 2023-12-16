@@ -20,6 +20,7 @@ import Homes from './src/components/screen/Homes';
 //   );
 // }
 
+
 const Tab = createBottomTabNavigator();
 
 const Stack = createNativeStackNavigator();
@@ -36,5 +37,6 @@ export default function App() {
           <Stack.Screen name='MercenaryList' component={MercenaryList} options={commonHeaderOptions}/>
         </Stack.Navigator>
     </NavigationContainer>
+
   );
 }
