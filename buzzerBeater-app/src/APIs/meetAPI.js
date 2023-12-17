@@ -12,8 +12,8 @@ import baseURL from "../Common/baseURL";
  * @returns 
  */
 const createMeet = async (title, maxPerson, place, time, createdById)=>{
-  endpoint = 'v1/meets/'
-  apiURL = baseURL + endpoint
+  const endpoint = 'v1/meets/'
+  const apiURL = baseURL + endpoint
 
   const requestData= {
     'title': title,
@@ -48,8 +48,8 @@ const createMeet = async (title, maxPerson, place, time, createdById)=>{
  * @returns 
  */
 const getMeetinfo = async (page, size) => {
-  endpoint = 'v1/meets/'
-  apiURL = baseURL + endpoint
+  const endpoint = 'v1/meets/'
+  const apiURL = baseURL + endpoint
   return await instance.get(apiURL, {
     params: {
       'page': page, // 페이지 번호
@@ -78,8 +78,8 @@ const getMeetinfo = async (page, size) => {
  * @param {string} ID 
  */
 const getMeetDetail = (ID) =>{
-  endpoint = 'v1/meets/'
-  apiURL = baseURL+endpoint+ID
+  const endpoint = 'v1/meets/'
+  const apiURL = baseURL+endpoint+ID
   instance.get(apiURL)
   .then((res)=>{
     console.log(res)
@@ -100,8 +100,8 @@ const getMeetDetail = (ID) =>{
  * @param {string} ID 
  */
 const deleteMeet = (ID) =>{
-  endpoint = 'v1/meets/'
-  apiURL = baseURL+endpoint+ID
+  const endpoint = 'v1/meets/'
+  const apiURL = baseURL+endpoint+ID
   instance.delete(apiURL,{
   })
   .then((res)=>{
@@ -126,8 +126,8 @@ const deleteMeet = (ID) =>{
  * @param {date time} time 
  */
 const setMeet = (ID, title, maxPerson, place, time) =>{
-  endpoint = 'v1/meets/'
-  apiURL = baseURL+endpoint+ID
+  const endpoint = 'v1/meets/'
+  const apiURL = baseURL+endpoint+ID
 
   const requestData ={
     'title' : title, 

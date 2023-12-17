@@ -11,7 +11,7 @@ const refresh = async()=>{
 
   instance.get(apiURL)
   .then((res)=>{
-    if(res.status == 200){
+    if(res.status === 200){
       return true
     }
     else{
@@ -55,9 +55,9 @@ const getBelong = async()=>{
 
   instance.get(apiURL)
   .then((res)=>{
-    if(res.status == 200){
+    if(res.status === 200){
       console.log(res)
-      return res
+      return res.data
     }
     else{
       return false
@@ -83,7 +83,7 @@ const setNickname = async (newName) => {
 
   return await instance.put(apiURL, finalData)
   .then((res)=>{
-    if (res.status == 204){
+    if (res.status === 204){
       return true
     }
     else{
@@ -112,7 +112,7 @@ const setHeight = async (newHeight) => {
 
   return await instance.put(apiURL, finalData)
   .then((res)=>{
-    if (res.status == 204){
+    if (res.status === 204){
       return true
     }
     else{

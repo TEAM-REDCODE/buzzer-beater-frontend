@@ -102,7 +102,7 @@ const Homes = () => {
                         </Text>
                     </View>
                     <TouchableOpacity style={styles.registerButton}>
-                        <Text style={styles.registerButtonText}>용병 등록하러 가기{' ➜'} </Text>
+                        <Text style={styles.registerButtonText}>용병 등록하러 가기{' →'} </Text>
                     </TouchableOpacity>
                 </View>
             </ScrollView>
