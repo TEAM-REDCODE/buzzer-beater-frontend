@@ -15,7 +15,6 @@ import { getMeetinfo, createMeet, setMeet, deleteeUserMeet } from '../../APIs/me
 import {NicknamePopup, PasswordPopup, PhysicalPopup, MecenearyPopup, PositonPopup} from '../UI/MyPagePopup';
 export default function MyPageScreen() {
   const { user, setUserData } = useContext(UserContext);
-  const [newName, setNewname] = useState("gyural");
   const [newHeight, setNewHeightPopup] = useState(188.0);
   const [nicknamePopup, setNicknamePopup] = useState(false)
   const [passwordPopup, setPasswordPopup] = useState(false)
@@ -64,7 +63,7 @@ export default function MyPageScreen() {
           <Text style={styles.subtitle}>개인 정보</Text>
           <View style={styles.iconList}>
             {/* SetNicname */}
-            <NicknamePopup modalVisible={nicknamePopup} setModalVisible={setNicknamePopup} />
+            <NicknamePopup modalVisible={nicknamePopup} setModalVisible={setNicknamePopup} userName={user.nickname}/>
             <View style={styles.iconBtn}>
               <TouchableOpacity onPress={()=>{handlePopup(0)}}>
                 <Iconify icon="mdi:rename-outline" size={50} style={styles.iconStyle} />
