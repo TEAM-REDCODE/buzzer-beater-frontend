@@ -13,6 +13,8 @@ import {
 import colors from "../../Common/Colors";
 import { Iconify } from 'react-native-iconify';
 import {signIn, signUp} from "../../APIs/signAPI";
+import passowrdVerify from "./account/passwordValidation";
+import Colors from "../../Common/Colors";
 
 
 let bigLogoImg = require('../../../assets/Buzzer-Beater_big_logo.png')
@@ -81,26 +83,37 @@ const SignUp = () => {
                             value={password}
                             secureTextEntry={true}
                             placeholder="비밀번호를 입력하세요."
-                            keyboardType="visible-password"
                         />
                         <View style={styles.validation}>
                             <View style={styles.valiList}>
                                 <View style={styles.valiButton}>
-                                    <Iconify icon="ri:checkbox-circle-line" size={15} color={colors.white} />
+                                    {passowrdVerify(password, 1)?
+                                        <Iconify icon="ri:checkbox-circle-line" size={13} color={Colors.warning} />
+                                        :<Iconify icon="ri:checkbox-circle-line" size={13} color={Colors.white} />
+                                    }
                                     <Text style={styles.valiText}>총 8글자 이상</Text>
                                 </View>
                                 <View style={styles.valiButton}>
-                                    <Iconify icon="ri:checkbox-circle-line" size={15} color={colors.white} />
+                                    {passowrdVerify(password, 3)?
+                                        <Iconify icon="ri:checkbox-circle-line" size={13} color={Colors.warning} />
+                                        :<Iconify icon="ri:checkbox-circle-line" size={13} color={Colors.white} />
+                                    }
                                     <Text style={styles.valiText}>1개 이상의 대문자 포함</Text>
                                 </View>
                             </View>
                             <View style={styles.valiList}>
                                 <View style={styles.valiButton}>
-                                    <Iconify icon="ri:checkbox-circle-line" size={15} color={colors.white} />
+                                    {passowrdVerify(password, 2)?
+                                        <Iconify icon="ri:checkbox-circle-line" size={13} color={Colors.warning} />
+                                        :<Iconify icon="ri:checkbox-circle-line" size={13} color={Colors.white} />
+                                    }
                                     <Text style={styles.valiText}>1개 이상의 소문자 포함</Text>
                                 </View>
                                 <View style={styles.valiButton}>
-                                    <Iconify icon="ri:checkbox-circle-line" size={15} color={colors.white} />
+                                    {passowrdVerify(password, 4)?
+                                        <Iconify icon="ri:checkbox-circle-line" size={13} color={Colors.warning} />
+                                        :<Iconify icon="ri:checkbox-circle-line" size={13} color={Colors.white} />
+                                    }
                                     <Text style={styles.valiText}>숫자, 특수문자 포함</Text>
                                 </View>
                             </View>
@@ -111,7 +124,6 @@ const SignUp = () => {
                             value={password_Check}
                             secureTextEntry={true}
                             placeholder="비밀번호를 재입력하세요."
-                            keyboardType="visible-password"
                         />
                         <Text style={styles.subtitle}>
                             피지컬 정보 입력 <Text style={styles.star}>*</Text>
@@ -189,11 +201,10 @@ const styles = StyleSheet.create({
 
     input: {
         width : 300,
-        height : 45,
+        height : 50,
         margin : 15,
         borderRadius : 5,
         padding : 10,
-        textAlignVertical : 'top',
         backgroundColor : colors.white,
     },
 
@@ -225,15 +236,15 @@ const styles = StyleSheet.create({
 
     valiText : {
         color : colors.white,
-        fontSize : 12,
+        fontSize : 11,
         marginLeft : 8,
     },
 
     button : {
         width : 300,
-        margin : 20,
+        margin : 15,
         borderRadius : 5,
-        padding : 15,
+        padding : 13,
         backgroundColor : colors.mainRed,
     },
 

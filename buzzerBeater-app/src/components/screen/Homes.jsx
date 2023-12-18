@@ -37,7 +37,7 @@ const Homes = () => {
                     </View>
                     <ScrollView horizontal={true}>
                         {/* 여기에 카드를 추가합니다. */}
-                        <TouchableOpacity onPress={handleCardPress} style={styles.cardTouchable}>
+                        <TouchableOpacity onPress={handleCardPress}>
                             <View style={styles.card}>
                                 <View style={styles.cardContentContainer}>
                                     <Iconify
@@ -50,9 +50,18 @@ const Homes = () => {
                                             <Text style={styles.cardTitleText}>초보 환영</Text>
                                         </View>
                                         <View style={styles.cardContent}>
-                                            <Text style={styles.cardContentText}>생성자 : slrspdla</Text>
-                                            <Text style={styles.cardContentText}>장소 : 고려대학교 농구장</Text>
-                                            <Text style={styles.cardContentText}>시간 : 16:00</Text>
+                                            <Text style={styles.cardContentText}>
+                                                <Text style={styles.cardContentLabel}>생성자 : </Text>
+                                                slrspdla
+                                            </Text>
+                                            <Text style={styles.cardContentText}>
+                                                <Text style={styles.cardContentLabel}>장소 : </Text>
+                                                고려대학교 농구장
+                                            </Text>
+                                            <Text style={styles.cardContentText}>
+                                                <Text style={styles.cardContentLabel}>시간 : </Text>
+                                                16:00
+                                            </Text>
                                         </View>
                                     </View>
                                 </View>
@@ -133,23 +142,31 @@ const Homes = () => {
                     <View style={styles.modalOverlay}>
                         <View style={styles.modalView}>
                             <Text style={[styles.modalTitle, { marginBottom: 8 }]}>
-                                <Text style={styles.modalCreatorName}>slrspdla</Text>
-                                님이 생성한 농구팟에 참여하시겠습니까{'?'}
+                                <Text style={[styles.modalCreatorName, styles.modalTextRed]}>slrspdla</Text>
+                                님이 생성한 농구팟에 참여하시겠습니까?
                             </Text>
-                            <Text style={[styles.modalMiddle, { marginBottom: 10 }]}>{'✔'}장소와 시간을 확인해주세요.</Text>
-                            <Text style={styles.modalContent}>
-                                <Text style={styles.modalLabel}>장소 :</Text>
-                                고려대학교 농구장</Text>
-                            <Text style={styles.modalContent}>
-                                <Text style={styles.modalLabel}>시간 :</Text>
-                                16:00</Text>
-                            <View style={styles.modalButtonContainer}>
-                                <TouchableOpacity style={styles.modalYesButton} onPress={closeModal}>
-                                    <Text style={styles.modalButtonText}>YES</Text>
-                                </TouchableOpacity>
-                                <TouchableOpacity style={styles.modalNoButton} onPress={closeModal}>
-                                    <Text style={styles.modalButtonText}>NO</Text>
-                                </TouchableOpacity>
+                            <View style={styles.modalMiddle}>
+                                <Text style={[styles.modalMiddleText, { marginBottom: 10 }]}>{'✔ '}
+                                    <Text style={styles.modalTextRed}>장소</Text>와 <Text style={styles.modalTextRed}>시간</Text>을 확인해주세요.
+                                </Text>
+                                <View>
+                                    <Text style={styles.modalContent}>
+                                        <Text style={styles.modalLabel}>장소 : </Text>
+                                        고려대학교 농구장
+                                    </Text>
+                                    <Text style={styles.modalContent}>
+                                        <Text style={styles.modalLabel}>시간 : </Text>
+                                        16:00
+                                    </Text>
+                                </View>
+                                <View style={styles.modalButtonContainer}>
+                                    <TouchableOpacity style={styles.modalYesButton} onPress={closeModal}>
+                                        <Text style={styles.modalButtonText}>YES</Text>
+                                    </TouchableOpacity>
+                                    <TouchableOpacity style={styles.modalNoButton} onPress={closeModal}>
+                                        <Text style={styles.modalButtonText}>NO</Text>
+                                    </TouchableOpacity>
+                                </View>
                             </View>
                         </View>
                     </View>
@@ -185,7 +202,6 @@ const styles = StyleSheet.create({
         padding: 5,
         marginLeft: 15,
         borderRadius: 5,
-
     },
     createButtonText: {
         color: colors.white,
@@ -200,8 +216,8 @@ const styles = StyleSheet.create({
     card: {
         backgroundColor: colors.white,
         borderRadius: 5,
-        width: 220,
-        height: 130,
+        width: 250,
+        height: 150,
         marginRight: 15,
         padding: 10,
         flexDirection: 'row',
@@ -234,6 +250,9 @@ const styles = StyleSheet.create({
         alignSelf: 'flex-start',
         marginBottom: 3,
     },
+    cardContentLabel : {
+        fontWeight : 'bold',
+    },
     maxPerson: {
         position: 'absolute',
         right: 10,
@@ -247,7 +266,7 @@ const styles = StyleSheet.create({
         marginRight: 5,
     },
     courtContainer: {
-        width: 336,
+        width: '97%',
     },
     courtImage: {
         width: '95%',
@@ -274,18 +293,19 @@ const styles = StyleSheet.create({
         right: '19%',
     },
     pfButton: {
-        bottom: '25%',
+        bottom: '20%',
         left: '23%',
     },
     cButton: {
-        bottom: '25%',
-        right: '28%',
+        bottom: '20%',
+        right: '29%',
     },
     registerButton: {
         backgroundColor: colors.white,
         width: '40%',
         borderRadius: 20,
         padding: 10,
+        marginBottom : 15,
     },
     registerButtonText: {
         color: colors.black,
@@ -299,13 +319,18 @@ const styles = StyleSheet.create({
         alignItems: "center",
         marginTop: 22
     },
+    modalOverlay: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: 'rgba(2, 2, 2, 0.5)',
+    },
     modalView: {
         margin: 20,
         backgroundColor: "white",
         borderRadius: 20,
         padding: 35,
-        alignItems: "center",
-        shadowColor: "#000",
+        shadowColor: colors.black,
         shadowOffset: {
             width: 0,
             height: 2
@@ -314,65 +339,65 @@ const styles = StyleSheet.create({
         shadowRadius: 3.84,
         elevation: 5
     },
-    modalText: {
-        marginBottom: 15,
-        textAlign: "center"
-    },
-    cardTouchable: {
-    },
-    modalOverlay: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: 'rgba(0, 0, 0, 0.5)',
-    },
     modalTitle: {
-        fontSize: 21,
+        width : 250,
+        fontSize: 15,
         fontWeight: 'bold',
-        color: 'black',
+        color: colors.black,
         textAlign: 'center',
-    },
-    modalMiddle: {
-        fontSize: 17,
-        fontWeight: 'bold',
-        color: 'black',
     },
     modalCreatorName: {
         fontSize: 20,
         fontWeight: 'bold',
-        color: 'red',
-        marginBottom: 15,
+    },
+    modalTextRed : {
+        color : colors.mainRed,
+        fontWeight: 'bold',
+    },
+    modalMiddle : {
+        width : 250,
+      alignItems : 'center',
+    },
+    modalMiddleText: {
+        fontSize: 14,
+        color: colors.black,
     },
     modalLabel: {
-        fontSize: 16,
-        color: 'black',
+        fontSize: 13,
+        color: colors.black,
         fontWeight:'bold',
     },
     modalContent: {
-        fontSize: 16,
-        marginBottom: 10,
+        fontSize: 12,
+        marginBottom: 5,
     },
     modalButtonContainer: {
+        width: 180,
         flexDirection: 'row',
-        justifyContent: 'space-around',
-        marginTop: 20,
+        marginTop: 10,
+        gap : 20,
     },
     modalYesButton: {
-        backgroundColor: 'red',
-        padding: 10,
+        backgroundColor: colors.mainRed,
+        paddingLeft: 30,
+        paddingRight: 30,
+        paddingTop: 10,
+        paddingBottom: 10,
         borderRadius: 5,
-        marginHorizontal: 10,
     },
     modalNoButton: {
-        backgroundColor: 'grey',
-        padding: 10,
+        backgroundColor: colors.black,
+        paddingLeft: 30,
+        paddingRight: 30,
+        paddingTop: 10,
+        paddingBottom: 10,
         borderRadius: 5,
-        marginHorizontal: 10,
     },
     modalButtonText: {
-        color: 'white',
-        fontSize: 16,
-        textAlign: 'center',
+        color : colors.white,
+        fontSize : 12,
+        fontWeight : 'bold',
+        textAlign : 'center',
     },
 });
 

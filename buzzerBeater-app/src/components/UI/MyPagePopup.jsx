@@ -22,37 +22,36 @@ const NicknamePopup = ({ modalVisible, setModalVisible, userName }) => {
       visible={modalVisible}
       onBackdropPress={() => {closeModal()}}
       >
-      
         <TouchableWithoutFeedback>
             <View View style={styles.overlay}>
               <View style={styles.modalView}>
-                <Text style={styles.modalTitle}>닉네임 번경</Text>
+                <Text style={styles.modalTitle}>닉네임 변경</Text>
                 <Text style={styles.modalText}>현재 사용중인 닉네임</Text>
                 <Text style={styles.currentText} >{userName}</Text>
-                <Text style={styles.modalText}></Text>
-                <TextInput style={styles.input} 
-                placeholder="변경하고 싶은 닉네임을 입력해주세요"
-                placeholderTextColor="gray"
-                placeholderText={{ fontSize: 1 }}
-                onChangeText={handleName}
-                value={newName}
-                ></TextInput>
-                <Text style={styles.smallText}>공백없이 문자와 숫자로만 5자 이상 20자 이내로 입력하세요.</Text>
+                <Text style={styles.modalText}>변경할 닉네임</Text>
+                <TextInput
+                  style={styles.input}
+                  placeholder="변경하고 싶은 닉네임을 입력해주세요"
+                  placeholderTextColor='gray'
+                  placeholderText={{ fontSize: 0.3 }}
+                  onChangeText={handleName}
+                  value={newName}
+                />
+                <Text style={styles.smallText}>*공백없이 문자와 숫자로만 5자 이상 20자 이내로 입력하세요.</Text>
                 <View style={styles.buttonList}>
-                  <View style={{borderRadius: 8, backgroundColor: Colors.mainRed}}>
+                  <View style={{borderRadius: 5, backgroundColor: Colors.mainRed}}>
                     <TouchableOpacity>
-                      <Text style={styles.submitBtn}>변경하기</Text>
+                      <Text style={styles.submitBtn}>변경</Text>
                     </TouchableOpacity>
                   </View>
-                  <View style={{borderRadius: 8, backgroundColor: Colors.black}}>
+                  <View style={{borderRadius: 5, backgroundColor: Colors.black}}>
                     <TouchableOpacity>
-                      <Text style={styles.cancelBtn} onPress={closeModal}>취소하기</Text>
+                      <Text style={styles.cancelBtn} onPress={closeModal}>취소</Text>
                     </TouchableOpacity>
                   </View>
                 </View>
               </View>
-            </View> 
-
+            </View>
         </TouchableWithoutFeedback>
     </Modal>
   );
@@ -90,35 +89,35 @@ const PasswordPopup = ({ modalVisible, setModalVisible }) => {
       <TouchableWithoutFeedback>
         <View style={styles.overlay}>
           <View style={styles.modalView}>
-            <Text style={styles.modalTitle}>비밀번호 번경</Text>
+            <Text style={styles.modalTitle}>비밀번호 변경</Text>
             <Text style={styles.modalText}>현재 비밀번호</Text>
             <TextInput style={styles.input}
               placeholder="현재 사용 중인 비밀번호를 입력해주세요"
               placeholderTextColor="gray"
               onChangeText={handlePW}
               value={pw}
-            ></TextInput>
+            />
             <Text style={styles.modalText}>새 비밀번호</Text>
             <TextInput style={styles.input}
               placeholder="새 비밀번호를 입력해주세요"
               placeholderTextColor="gray"
               onChangeText={handleNewPW}
+              secureTextEntry={true}
               value={newPw}
-            
             ></TextInput>
             <View style={styles.validation}>
               <View style={styles.valiList}>
                   <View style={styles.valiButton}>
                       {passowrdVerify(newPw, 1)? 
-                      <Iconify icon="ri:checkbox-circle-line" size={15} color={Colors.mainRed} />
-                      :<Iconify icon="ri:checkbox-circle-line" size={15} color={Colors.black} />
+                      <Iconify icon="ri:checkbox-circle-line" size={13} color={Colors.mainRed} />
+                      :<Iconify icon="ri:checkbox-circle-line" size={13} color={Colors.black} />
                       }
                       <Text style={styles.valiText}>총 8글자 이상</Text>
                   </View>
                   <View style={styles.valiButton}>
                     {passowrdVerify(newPw, 3)? 
-                      <Iconify icon="ri:checkbox-circle-line" size={15} color={Colors.mainRed} />
-                      :<Iconify icon="ri:checkbox-circle-line" size={15} color={Colors.black} />
+                      <Iconify icon="ri:checkbox-circle-line" size={13} color={Colors.mainRed} />
+                      :<Iconify icon="ri:checkbox-circle-line" size={13} color={Colors.black} />
                       }
                       <Text style={styles.valiText}>1개 이상의 대문자 포함</Text>
                   </View>
@@ -126,15 +125,15 @@ const PasswordPopup = ({ modalVisible, setModalVisible }) => {
               <View style={styles.valiList}>
                   <View style={styles.valiButton}>
                       {passowrdVerify(newPw, 2)? 
-                      <Iconify icon="ri:checkbox-circle-line" size={15} color={Colors.mainRed} />
-                      :<Iconify icon="ri:checkbox-circle-line" size={15} color={Colors.black} />
+                      <Iconify icon="ri:checkbox-circle-line" size={13} color={Colors.mainRed} />
+                      :<Iconify icon="ri:checkbox-circle-line" size={13} color={Colors.black} />
                       }
                       <Text style={styles.valiText}>1개 이상의 소문자 포함</Text>
                   </View>
                   <View style={styles.valiButton}>
                       {passowrdVerify(newPw, 4)? 
-                      <Iconify icon="ri:checkbox-circle-line" size={15} color={Colors.mainRed} />
-                      :<Iconify icon="ri:checkbox-circle-line" size={15} color={Colors.black} />
+                      <Iconify icon="ri:checkbox-circle-line" size={13} color={Colors.mainRed} />
+                      :<Iconify icon="ri:checkbox-circle-line" size={13} color={Colors.black} />
                       }
                       <Text style={styles.valiText}>숫자, 특수문자 포함</Text>
                   </View>
@@ -146,18 +145,16 @@ const PasswordPopup = ({ modalVisible, setModalVisible }) => {
               placeholderTextColor="gray"
               onChangeText={handleNewPWV}
               value={newPwV}
-            
-            ></TextInput>
-
+            />
             <View style={styles.buttonList}>
-                  <View style={{borderRadius: 8, backgroundColor: Colors.mainRed}}>
+                  <View style={{borderRadius: 5, backgroundColor: Colors.mainRed}}>
                     <TouchableOpacity>
-                      <Text style={styles.submitBtn}>변경하기</Text>
+                      <Text style={styles.submitBtn}>변경</Text>
                     </TouchableOpacity>
                   </View>
-                  <View style={{borderRadius: 8, backgroundColor: Colors.black}}>
+                  <View style={{borderRadius: 5, backgroundColor: Colors.black}}>
                     <TouchableOpacity>
-                      <Text style={styles.cancelBtn} onPress={closeModal}>취소하기</Text>
+                      <Text style={styles.cancelBtn} onPress={closeModal}>취소</Text>
                     </TouchableOpacity>
                   </View>
                 </View>
@@ -247,18 +244,17 @@ const PositonPopup = ({ modalVisible, setModalVisible }) => {
 const styles = StyleSheet.create({
   overlay: {
     flex: 1,
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    backgroundColor: 'rgba(2, 2, 2, 0.5)',
     justifyContent: 'center',
     alignItems: 'center',
   },
   modalView: {
-    margin: 20,
+    width : 350,
     backgroundColor: Colors.white,
     borderRadius: 20,
-    padding: 35,
-    paddingBottom: 20,
+    padding: 20,
     alignItems: 'center',
-    shadowColor: '#000',
+    shadowColor: Colors.black,
     shadowOffset: {
       width: 0,
       height: 2,
@@ -268,103 +264,96 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   modalTitle: {
-    color: Colors.mainRed,
     width: 280,
-    fontSize: 24,
+    color: Colors.mainRed,
+    fontSize: 20,
     fontWeight: 'bold',
-    marginBottom: 24,
   },
   modalText: {
-    marginBottom: 15,
+    width: 280,
+    marginTop : 10,
+    marginBottom : 10,
     color: Colors.black,
     fontWeight: 'bold',
-    textAlign: 'left',
-    width: 280,
   },
   currentText: {
-    width : 280,
-    height : 50,
-    margin : 10,
+    width: 280,
+    height : 45,
     borderRadius : 5,
-    padding: 15,
+    paddingTop : 11,
+    paddingLeft : 15,
     fontWeight: 'bold',
     backgroundColor : 'white',
   },
   smallText: {
-    fontSize: 12,
-    color: `rgba(255, 0, 0, 0.5)`, // 예시: 빨간색과 투명도 0.5
-    
-    textAlign: 'left',
-    
-    width: 240,
+    width: 280,
+    fontSize: 9,
+    marginTop : 5,
+    fontWeight : 'bold',
+    color: Colors.warning, // 예시: 빨간색과 투명도 0.5
   },
   input: {
-    width : 280,
-    height : 50,
-    margin : 10,
+    width: 280,
+    height : 45,
     borderRadius : 5,
-    padding : 15,
+    paddingLeft : 15,
     backgroundColor : 'white',
-
   },
   buttonList:{
-    marginTop: 12,
     width: 280,
+    marginTop: 15,
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'center',
-    gap: 10,
+    gap: 20,
   },
   submitBtn:{
-    paddingLeft: 35,
-    paddingRight: 35,
+    paddingLeft: 30,
+    paddingRight: 30,
     paddingTop: 10,
     paddingBottom: 10,
     color: Colors.white,
     fontWeight: 'bold',
-    fontSize: 18,
+    fontSize: 15,
   },
   cancelBtn:{
-    paddingLeft: 35,
-    paddingRight: 35,
+    paddingLeft: 30,
+    paddingRight: 30,
     paddingTop: 10,
     paddingBottom: 10,
     color: Colors.white,
     fontWeight: 'bold',
-    fontSize: 18,
+    fontSize: 15,
   },
   
   validation : {
-    width: 280,
-    height : 60,
+    width: 260,
+    height : 52,
+    margin : 5,
     display : 'flex',
     flexWrap : 'wrap',
     justifyContent : 'space-between',
     flexDirection : 'row',
     borderColor: 'red',
     borderwidth: 1,
-    
   },
 
   valiList : {
       display : 'flex',
-      justifyContent : 'space-between',
-
-      
   },
 
   valiButton : {
     height : 20,
     flexDirection : 'row',
     alignItems : 'center',
-    marginTop : 6,
+    marginTop : 3,
     left : 3,
   },
 
   valiText : {
       color : Colors.black,
-      fontSize : 12,
-      marginLeft : 3,
+      fontSize : 10,
+      marginLeft : 5,
   },
 });
 

@@ -100,6 +100,7 @@ const styles = StyleSheet.create({
         width : 55,
         height : 55,
         marginLeft : 15,
+        marginTop : 8,
     },
 
     rightHead : {

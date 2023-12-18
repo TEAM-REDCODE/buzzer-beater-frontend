@@ -107,19 +107,18 @@ const styles = StyleSheet.create({
 
     input: {
         width : 300,
-        height : 45,
+        height : 50,
         margin : 13,
         borderRadius : 5,
         padding : 10,
-        textAlignVertical : 'top',
         backgroundColor : colors.white,
     },
 
     button : {
         width : 300,
-        margin : 20,
+        margin : 15,
         borderRadius : 5,
-        padding : 14,
+        padding : 13,
         backgroundColor : colors.mainRed,
     },
 

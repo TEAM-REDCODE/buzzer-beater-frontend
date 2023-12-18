@@ -155,6 +155,7 @@ const styles = StyleSheet.create({
 
   logout : {
     width : '23%',
+    height : '36%',
   },
 
   logoutbtn:{
@@ -163,9 +164,9 @@ const styles = StyleSheet.create({
     fontSize : 12,
     textAlign : 'center',
     borderColor : Colors.mainRed,
-    borderWidth : 2,
+    borderWidth : 1.5,
     borderRadius : 15,
-    padding : 7,
+    padding : 5,
   },
 
   subtitle : {
