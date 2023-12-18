@@ -8,19 +8,26 @@ import {getMeetDetail} from "../../APIs/meetAPI";
 const MercenaryList = ({navigation}) => {
     const [belongList, setBelongList] = useState([]);
 
-    useEffect(() => {
-        const mercData = async () => {
-            try {
-                // getBelong 함수 호출
-                const response = await getBelong();
-                setBelongList(response || []);
+    const mercData = async () => {
+        try {
+            // getBelong 함수 호출
+            const mercResponse = await getBelong();
+            console.log('Response from getBelong:', mercResponse);
 
-            } catch (error) {
-                console.error('Error while fetching belong list', error);
-                alert('에러 발생!')
+            // mercResponse가 object 타입인지 확인
+            if (mercResponse && typeof mercResponse === 'object' && Object.keys(mercResponse).length > 0) {
+                setBelongList(mercResponse[0]);
+            } else {
+                setBelongList([]);
             }
-        };
 
+        } catch (error) {
+            console.error('Error while fetching belong list', error);
+            alert('에러 발생!')
+        }
+    };
+
+    useEffect(() => {
         mercData(); // 컴포넌트가 마운트될 때 데이터 가져오기
     }, []);
 
@@ -36,7 +43,7 @@ const MercenaryList = ({navigation}) => {
                             <ScrollView horizontal={true}>
                                 {belongList.length > 0 ? (
                                     belongList.map((item) => (
-                                        <TouchableOpacity key={item.id} style={styles.listBox}>
+                                        <TouchableOpacity key={item._id} style={styles.listBox}>
                                             <Iconify
                                                 icon="solar:basketball-bold-duotone"
                                                 size={40}
@@ -75,7 +82,7 @@ const MercenaryList = ({navigation}) => {
                             <ScrollView horizontal={true}>
                                 {belongList.length > 0 ? (
                                     belongList.map((item) => (
-                                        <TouchableOpacity key={item.id} style={styles.listBox}>
+                                        <TouchableOpacity key={item._id} style={styles.listBox}>
                                             <Iconify
                                                 icon="solar:basketball-bold-duotone"
                                                 size={40}

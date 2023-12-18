@@ -45,7 +45,6 @@ const getUserInfo = async()=>{
   })
 }
 
-
 /**
  * 유저가 속해있는 파티 GET
  */
@@ -66,7 +65,6 @@ const getBelong = async()=>{
   .catch((error)=>{
     return false
   })
-
 }
 /**
  * 
