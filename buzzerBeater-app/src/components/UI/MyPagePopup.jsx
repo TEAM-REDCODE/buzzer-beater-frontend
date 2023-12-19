@@ -157,7 +157,7 @@ const PasswordPopup = ({ modalVisible, setModalVisible }) => {
                       <Text style={styles.cancelBtn} onPress={closeModal}>취소</Text>
                     </TouchableOpacity>
                   </View>
-                </View>
+            </View>
           </View>
         </View>
       </TouchableWithoutFeedback>
@@ -165,7 +165,13 @@ const PasswordPopup = ({ modalVisible, setModalVisible }) => {
   );
 };
 
-const PhysicalPopup = ({ modalVisible, setModalVisible }) => {
+const PhysicalPopup = ({ modalVisible, setModalVisible}) => {
+  const [newHeight, setNewHeight] = useState("")
+
+  const handleChange = (text) =>{
+    setNewHeight(parseInt(text))
+
+  }
   const closeModal = () => {
     setModalVisible(false);
   };
@@ -182,7 +188,26 @@ const PhysicalPopup = ({ modalVisible, setModalVisible }) => {
       <TouchableWithoutFeedback onPress={closeModal}>
         <View style={styles.overlay}>
           <View style={styles.modalView}>
-            <Text style={styles.modalText}>PhysicalPopup load!!</Text>
+            <Text style={styles.modalTitle}>피지컬 수정</Text>
+            <Text style={styles.modalText}>피지컬 정보</Text>
+            <TextInput style={styles.input}
+              placeholder="키를 입력해주세요"
+              placeholderTextColor="gray"
+              onChangeText={handleChange}
+              value={newHeight}
+            ></TextInput>
+            <View style={styles.buttonList}>
+                  <View style={{borderRadius: 5, backgroundColor: Colors.mainRed}}>
+                    <TouchableOpacity>
+                      <Text style={styles.submitBtn}>변경</Text>
+                    </TouchableOpacity>
+                  </View>
+                  <View style={{borderRadius: 5, backgroundColor: Colors.black}}>
+                    <TouchableOpacity>
+                      <Text style={styles.cancelBtn} onPress={closeModal}>취소</Text>
+                    </TouchableOpacity>
+                  </View>
+            </View>
           </View>
         </View>
       </TouchableWithoutFeedback>
@@ -190,7 +215,10 @@ const PhysicalPopup = ({ modalVisible, setModalVisible }) => {
   );
 };
 
-const MecenearyPopup = ({ modalVisible, setModalVisible }) => {
+const MecenearyPopup = ({ modalVisible, setModalVisible, mercen }) => {
+  const [yn, setYn] = useState(true)
+
+  
   const closeModal = () => {
     setModalVisible(false);
   };
@@ -206,7 +234,16 @@ const MecenearyPopup = ({ modalVisible, setModalVisible }) => {
       <TouchableWithoutFeedback onPress={closeModal}>
         <View style={styles.overlay}>
           <View style={styles.modalView}>
-            <Text style={styles.modalText}>MecenearyPopup load!!</Text>
+            <Text style={styles.modalTextCenter}>용병 등록 확인</Text>
+            {mercen? 
+            <Text style={styles.modalTextCenter}>
+              <Text style={{fontSize: 40, color: Colors.mainRed}}>O</Text><Text> / X</Text>
+            </Text>
+            :
+            <Text style={styles.modalTextCenter}>
+              <Text >O / </Text><Text style={{fontSize: 40, color: Colors.mainRed}}>X</Text>
+            </Text>
+            }
           </View>
         </View>
         
@@ -216,11 +253,14 @@ const MecenearyPopup = ({ modalVisible, setModalVisible }) => {
   );
 };
 
-const PositonPopup = ({ modalVisible, setModalVisible }) => {
+const PositonPopup = ({ modalVisible, setModalVisible, position }) => {
   const closeModal = () => {
     setModalVisible(false);
   };
-
+  const [newPosition, setNewPosition] = useState("")
+  const handleChange = (text) =>{
+    setNewPosition(text)
+  }
   return (
     <Modal
       animationType="fade"
@@ -233,7 +273,29 @@ const PositonPopup = ({ modalVisible, setModalVisible }) => {
       <TouchableWithoutFeedback onPress={closeModal}>
         <View style={styles.overlay}>
           <View style={styles.modalView}>
-            <Text style={styles.modalText}>PositonPopup load!!</Text>
+            <Text style={styles.modalTitle}>주 포지션 번경</Text>
+            <Text style={styles.modalText}>현재 설정된 포지션</Text>
+            <Text style={styles.currentText}>{position}</Text>
+            <Text style={styles.modalText}>번경한 포지션</Text>
+            <TextInput style={styles.input}
+               placeholder="변경할 포지션을 입력해주세요"
+               placeholderTextColor="gray"
+               onChangeText={handleChange}
+               value={newPosition}
+            ></TextInput>
+
+            <View style={styles.buttonList}>
+                  <View style={{borderRadius: 5, backgroundColor: Colors.mainRed}}>
+                    <TouchableOpacity>
+                      <Text style={styles.submitBtn}>변경</Text>
+                    </TouchableOpacity>
+                  </View>
+                  <View style={{borderRadius: 5, backgroundColor: Colors.black}}>
+                    <TouchableOpacity>
+                      <Text style={styles.cancelBtn} onPress={closeModal}>취소</Text>
+                    </TouchableOpacity>
+                  </View>
+            </View>
           </View>
         </View>
       </TouchableWithoutFeedback>
@@ -275,6 +337,15 @@ const styles = StyleSheet.create({
     marginBottom : 10,
     color: Colors.black,
     fontWeight: 'bold',
+  },
+  modalTextCenter: {
+    width: 280,
+    marginTop : 10,
+    marginBottom : 10,
+    color: Colors.black,
+    fontWeight: 'bold',
+    textAlign: 'center',
+    textAlignVertical: 'center',
   },
   currentText: {
     width: 280,

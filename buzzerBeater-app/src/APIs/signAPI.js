@@ -17,6 +17,7 @@ const signIn = async (email, password) => {
         withCredentials : true
     })
     .then((res) => {
+        console.log(res)
         const status = res.status
 
         // console.log(res.cookie);

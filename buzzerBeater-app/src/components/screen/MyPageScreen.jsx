@@ -91,7 +91,7 @@ export default function MyPageScreen() {
           <Text style={styles.subtitle}>용병등록 / 주 포지션</Text>
           <View style={styles.iconList}>
             {/* Get Mercenary */}
-            <MecenearyPopup modalVisible={mecenearyPopup} setModalVisible={setMecenearyPopup} />
+            <MecenearyPopup modalVisible={mecenearyPopup} setModalVisible={setMecenearyPopup} mercen={user.isMercenary}/>
             <View style={styles.iconBtn}>
               <TouchableOpacity onPress={()=>{handlePopup(3)}}>
                 <Iconify icon="fa6-solid:basketball" size={45} style={styles.iconStyle} />
@@ -100,7 +100,7 @@ export default function MyPageScreen() {
             </View>
 
             {/* Set Positon */}
-            <PositonPopup modalVisible={positonPopup} setModalVisible={setPositonPopup} />
+            <PositonPopup modalVisible={positonPopup} setModalVisible={setPositonPopup} position={user.mainPosition}/>
             <View style={styles.iconBtn}>
               <TouchableOpacity onPress={()=>{handlePopup(4)}}>
                 <Iconify icon="gis:position-man" size={45} style={styles.iconStyle} />
