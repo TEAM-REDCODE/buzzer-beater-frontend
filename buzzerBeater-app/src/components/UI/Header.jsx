@@ -93,14 +93,13 @@ const signUpHeaderOptions = ({ navigation }) => ({
 const styles = StyleSheet.create({
 
     logoimg : {
-        height : 70,
+        height : 55,
     },
 
     logo : {
         width : 55,
         height : 55,
         marginLeft : 15,
-        marginTop : 8,
     },
 
     rightHead : {

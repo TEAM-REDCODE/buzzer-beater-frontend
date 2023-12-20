@@ -75,7 +75,7 @@ export default function MyPageScreen() {
             <PasswordPopup modalVisible={passwordPopup} setModalVisible={setPasswordPopup} />
             <View style={styles.iconBtn}>
               <TouchableOpacity onPress={()=>{(handlePopup(1))}}>
-                <Iconify icon="mdi:password-outline" size={50} style={styles.iconStyle} />
+                <Iconify icon="mdi:password-outline" size={48} style={styles.iconStyle} />
               </TouchableOpacity >
               <Text style={styles.iconText}>비밀번호 변경</Text>
             </View>
@@ -199,7 +199,7 @@ const styles = StyleSheet.create({
   iconText : {
     fontSize : 13,
     color : Colors.white,
-    marginTop : '10%',
+    marginTop : '15%',
   },
 
   leave : {

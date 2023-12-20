@@ -143,7 +143,7 @@ const Homes = () => {
                         <View style={styles.modalView}>
                             <Text style={[styles.modalTitle, { marginBottom: 8 }]}>
                                 <Text style={[styles.modalCreatorName, styles.modalTextRed]}>slrspdla</Text>
-                                님이 생성한 농구팟에 참여하시겠습니까?
+                                님이 생성한 농구팟에{'\n'}참여하시겠습니까?
                             </Text>
                             <View style={styles.modalMiddle}>
                                 <Text style={[styles.modalMiddleText, { marginBottom: 10 }]}>{'✔ '}
@@ -328,8 +328,8 @@ const styles = StyleSheet.create({
     modalView: {
         margin: 20,
         backgroundColor: "white",
-        borderRadius: 20,
-        padding: 35,
+        borderRadius: 15,
+        padding : 30,
         shadowColor: colors.black,
         shadowOffset: {
             width: 0,

@@ -60,8 +60,8 @@ const styles = StyleSheet.create({
     backgroundColor: colors.white,
     padding : 15,
     borderRadius : 5,
-    marginBottom : 10,
-    width : '80%',
+    marginBottom : 15,
+    width : '75%',
     alignItems : 'center',
   },
   buttonText: {

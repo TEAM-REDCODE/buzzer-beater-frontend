@@ -27,7 +27,9 @@ const NicknamePopup = ({ modalVisible, setModalVisible, userName }) => {
               <View style={styles.modalView}>
                 <Text style={styles.modalTitle}>닉네임 변경</Text>
                 <Text style={styles.modalText}>현재 사용중인 닉네임</Text>
-                <Text style={styles.currentText} >{userName}</Text>
+                <View style={styles.currentText}>
+                  <Text style={{fontWeight : 'bold', fontSize : 16,}}>{userName}</Text>
+                </View>
                 <Text style={styles.modalText}>변경할 닉네임</Text>
                 <TextInput
                   style={styles.input}
@@ -273,10 +275,12 @@ const PositonPopup = ({ modalVisible, setModalVisible, position }) => {
       <TouchableWithoutFeedback onPress={closeModal}>
         <View style={styles.overlay}>
           <View style={styles.modalView}>
-            <Text style={styles.modalTitle}>주 포지션 번경</Text>
+            <Text style={styles.modalTitle}>주 포지션 변경</Text>
             <Text style={styles.modalText}>현재 설정된 포지션</Text>
-            <Text style={styles.currentText}>{position}</Text>
-            <Text style={styles.modalText}>번경한 포지션</Text>
+            <View style={styles.currentText}>
+              <Text style={{fontWeight : 'bold', fontSize : 16,}}>{position}</Text>
+            </View>
+            <Text style={styles.modalText}>변경한 포지션</Text>
             <TextInput style={styles.input}
                placeholder="변경할 포지션을 입력해주세요"
                placeholderTextColor="gray"
@@ -349,12 +353,10 @@ const styles = StyleSheet.create({
   },
   currentText: {
     width: 280,
-    height : 45,
     borderRadius : 5,
-    paddingTop : 11,
-    paddingLeft : 15,
-    fontWeight: 'bold',
+    padding : 15,
     backgroundColor : 'white',
+    color : Colors.black,
   },
   smallText: {
     width: 280,

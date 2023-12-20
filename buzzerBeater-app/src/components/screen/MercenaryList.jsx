@@ -4,6 +4,7 @@ import colors from "../../Common/Colors";
 import { Iconify } from 'react-native-iconify';
 import { getBelong } from '../../APIs/userAPI';
 import {UserContext} from "../../Common/UserContext";
+import Colors from "../../Common/Colors";
 
 
 const MercenaryList = ({navigation}) => {
@@ -157,7 +158,7 @@ const styles = StyleSheet.create({
     topLine : {
       borderTopWidth : 1.5,
       borderTopColor : colors.white,
-      borderStyle : 'dashed',
+      borderStyle : 'solid',
     },
 
     listCol : {
@@ -262,18 +263,18 @@ const styles = StyleSheet.create({
     },
 
     homeButton : {
-        width : '36%',
-        borderRadius : 25,
-        padding : 10,
-        backgroundColor : colors.white,
+        width : '45%',
+        borderRadius : 20,
+        padding : 8,
+        backgroundColor : Colors.white,
     },
 
     homeText : {
-        color : colors.black,
+        color : Colors.black,
         fontWeight : 'bold',
-        fontSize : 11,
+        fontSize : 14,
         textAlign : 'center',
-        marginTop : 3,
+        padding : 3,
     }
 
 });
