@@ -13,6 +13,7 @@ import { logout } from '../../APIs/signAPI';
 import { setNickname, setHeight, getUserInfo, getBelong, refresh} from '../../APIs/userAPI';
 import { getMeetinfo, createMeet, setMeet, deleteeUserMeet } from '../../APIs/meetAPI';
 import {NicknamePopup, PasswordPopup, PhysicalPopup, MecenearyPopup, PositonPopup} from '../UI/MyPagePopup';
+import { createMercs, getPosMercs, deleteMercs } from '../../APIs/mercs';
 export default function MyPageScreen() {
   const { user, setUserData } = useContext(UserContext);
   const [newHeight, setNewHeightPopup] = useState(188.0);
@@ -110,7 +111,7 @@ export default function MyPageScreen() {
           </View> 
 
           <View style={styles.leave}>
-            <TouchableOpacity onPress={()=>{createMeet(sampletitle, maxperson, place, time, user.name)}}>
+            <TouchableOpacity onPress={()=>{deleteMercs()}}>
               <View style={styles.leavebtn}>
                 <Text style={styles.leavetext}>회원 탈퇴하기</Text>
               </View>
