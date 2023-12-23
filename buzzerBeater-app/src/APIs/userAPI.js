@@ -124,4 +124,34 @@ const setHeight = async (newHeight) => {
   )
 }
 
-export {setNickname, setHeight, getUserInfo, getBelong, refresh}
+/**
+ * 
+ * @param {string} position  ['c', 'pf', 'sf', 'sg', 'pg'] 중에서 1개로 요청보내야 함.
+ * @returns 메인 포지션을 변경
+ */
+const setMpos = async (newPosition) => {
+  const endPoint = 'v1/users/mainPosition'
+  const apiURL = baseURL + endPoint
+  const requestData = {
+    "mainPosition" : newPosition
+  }
+  const finalData = JSON.stringify(requestData)
+
+  return await instance.put(apiURL, finalData)
+  .then((res)=>{
+    if (res.status === 204){
+      return true
+    }
+    else{
+      return false
+    }
+  })
+  .catch((error)=>{
+      console.log(error)
+      return false
+    }
+  )
+}
+
+
+export {setNickname, setHeight, getUserInfo, getBelong, refresh, setMpos}

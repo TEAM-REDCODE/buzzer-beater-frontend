@@ -57,6 +57,25 @@ const getPosMercs = async (position) =>{
     return false
   })
 }
+
+const getMercs = async () =>{
+  const endpoint = 'v1/mercs/'
+  const apiURL = baseURL + endpoint
+  instance.get(apiURL)
+  .then((res) =>{
+    console.log(res.data)
+    if(res.status === 200){
+      return res.data
+    }
+    else{
+      return false
+    }
+  })
+  .catch((error)=>{
+    console.log(error)
+    return false
+  })
+}
 /**
  * 회원 쿠키를 통해 회원 용병을 삭제하는 API
  */
@@ -79,4 +98,4 @@ const deleteMercs = async () =>{
   })
 
 }
-export {createMercs, getPosMercs, deleteMercs}
+export {createMercs, getPosMercs, deleteMercs, getMercs}

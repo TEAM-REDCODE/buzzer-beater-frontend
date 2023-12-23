@@ -4,28 +4,21 @@ import {
   Text, 
   TouchableOpacity,
   StyleSheet,
-  Image,
 } from 'react-native'
 import Colors from '../../Common/Colors'
 import { Iconify } from 'react-native-iconify';
 import { UserContext } from '../../Common/UserContext';
 import { logout } from '../../APIs/signAPI';
-import { setNickname, setHeight, getUserInfo, getBelong, refresh} from '../../APIs/userAPI';
-import { getMeetinfo, createMeet, setMeet, deleteeUserMeet } from '../../APIs/meetAPI';
 import {NicknamePopup, PasswordPopup, PhysicalPopup, MecenearyPopup, PositonPopup} from '../UI/MyPagePopup';
-import { createMercs, getPosMercs, deleteMercs } from '../../APIs/mercs';
-export default function MyPageScreen() {
+import { setMpos } from '../../APIs/userAPI';
+export default function MyPageScreen({navigation}) {
   const { user, setUserData } = useContext(UserContext);
-  const [newHeight, setNewHeightPopup] = useState(188.0);
   const [nicknamePopup, setNicknamePopup] = useState(false)
   const [passwordPopup, setPasswordPopup] = useState(false)
   const [physicalPopup, setPhysicalPopup] = useState(false)
   const [mecenearyPopup, setMecenearyPopup] = useState(false)
   const [positonPopup, setPositonPopup] = useState(false)
-  const sampletitle= "나랑 농구할사람2222"
-  const maxperson = 6
-  const place = "신정문 앞 농구장"
-  const time = new Date()
+
   useEffect(() => {
     console.log(user);
   }, [user]);
@@ -47,8 +40,10 @@ export default function MyPageScreen() {
       setPositonPopup(!positonPopup)
     }
   }
-  const handleHeight = async() =>{
-    await setHeight(newHeight)
+  
+  const handleLogout = () =>{
+    logout()
+    navigation.navigate('Start')
   }
   return (
       <View style={styles.container}>
@@ -56,7 +51,7 @@ export default function MyPageScreen() {
           <View style={styles.mypage}>
             <Iconify icon="solar:basketball-bold-duotone" size={80} color = {Colors.white} />
             <Text style={styles.mypageText}>{user.nickname}</Text>
-            <TouchableOpacity style={styles.logout} onPress={logout}>
+            <TouchableOpacity style={styles.logout} onPress={()=>{handleLogout(navigation)}}>
               <Text style={styles.logoutbtn}>로그아웃</Text>
             </TouchableOpacity>
           </View>
@@ -75,12 +70,12 @@ export default function MyPageScreen() {
             <PasswordPopup modalVisible={passwordPopup} setModalVisible={setPasswordPopup} />
             <View style={styles.iconBtn}>
               <TouchableOpacity onPress={()=>{(handlePopup(1))}}>
-                <Iconify icon="mdi:password-outline" size={48} style={styles.iconStyle} />
+                <Iconify icon="mdi:password-outline" size={50} style={styles.iconStyle} />
               </TouchableOpacity >
               <Text style={styles.iconText}>비밀번호 변경</Text>
             </View>
             {/* SetPhysical */}
-            <PhysicalPopup modalVisible={physicalPopup} setModalVisible={setPhysicalPopup} />
+            <PhysicalPopup modalVisible={physicalPopup} setModalVisible={setPhysicalPopup} setUserData={setUserData} />
             <View style={styles.iconBtn}>
               <TouchableOpacity onPress={()=>{(handlePopup(2))}}>
                 <Iconify icon="mdi:human-male-height" size={50} style={styles.iconStyle} />
@@ -101,7 +96,7 @@ export default function MyPageScreen() {
             </View>
 
             {/* Set Positon */}
-            <PositonPopup modalVisible={positonPopup} setModalVisible={setPositonPopup} position={user.mainPosition}/>
+            <PositonPopup modalVisible={positonPopup} setModalVisible={setPositonPopup} position={user.mainPosition} setMpos={setMpos}/>
             <View style={styles.iconBtn}>
               <TouchableOpacity onPress={()=>{handlePopup(4)}}>
                 <Iconify icon="gis:position-man" size={45} style={styles.iconStyle} />
@@ -111,7 +106,7 @@ export default function MyPageScreen() {
           </View> 
 
           <View style={styles.leave}>
-            <TouchableOpacity onPress={()=>{deleteMercs()}}>
+            <TouchableOpacity onPress={()=>{setMpos("pf")}}>
               <View style={styles.leavebtn}>
                 <Text style={styles.leavetext}>회원 탈퇴하기</Text>
               </View>
@@ -199,7 +194,7 @@ const styles = StyleSheet.create({
   iconText : {
     fontSize : 13,
     color : Colors.white,
-    marginTop : '15%',
+    marginTop : '10%',
   },
 
   leave : {

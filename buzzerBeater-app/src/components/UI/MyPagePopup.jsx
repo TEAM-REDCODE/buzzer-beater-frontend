@@ -1,13 +1,17 @@
-import React, {useState} from 'react';
+import React, {useContext, useState} from 'react';
 import { StyleSheet, Text, TouchableWithoutFeedback, Modal, 
   View, Alert, TextInput, Button, TouchableOpacity  } from 'react-native';
 import { Iconify } from 'react-native-iconify';
 import Colors from '../../Common/Colors';
 import passowrdVerify from '../screen/account/passwordValidation';
+import { setNickname, getUserInfo, setHeight} from '../../APIs/userAPI';
+import { UserContext } from '../../Common/UserContext';
+
+
 
 const NicknamePopup = ({ modalVisible, setModalVisible, userName }) => {
   const [newName, setNewName] = useState("")
-  console.log(newName)
+  const { user, setUserData } = useContext(UserContext);
   const closeModal = (e) => {
     setModalVisible(!modalVisible);
 
@@ -15,6 +19,29 @@ const NicknamePopup = ({ modalVisible, setModalVisible, userName }) => {
   const handleName= (text)=>{
     setNewName(text)
   }
+  const handleSubmit = async () =>{
+    try {
+      const success = await setNickname(newName);
+      
+      if (success) {
+        const userResponse =  await getUserInfo()
+        setUserData({
+            email: userResponse.email,
+            height: userResponse.height,
+            isMercenary: userResponse.isMercenary,
+            mainPosition: userResponse.mainPosition,
+            nickname: userResponse.nickname
+        })
+        setNewName("")
+        alert("변경 성공");
+      } else {
+        alert("닉네임 변경 실패!!");
+      }
+    } catch (error) {
+      alert("An error occurred:", error);
+    }
+  }
+  
   return (
     <Modal
       animationType="fade"
@@ -43,7 +70,7 @@ const NicknamePopup = ({ modalVisible, setModalVisible, userName }) => {
                 <View style={styles.buttonList}>
                   <View style={{borderRadius: 5, backgroundColor: Colors.mainRed}}>
                     <TouchableOpacity>
-                      <Text style={styles.submitBtn}>변경</Text>
+                      <Text style={styles.submitBtn} onPress={handleSubmit}>변경</Text>
                     </TouchableOpacity>
                   </View>
                   <View style={{borderRadius: 5, backgroundColor: Colors.black}}>
@@ -59,6 +86,7 @@ const NicknamePopup = ({ modalVisible, setModalVisible, userName }) => {
   );
 };
 
+
 const PasswordPopup = ({ modalVisible, setModalVisible }) => {
   const closeModal = () => {
     setModalVisible(false);
@@ -68,15 +96,12 @@ const PasswordPopup = ({ modalVisible, setModalVisible }) => {
   const [newPwV, setNewPwV] = useState("")
   const handlePW = (text) =>{
     setPw(text)
-    console.log('first')
   }
   const handleNewPW = (text) =>{
     setNewPw(text)
-    console.log('first')
   }
   const handleNewPWV = (text) =>{
     setNewPwV(text)
-    console.log('first')
   }
   
   return (
@@ -167,17 +192,41 @@ const PasswordPopup = ({ modalVisible, setModalVisible }) => {
   );
 };
 
-const PhysicalPopup = ({ modalVisible, setModalVisible}) => {
+const PhysicalPopup = ({ modalVisible, setModalVisible, setUserData}) => {
   const [newHeight, setNewHeight] = useState("")
 
   const handleChange = (text) =>{
-    setNewHeight(parseInt(text))
+    setNewHeight(text)
 
   }
   const closeModal = () => {
     setModalVisible(false);
-  };
+  }; 
 
+  const handleSubmit = async (newHeight) =>{
+    try {
+      const success = await setHeight(parseFloat(newHeight));
+      
+      if (success) {
+
+        const userResponse =  await getUserInfo()
+        setUserData({
+            email: userResponse.email,
+            height: userResponse.height,
+            isMercenary: userResponse.isMercenary,
+            mainPosition: userResponse.mainPosition,
+            nickname: userResponse.nickname
+        })
+        
+        alert("변경 성공");
+      } else {
+        alert("닉네임 변경 실패!!");
+      }
+    } catch (error) {
+      console.log(error)
+      alert("An error occurred:", error);
+    }
+  }
   return (
     <Modal
       animationType="fade"
@@ -201,7 +250,7 @@ const PhysicalPopup = ({ modalVisible, setModalVisible}) => {
             <View style={styles.buttonList}>
                   <View style={{borderRadius: 5, backgroundColor: Colors.mainRed}}>
                     <TouchableOpacity>
-                      <Text style={styles.submitBtn}>변경</Text>
+                      <Text style={styles.submitBtn} onPress={() =>{handleSubmit(newHeight)}}>변경</Text>
                     </TouchableOpacity>
                   </View>
                   <View style={{borderRadius: 5, backgroundColor: Colors.black}}>
@@ -255,13 +304,43 @@ const MecenearyPopup = ({ modalVisible, setModalVisible, mercen }) => {
   );
 };
 
-const PositonPopup = ({ modalVisible, setModalVisible, position }) => {
+const PositonPopup = ({ modalVisible, setModalVisible, position, setMpos}) => {
+  const { user, setUserData } = useContext(UserContext);
+
   const closeModal = () => {
     setModalVisible(false);
   };
   const [newPosition, setNewPosition] = useState("")
   const handleChange = (text) =>{
     setNewPosition(text)
+  }
+  const handleSumbit = async () =>{
+    try{
+      const success = await setMpos(newPosition)
+
+      if(success){
+        const userResponse =  await getUserInfo()
+          setUserData({
+              email: userResponse.email,
+              height: userResponse.height,
+              isMercenary: userResponse.isMercenary,
+              mainPosition: userResponse.mainPosition,
+              nickname: userResponse.nickname
+        })
+        setNewPosition("")
+        alert("포지션 변경 성공")
+  
+      }
+      else{
+        alert("포지션 변경 실패")
+  
+      }
+    }catch{
+      alert("error occured")
+    }
+
+    
+    
   }
   return (
     <Modal
@@ -291,7 +370,7 @@ const PositonPopup = ({ modalVisible, setModalVisible, position }) => {
             <View style={styles.buttonList}>
                   <View style={{borderRadius: 5, backgroundColor: Colors.mainRed}}>
                     <TouchableOpacity>
-                      <Text style={styles.submitBtn}>변경</Text>
+                      <Text style={styles.submitBtn} onPress={handleSumbit}>변경</Text>
                     </TouchableOpacity>
                   </View>
                   <View style={{borderRadius: 5, backgroundColor: Colors.black}}>
