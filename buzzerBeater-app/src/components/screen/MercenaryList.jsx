@@ -1,5 +1,15 @@
 import React, {useContext, useEffect, useState} from 'react';
-import {Image, SafeAreaView, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View} from 'react-native';
+import {
+    Image,
+    Modal,
+    SafeAreaView,
+    ScrollView,
+    StyleSheet,
+    Text,
+    TextInput,
+    TouchableOpacity,
+    View
+} from 'react-native';
 import colors from "../../Common/Colors";
 import { Iconify } from 'react-native-iconify';
 import { getBelong } from '../../APIs/userAPI';
@@ -9,7 +19,54 @@ import Colors from "../../Common/Colors";
 
 const MercenaryList = ({navigation}) => {
     const { user, setUserData } = useContext(UserContext);
-    const [belongList, setBelongList] = useState([]);
+    const [belongList1, setBelongList1] = useState([]);
+
+    const basketData = async () => {
+        try {
+            // const basketResponse = [
+            //     [{
+            //         "_id": 1,
+            //         "title": "초보 환영",
+            //         "createdByNick": "First User",
+            //         "maxPerson": 5,
+            //         "place": "고려대학교 녹지",
+            //         "time": "12:00",
+            //         "createdAt": "2023-01-01T00:00:00Z",
+            //         "updatedAt": "2023-01-01T00:00:00Z"
+            //     },{
+            //         "_id": 2,
+            //         "title": "실력자 환영",
+            //         "createdByNick": "Second User",
+            //         "maxPerson": 8,
+            //         "place": "고려대학교 녹지",
+            //         "time": "18:00",
+            //         "createdAt": "2023-01-01T00:00:00Z",
+            //         "updatedAt": "2023-01-01T00:00:00Z"
+            //     }]
+            // ];
+
+            // getBelong 함수 호출
+            const basketResponse = await getBelong();
+            console.log('Response from getBelong:', basketResponse);
+
+            // basketResponse가 object 타입인지 확인
+            if (basketResponse && typeof basketResponse === 'object' && Object.keys(basketResponse).length > 0) {
+                setBelongList1(basketResponse[0]);
+            } else {
+                setBelongList1([]);
+            }
+
+        } catch (error) {
+            console.error('Error while fetching belong list', error);
+            alert('에러 발생!')
+        }
+    };
+
+    useEffect(() => {
+        basketData(); // 컴포넌트가 마운트될 때 데이터 가져오기
+    }, []);
+
+    const [belongList2, setBelongList2] = useState([]);
 
     const mercData = async () => {
         try {
@@ -20,9 +77,9 @@ const MercenaryList = ({navigation}) => {
 
             // mercResponse가 object 타입인지 확인
             if (mercResponse && typeof mercResponse === 'object' && Object.keys(mercResponse).length > 0) {
-                setBelongList(mercResponse[0]);
+                setBelongList2(mercResponse[0]);
             } else {
-                setBelongList([]);
+                setBelongList2([]);
             }
 
         } catch (error) {
@@ -35,6 +92,21 @@ const MercenaryList = ({navigation}) => {
         mercData(); // 컴포넌트가 마운트될 때 데이터 가져오기
     }, []);
 
+    const [modalVisible, setModalVisible] = useState(false);
+    const openModal = async (data) => {
+        setModalVisible(true);
+    };
+
+    const closeModal = () => {
+        setModalVisible(false);
+    };
+
+    // 카드 클릭 핸들러 함수
+    const handleCardPress = () => {
+        // 모달을 보이게 설정
+        setModalVisible(true);
+    };
+
     return (
         <SafeAreaView style={styles.safeArea}>
             <View style={styles.container}>
@@ -44,9 +116,9 @@ const MercenaryList = ({navigation}) => {
                             <Text style={styles.bigText}>들어간 농구팟</Text>
                             <Text style={styles.smallText}>본인이 들어간 농구팟을 확인해보세요.</Text>
                             <ScrollView horizontal={true}>
-                                {belongList.length > 0 ? (
-                                    belongList.map((item) => (
-                                        <TouchableOpacity key={item._id} style={styles.listBox}>
+                                {belongList1.length > 0 ? (
+                                    belongList1.map((item) => (
+                                        <TouchableOpacity key={item._id} style={styles.listBox} onPress={handleCardPress}>
                                             <Iconify
                                                 icon="solar:basketball-bold-duotone"
                                                 size={50}
@@ -55,11 +127,11 @@ const MercenaryList = ({navigation}) => {
                                             <Text style={styles.title}>{item.title}</Text>
                                             <View style={styles.titleUnderbar}></View>
                                             <Text style={styles.content}>
-                                                <Text style={styles.contentTextBold}>생성자 : </Text> {item.createdByNick}</Text>
+                                                <Text style={styles.contentTextBold}>생성자 : </Text>{item.createdByNick}</Text>
                                             <Text style={styles.content}>
-                                                <Text style={styles.contentTextBold}>장소 : </Text> {item.place}</Text>
+                                                <Text style={styles.contentTextBold}>장소 : </Text>{item.place}</Text>
                                             <Text style={styles.content}>
-                                                <Text style={styles.contentTextBold}>시간 : </Text> {item.time}</Text>
+                                                <Text style={styles.contentTextBold}>시간 : </Text>{item.time}</Text>
                                             <View style={styles.maxPerson}>
                                                 <View style={styles.person}>
                                                     <Text style={styles.maxNum}>{item.maxPerson}</Text>
@@ -86,9 +158,9 @@ const MercenaryList = ({navigation}) => {
                             <Text style={styles.bigText}>보류 중인 용병 신청</Text>
                             <Text style={styles.smallText}>{user.nickname}님을 용병으로 신청한 농구팟을 확인해보세요.</Text>
                             <ScrollView horizontal={true}>
-                                {belongList.length > 0 ? (
-                                    belongList.map((item) => (
-                                        <TouchableOpacity key={item._id} style={styles.listBox}>
+                                {belongList2.length > 0 ? (
+                                    belongList2.map((item) => (
+                                        <TouchableOpacity key={item._id} style={styles.listBox} onPress={handleCardPress}>
                                             <Iconify
                                                 icon="solar:basketball-bold-duotone"
                                                 size={50}
@@ -97,11 +169,11 @@ const MercenaryList = ({navigation}) => {
                                             <Text style={styles.title}>{item.title}</Text>
                                             <View style={styles.titleUnderbar}></View>
                                             <Text style={styles.content}>
-                                                <Text style={styles.contentTextBold}>생성자 : </Text> {item.createdByNick}</Text>
+                                                <Text style={styles.contentTextBold}>생성자 : </Text>{item.createdByNick}</Text>
                                             <Text style={styles.content}>
-                                                <Text style={styles.contentTextBold}>장소 : </Text> {item.place}</Text>
+                                                <Text style={styles.contentTextBold}>장소 : </Text>{item.place}</Text>
                                             <Text style={styles.content}>
-                                                <Text style={styles.contentTextBold}>시간 : </Text> {item.time}</Text>
+                                                <Text style={styles.contentTextBold}>시간 : </Text>{item.time}</Text>
                                             <View style={styles.maxPerson}>
                                                 <View style={styles.person}>
                                                     <Text style={styles.maxNum}>{item.maxPerson}</Text>
@@ -131,6 +203,50 @@ const MercenaryList = ({navigation}) => {
                     </ScrollView>
                 </View>
             </View>
+            {/* 모달 */}
+            {belongList1.map((item) => (
+                <Modal
+                    animationType="none"
+                    transparent={true}
+                    visible={modalVisible}
+                    onRequestClose={() => {
+                        setModalVisible(!modalVisible);
+                    }}
+                >
+                    <View style={styles.modalOverlay}>
+                        <View style={styles.modalView}>
+                            <Text style={[styles.modalTitle, { marginBottom: 8 }]}>
+                                <Text style={[styles.modalCreatorName, styles.modalTextRed]}>{item.createdByNick}</Text>
+                                님이 생성한 농구팟에{'\n'}참여하시겠습니까?
+                            </Text>
+                            <View style={styles.modalMiddle}>
+                                <Text style={[styles.modalMiddleText, { marginBottom: 10 }]}>{'✔ '}
+                                    <Text style={styles.modalTextRed}>장소</Text>와 <Text style={styles.modalTextRed}>시간</Text>을 확인해주세요.
+                                </Text>
+                                <View>
+                                    <Text style={styles.modalContent}>
+                                        <Text style={styles.modalLabel}>장소 : </Text>
+                                        {item.place}
+                                    </Text>
+                                    <Text style={styles.modalContent}>
+                                        <Text style={styles.modalLabel}>시간 : </Text>
+                                        {item.time}
+                                    </Text>
+                                </View>
+                                <View style={styles.modalButtonContainer}>
+                                    <TouchableOpacity style={styles.modalYesButton} onPress={closeModal}>
+                                        <Text style={styles.modalButtonText}>YES</Text>
+                                    </TouchableOpacity>
+                                    <TouchableOpacity style={styles.modalNoButton} onPress={closeModal}>
+                                        <Text style={styles.modalButtonText}>NO</Text>
+                                    </TouchableOpacity>
+                                </View>
+                            </View>
+                        </View>
+                    </View>
+                </Modal>
+                ))
+            }
         </SafeAreaView>
     );
 };
@@ -275,7 +391,100 @@ const styles = StyleSheet.create({
         fontSize : 14,
         textAlign : 'center',
         padding : 3,
-    }
+    },
+
+    modalOverlay: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: 'rgba(2, 2, 2, 0.5)',
+    },
+
+    modalView: {
+        margin: 20,
+        backgroundColor: "white",
+        borderRadius: 15,
+        padding : 30,
+        shadowColor: colors.black,
+        shadowOffset: {
+            width: 0,
+            height: 2
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 3.84,
+        elevation: 5
+    },
+
+    modalTitle: {
+        width : 250,
+        fontSize: 15,
+        fontWeight: 'bold',
+        color: colors.black,
+        textAlign: 'center',
+    },
+
+    modalCreatorName: {
+        fontSize: 20,
+        fontWeight: 'bold',
+    },
+
+    modalTextRed : {
+        color : colors.mainRed,
+        fontWeight: 'bold',
+    },
+
+    modalMiddle : {
+        width : 250,
+        alignItems : 'center',
+    },
+
+    modalMiddleText: {
+        fontSize: 14,
+        color: colors.black,
+    },
+
+    modalLabel: {
+        fontSize: 13,
+        color: colors.black,
+        fontWeight:'bold',
+    },
+
+    modalContent: {
+        fontSize: 12,
+        marginBottom: 5,
+    },
+
+    modalButtonContainer: {
+        width: 180,
+        flexDirection: 'row',
+        marginTop: 10,
+        gap : 20,
+    },
+
+    modalYesButton: {
+        backgroundColor: colors.mainRed,
+        paddingLeft: 30,
+        paddingRight: 30,
+        paddingTop: 10,
+        paddingBottom: 10,
+        borderRadius: 5,
+    },
+
+    modalNoButton: {
+        backgroundColor: colors.black,
+        paddingLeft: 30,
+        paddingRight: 30,
+        paddingTop: 10,
+        paddingBottom: 10,
+        borderRadius: 5,
+    },
+
+    modalButtonText: {
+        color : colors.white,
+        fontSize : 12,
+        fontWeight : 'bold',
+        textAlign : 'center',
+    },
 
 });
 
