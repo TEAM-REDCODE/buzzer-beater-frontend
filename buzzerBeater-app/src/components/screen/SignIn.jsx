@@ -114,21 +114,21 @@ const styles = StyleSheet.create({
         backgroundColor : colors.white,
     },
 
-    button : {
+    button: {
+        padding : 15,
+        marginBottom : 15,
         width : 300,
         margin : 15,
         borderRadius : 5,
-        padding : 13,
         backgroundColor : colors.mainRed,
     },
 
-    loginText : {
-        color : colors.white,
-        fontWeight : 'bold',
+    loginText: {
         fontSize : 16,
+        color : colors.white,
         textAlign : 'center',
-        marginBottom : 3,
-    }
+        fontWeight : 'bold',
+    },
 
 });
 

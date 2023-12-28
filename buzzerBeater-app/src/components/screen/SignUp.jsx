@@ -30,14 +30,20 @@ const SignUp = () => {
     const handleSignUp = async (nickname, email, password, height, mainPosition) => {
         height = parseFloat(height);
         try {
-
             const response = await signUp(nickname, email, password, height, mainPosition);
-            console.log(response)
 
             if (response === true) {
-                // Handle successful login, e.g., navigate to another page
-                console.log('Register successful', response.data);
-                alert('로그인 창으로 이동');
+                if (!nickname || !email || !password || !height || !mainPosition) {
+                    alert('모든 항목은 필수입니다.');
+                }
+                else if (password !== password_Check) {
+                    alert('비밀번호가 일치하지 않습니다.');
+                }
+                else {
+                    // Handle successful login, e.g., navigate to another page
+                    console.log('Register successful', response.data);
+                    alert('로그인 창으로 이동');
+                }
             } else {
                 // Handle unsuccessful login, show an alert or perform other actions
                 console.error('Register failed', response.error);
@@ -48,7 +54,6 @@ const SignUp = () => {
             console.error('signup error:', error);
             alert('에러 발생');
         }
-
     }
 
     return (
@@ -63,7 +68,6 @@ const SignUp = () => {
                         <TextInput
                             style={styles.input}
                             onChangeText={onChangeNickname}
-                            value={nickname}
                             placeholder="닉네임을 입력하세요."
                             keyboardType="ascii-capable"
                         />
@@ -73,14 +77,12 @@ const SignUp = () => {
                         <TextInput
                             style={styles.input}
                             onChangeText={onChangeEmail}
-                            value={email}
                             placeholder="학교 이메일을 입력하세요."
                             keyboardType="url"
                         />
                         <TextInput
                             style={[styles.input, styles.topMargin]}
                             onChangeText={onChangePassword}
-                            value={password}
                             secureTextEntry={true}
                             placeholder="비밀번호를 입력하세요."
                         />
@@ -88,14 +90,14 @@ const SignUp = () => {
                             <View style={styles.valiList}>
                                 <View style={styles.valiButton}>
                                     {passowrdVerify(password, 1)?
-                                        <Iconify icon="ri:checkbox-circle-line" size={13} color={Colors.warning} />
+                                        <Iconify icon="ri:checkbox-circle-fill" size={13} color={Colors.mainRed} />
                                         :<Iconify icon="ri:checkbox-circle-line" size={13} color={Colors.white} />
                                     }
                                     <Text style={styles.valiText}>총 8글자 이상</Text>
                                 </View>
                                 <View style={styles.valiButton}>
                                     {passowrdVerify(password, 3)?
-                                        <Iconify icon="ri:checkbox-circle-line" size={13} color={Colors.warning} />
+                                        <Iconify icon="ri:checkbox-circle-fill" size={13} color={Colors.mainRed} />
                                         :<Iconify icon="ri:checkbox-circle-line" size={13} color={Colors.white} />
                                     }
                                     <Text style={styles.valiText}>1개 이상의 대문자 포함</Text>
@@ -104,14 +106,14 @@ const SignUp = () => {
                             <View style={styles.valiList}>
                                 <View style={styles.valiButton}>
                                     {passowrdVerify(password, 2)?
-                                        <Iconify icon="ri:checkbox-circle-line" size={13} color={Colors.warning} />
+                                        <Iconify icon="ri:checkbox-circle-fill" size={13} color={Colors.mainRed} />
                                         :<Iconify icon="ri:checkbox-circle-line" size={13} color={Colors.white} />
                                     }
                                     <Text style={styles.valiText}>1개 이상의 소문자 포함</Text>
                                 </View>
                                 <View style={styles.valiButton}>
                                     {passowrdVerify(password, 4)?
-                                        <Iconify icon="ri:checkbox-circle-line" size={13} color={Colors.warning} />
+                                        <Iconify icon="ri:checkbox-circle-fill" size={13} color={Colors.mainRed} />
                                         :<Iconify icon="ri:checkbox-circle-line" size={13} color={Colors.white} />
                                     }
                                     <Text style={styles.valiText}>숫자, 특수문자 포함</Text>
@@ -121,7 +123,6 @@ const SignUp = () => {
                         <TextInput
                             style={[styles.input, styles.topMargin]}
                             onChangeText={onChangePW_Check}
-                            value={password_Check}
                             secureTextEntry={true}
                             placeholder="비밀번호를 재입력하세요."
                         />
@@ -131,7 +132,6 @@ const SignUp = () => {
                         <TextInput
                             style={styles.input}
                             onChangeText={onChangeHeight}
-                            value={height}
                             placeholder="키를 입력하세요."
                             keyboardType="number-pad"
                         />
@@ -141,7 +141,6 @@ const SignUp = () => {
                         <TextInput
                             style={styles.input}
                             onChangeText={onChangePosition}
-                            value={mainPosition}
                             placeholder="주 포지션을 입력하세요."
                             keyboardType="default"
                         />
@@ -240,21 +239,21 @@ const styles = StyleSheet.create({
         marginLeft : 8,
     },
 
-    button : {
+    button: {
+        padding : 15,
+        marginBottom : 15,
         width : 300,
         margin : 15,
         borderRadius : 5,
-        padding : 13,
         backgroundColor : colors.mainRed,
     },
 
-    signUpText : {
-        color : colors.white,
-        fontWeight : 'bold',
+    signUpText: {
         fontSize : 16,
+        color : colors.white,
         textAlign : 'center',
-        marginBottom : 3,
-    }
+        fontWeight : 'bold',
+    },
 
 });
 

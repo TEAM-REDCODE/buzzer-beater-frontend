@@ -35,7 +35,8 @@ const signIn = async (email, password) => {
 };
 
 const signUp = async (nickname, email, password, height, mainPosition) => {
-    const apiURL = 'http://172.16.3.243:5000/v1/users/signup'
+    const endPoint = 'v1/users/signUp'
+    const apiURL = baseURL + endPoint
     const requestData = {
         "nickname": nickname,
         "password": password,
@@ -43,7 +44,6 @@ const signUp = async (nickname, email, password, height, mainPosition) => {
         "height": height,
         "mainPosition": mainPosition,
     }
-    console.log(requestData);
     const finalData = JSON.stringify(requestData)
     console.log(finalData);
     return await axios.post(apiURL, finalData, {

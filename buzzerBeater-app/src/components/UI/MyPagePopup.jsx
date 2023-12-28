@@ -136,14 +136,14 @@ const PasswordPopup = ({ modalVisible, setModalVisible }) => {
               <View style={styles.valiList}>
                   <View style={styles.valiButton}>
                       {passowrdVerify(newPw, 1)? 
-                      <Iconify icon="ri:checkbox-circle-line" size={13} color={Colors.mainRed} />
+                      <Iconify icon="ri:checkbox-circle-fill" size={13} color={Colors.mainRed} />
                       :<Iconify icon="ri:checkbox-circle-line" size={13} color={Colors.black} />
                       }
                       <Text style={styles.valiText}>총 8글자 이상</Text>
                   </View>
                   <View style={styles.valiButton}>
                     {passowrdVerify(newPw, 3)? 
-                      <Iconify icon="ri:checkbox-circle-line" size={13} color={Colors.mainRed} />
+                      <Iconify icon="ri:checkbox-circle-fill" size={13} color={Colors.mainRed} />
                       :<Iconify icon="ri:checkbox-circle-line" size={13} color={Colors.black} />
                       }
                       <Text style={styles.valiText}>1개 이상의 대문자 포함</Text>
@@ -152,14 +152,14 @@ const PasswordPopup = ({ modalVisible, setModalVisible }) => {
               <View style={styles.valiList}>
                   <View style={styles.valiButton}>
                       {passowrdVerify(newPw, 2)? 
-                      <Iconify icon="ri:checkbox-circle-line" size={13} color={Colors.mainRed} />
+                      <Iconify icon="ri:checkbox-circle-fill" size={13} color={Colors.mainRed} />
                       :<Iconify icon="ri:checkbox-circle-line" size={13} color={Colors.black} />
                       }
                       <Text style={styles.valiText}>1개 이상의 소문자 포함</Text>
                   </View>
                   <View style={styles.valiButton}>
                       {passowrdVerify(newPw, 4)? 
-                      <Iconify icon="ri:checkbox-circle-line" size={13} color={Colors.mainRed} />
+                      <Iconify icon="ri:checkbox-circle-fill" size={13} color={Colors.mainRed} />
                       :<Iconify icon="ri:checkbox-circle-line" size={13} color={Colors.black} />
                       }
                       <Text style={styles.valiText}>숫자, 특수문자 포함</Text>
