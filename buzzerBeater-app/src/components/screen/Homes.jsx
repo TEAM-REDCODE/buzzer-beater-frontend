@@ -19,7 +19,7 @@ const Homes = () => {
         maxPerson: '1',
     });
 
-    const [maxPerson, setMaxPerson] = useState('1'); 
+    const [maxPerson, setMaxPerson] = useState('1');
 
     const timeOptions = [
         "00:00", "01:00", "02:00", "03:00", "04:00", "05:00", "06:00", "07:00", "08:00", "09:00",
@@ -30,9 +30,11 @@ const Homes = () => {
     const showPicker = () => setPickerVisible(true);
     const hidePicker = () => setPickerVisible(false);
 
+    const [possessionVisible, setPossessionVisible] = useState(false);
+
     const onValueChange = (itemValue) => {
         setNewTeam({ ...newTeam, maxPerson: itemValue });
-        hidePicker(); 
+        hidePicker();
     };
 
     const openCreateModal = () => {
@@ -58,8 +60,19 @@ const Homes = () => {
     };
 
     const handleCardPress = () => {
-        openModal(); 
+        openModal();
     };
+
+    const [isMercenaryModalVisible, setIsMercenaryModalVisible] = useState(false);
+
+    const openMercenaryModal = () => {
+        setIsMercenaryModalVisible(true);
+    };
+
+    const closeMercenaryModal = () => {
+        setIsMercenaryModalVisible(false);
+    };
+
     return (
         <SafeAreaView style={styles.screenContainer}>
             <ScrollView>
@@ -157,7 +170,7 @@ const Homes = () => {
                             용병 등록을 통해서 새로운 사람들과 농구를 즐겨보세요 !!!
                         </Text>
                     </View>
-                    <TouchableOpacity style={styles.registerButton}>
+                    <TouchableOpacity style={styles.registerButton} onPress={openMercenaryModal}>
                         <Text style={styles.registerButtonText}>용병 등록하러 가기{' →'} </Text>
                     </TouchableOpacity>
                 </View>
@@ -289,6 +302,78 @@ const Homes = () => {
                                     <Text style={styles.buttonText}>생성하기</Text>
                                 </TouchableOpacity>
                                 <TouchableOpacity style={styles.cancelButton} onPress={closeCreateModal}>
+                                    <Text style={styles.buttonText}>취소하기</Text>
+                                </TouchableOpacity>
+                            </View>
+                        </View>
+                    </View>
+                </Modal>
+                {/* "용병 등록하기" 모달 */}
+                <Modal
+                    animationType="none"
+                    transparent={true}
+                    visible={isMercenaryModalVisible}
+                    onRequestClose={closeMercenaryModal}
+                >
+                    <View style={styles.modalOverlay}>
+                        <View style={styles.modalView}>
+                            <Text style={[styles.modalTitle, { marginBottom: 8 }]}>용병 등록하기</Text>
+                            <Text style={[styles.modalMiddle, { marginBottom: 10 }]}>아래의 정보를 작성해주세요.</Text>
+                            <TextInput
+                                style={styles.input}
+                                placeholder="이름을 입력해주세요."
+                                onChangeText={(text) => setNewTeam({ ...newTeam, nickname: text })}
+                                value={newTeam.title}
+                            />
+                            <TextInput
+                                style={styles.input}
+                                placeholder="포지션을 입력해주세요."
+                                onChangeText={(text) => setNewTeam({ ...newTeam, mainPosition: text })}
+                                value={newTeam.location}
+                            />
+                            <TextInput
+                                style={styles.input}
+                                placeholder="키를 입력해주세요."
+                                onChangeText={(text) => setNewTeam({ ...newTeam, height: text })}
+                                value={newTeam.location}
+                            />
+                            <TouchableOpacity onPress={showPicker} style={styles.selectTouchable}>
+                                <Text style={styles.selectText}>공 소유 여부 {'→'}</Text>
+                            </TouchableOpacity>
+
+                            <Modal
+                                visible={pickerVisible}
+                                transparent={true}
+                                onRequestClose={hidePicker}
+                            >
+                                <TouchableOpacity style={styles.modalOverlay} onPress={hidePicker} activeOpacity={1}>
+                                    <View style={styles.possessionPickerContainer} onStartShouldSetResponder={() => true}>
+                                        <TouchableOpacity
+                                            style={styles.possessionOption}
+                                            onPress={() => {
+                                                hidePicker();
+                                            }}>
+                                            <Text style={styles.possessionOptionText}>O</Text>
+                                        </TouchableOpacity>
+                                        <TouchableOpacity
+                                            style={styles.possessionOption}
+                                            onPress={() => {
+                                                hidePicker();
+                                            }}>
+                                            <Text style={styles.possessionOptionText}>X</Text>
+                                        </TouchableOpacity>
+                                    </View>
+                                </TouchableOpacity>
+                            </Modal>
+
+                            <View style={styles.modalButtonContainer2}>
+
+                                <TouchableOpacity style={styles.addButton} onPress={() => {
+                                    closeMercenaryModal();
+                                }}>
+                                    <Text style={styles.buttonText}>등록하기</Text>
+                                </TouchableOpacity>
+                                <TouchableOpacity style={styles.cancelButton} onPress={closeMercenaryModal}>
                                     <Text style={styles.buttonText}>취소하기</Text>
                                 </TouchableOpacity>
                             </View>
@@ -538,7 +623,7 @@ const styles = StyleSheet.create({
         height: '85%',
         alignItems: 'center',
         marginRight: 10,
-        borderRadius:8,
+        borderRadius: 8,
     },
     cancelButton: {
         backgroundColor: 'grey',
@@ -548,7 +633,7 @@ const styles = StyleSheet.create({
         width: '45%',
         height: '85%',
         alignItems: 'center',
-        borderRadius:8,
+        borderRadius: 8,
     },
     buttonText: {
         color: 'white',
@@ -571,12 +656,6 @@ const styles = StyleSheet.create({
         color: '#BBBBBB',
         marginLeft: 3,
     },
-    modalOverlay: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: 'rgba(0, 0, 0, 0.5)',
-    },
     pickerContainer: {
         backgroundColor: 'white',
         borderRadius: 5,
@@ -594,7 +673,24 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         fontSize: 18,
     },
+    possessionPickerContainer: {
+        backgroundColor: 'white',
+        borderRadius: 5,
+        padding: 20,
+        width: '50%', 
+    },
+    possessionOption: {
+        padding: 10,
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderBottomWidth: 1,
+        borderBottomColor: '#ccc',
+    },
+    possessionOptionText: {
+        fontSize: 18,
+    },
 });
 
 export default Homes;
+
 
