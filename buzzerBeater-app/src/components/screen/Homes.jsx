@@ -1,11 +1,48 @@
 import React, { useState } from 'react';
-import { View, Text, ScrollView, StyleSheet, TouchableOpacity, Image, SafeAreaView, Modal } from 'react-native';
+import { View, Text, ScrollView, StyleSheet, TouchableOpacity, Image, SafeAreaView, Modal, TextInput } from 'react-native';
 import colors from "../../Common/Colors";
 import { Iconify } from 'react-native-iconify';
+import { Picker } from '@react-native-picker/picker';
+
 
 let court = require('../../../assets/court.png');
 const Homes = () => {
-    const [modalVisible, setModalVisible] = useState(false);
+    const [ModalVisible, setModalVisible] = useState(false);
+    const [pickerVisible, setPickerVisible] = useState(false);
+
+    const [isCreateModalVisible, setIsCreateModalVisible] = useState(false);
+    const [teams, setTeams] = useState([]);
+    const [newTeam, setNewTeam] = useState({
+        title: '',
+        place: '',
+        time: '',
+        maxPerson: '1',
+    });
+
+    const [maxPerson, setMaxPerson] = useState('1'); 
+
+    const timeOptions = [
+        "00:00", "01:00", "02:00", "03:00", "04:00", "05:00", "06:00", "07:00", "08:00", "09:00",
+        "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00", "19:00", "20:00", "21:00", "22:00", "23:00", "24:00",
+    ];
+
+
+    const showPicker = () => setPickerVisible(true);
+    const hidePicker = () => setPickerVisible(false);
+
+    const onValueChange = (itemValue) => {
+        setNewTeam({ ...newTeam, maxPerson: itemValue });
+        hidePicker(); 
+    };
+
+    const openCreateModal = () => {
+        setIsCreateModalVisible(true);
+    };
+
+    const closeCreateModal = () => {
+        setIsCreateModalVisible(false);
+    };
+
     const openModal = () => {
         setModalVisible(true);
     };
@@ -14,10 +51,14 @@ const Homes = () => {
         setModalVisible(false);
     };
 
-    // 카드 클릭 핸들러 함수
+    const addNewTeam = () => {
+        setTeams([...teams, newTeam]);
+        setNewTeam({ title: '', location: '', time: '', members: '' });
+        closeCreateModal();
+    };
+
     const handleCardPress = () => {
-        // 모달을 보이게 설정
-        setModalVisible(true);
+        openModal(); 
     };
     return (
         <SafeAreaView style={styles.screenContainer}>
@@ -27,7 +68,7 @@ const Homes = () => {
                     <View style={styles.header}>
                         <View style={styles.listHeader}>
                             <Text style={styles.headerTitle}>모집 중인 농구팟</Text>
-                            <TouchableOpacity style={styles.createButton}>
+                            <TouchableOpacity onPress={openCreateModal} style={styles.createButton}>
                                 <Text style={styles.createButtonText}>농구팟 생성하기</Text>
                             </TouchableOpacity>
                         </View>
@@ -36,8 +77,7 @@ const Homes = () => {
                         </Text>
                     </View>
                     <ScrollView horizontal={true}>
-                        {/* 여기에 카드를 추가합니다. */}
-                        <TouchableOpacity onPress={handleCardPress}>
+                        <TouchableOpacity onPress={handleCardPress} style={styles.cardTouchable}>
                             <View style={styles.card}>
                                 <View style={styles.cardContentContainer}>
                                     <Iconify
@@ -50,18 +90,9 @@ const Homes = () => {
                                             <Text style={styles.cardTitleText}>초보 환영</Text>
                                         </View>
                                         <View style={styles.cardContent}>
-                                            <Text style={styles.cardContentText}>
-                                                <Text style={styles.cardContentLabel}>생성자 : </Text>
-                                                slrspdla
-                                            </Text>
-                                            <Text style={styles.cardContentText}>
-                                                <Text style={styles.cardContentLabel}>장소 : </Text>
-                                                고려대학교 농구장
-                                            </Text>
-                                            <Text style={styles.cardContentText}>
-                                                <Text style={styles.cardContentLabel}>시간 : </Text>
-                                                16:00
-                                            </Text>
+                                            <Text style={styles.cardContentText}>생성자 : slrspdla</Text>
+                                            <Text style={styles.cardContentText}>장소 : 고려대학교 농구장</Text>
+                                            <Text style={styles.cardContentText}>시간 : 16:00</Text>
                                         </View>
                                     </View>
                                 </View>
@@ -134,43 +165,137 @@ const Homes = () => {
                 <Modal
                     animationType="none"
                     transparent={true}
-                    visible={modalVisible}
+                    visible={ModalVisible}
                     onRequestClose={() => {
-                        setModalVisible(!modalVisible);
+                        setModalVisible(!ModalVisible);
                     }}
                 >
                     <View style={styles.modalOverlay}>
                         <View style={styles.modalView}>
                             <Text style={[styles.modalTitle, { marginBottom: 8 }]}>
-                                <Text style={[styles.modalCreatorName, styles.modalTextRed]}>slrspdla</Text>
-                                님이 생성한 농구팟에{'\n'}참여하시겠습니까?
+                                <Text style={styles.modalCreatorName}>slrspdla</Text>
+                                님이 생성한 농구팟에 참여하시겠습니까{'?'}
                             </Text>
-                            <View style={styles.modalMiddle}>
-                                <Text style={[styles.modalMiddleText, { marginBottom: 10 }]}>{'✔ '}
-                                    <Text style={styles.modalTextRed}>장소</Text>와 <Text style={styles.modalTextRed}>시간</Text>을 확인해주세요.
-                                </Text>
-                                <View>
-                                    <Text style={styles.modalContent}>
-                                        <Text style={styles.modalLabel}>장소 : </Text>
-                                        고려대학교 농구장
-                                    </Text>
-                                    <Text style={styles.modalContent}>
-                                        <Text style={styles.modalLabel}>시간 : </Text>
-                                        16:00
-                                    </Text>
-                                </View>
-                                <View style={styles.modalButtonContainer}>
-                                    <TouchableOpacity style={styles.modalYesButton} onPress={closeModal}>
-                                        <Text style={styles.modalButtonText}>YES</Text>
-                                    </TouchableOpacity>
-                                    <TouchableOpacity style={styles.modalNoButton} onPress={closeModal}>
-                                        <Text style={styles.modalButtonText}>NO</Text>
-                                    </TouchableOpacity>
-                                </View>
+                            <Text style={[styles.modalMiddle, { marginBottom: 10 }]}>{'✔'}장소와 시간을 확인해주세요.</Text>
+                            <Text style={styles.modalContent}>
+                                <Text style={styles.modalLabel}>장소 :</Text>
+                                고려대학교 농구장</Text>
+                            <Text style={styles.modalContent}>
+                                <Text style={styles.modalLabel}>시간 :</Text>
+                                16:00</Text>
+                            <View style={styles.modalButtonContainer}>
+                                <TouchableOpacity style={styles.modalYesButton} onPress={closeModal}>
+                                    <Text style={styles.modalButtonText}>YES</Text>
+                                </TouchableOpacity>
+                                <TouchableOpacity style={styles.modalNoButton} onPress={closeModal}>
+                                    <Text style={styles.modalButtonText}>NO</Text>
+                                </TouchableOpacity>
                             </View>
                         </View>
                     </View>
                 </Modal>
+                {/* "농구팟 생성하기" 모달 */}
+                <Modal
+                    animationType="none"
+                    transparent={true}
+                    visible={isCreateModalVisible}
+                    onRequestClose={closeCreateModal}
+                >
+                    <View style={styles.modalOverlay}>
+                        <View style={styles.modalView}>
+                            <Text style={[styles.modalTitle, { marginBottom: 8 }]}>농구팟 생성하기</Text>
+                            <Text style={[styles.modalMiddle, { marginBottom: 10 }]}>아래의 정보를 작성해주세요.</Text>
+                            <TextInput
+                                style={styles.input}
+                                placeholder="제목을 입력해주세요."
+                                onChangeText={(text) => setNewTeam({ ...newTeam, title: text })}
+                                value={newTeam.title}
+                            />
+                            <TextInput
+                                style={styles.input}
+                                placeholder="장소를 입력해주세요."
+                                onChangeText={(text) => setNewTeam({ ...newTeam, location: text })}
+                                value={newTeam.location}
+                            />
+
+                            <TouchableOpacity onPress={showPicker} style={styles.selectTouchable}>
+                                <Text style={styles.selectText}>시간을 선택해주세요.</Text>
+                            </TouchableOpacity>
+
+                            <Modal
+                                visible={pickerVisible}
+                                transparent={true}
+                                animationType="slide"
+                                onRequestClose={hidePicker}
+                            >
+                                <TouchableOpacity style={styles.modalOverlay} onPress={hidePicker} activeOpacity={1}>
+                                    <View style={styles.pickerContainer} onStartShouldSetResponder={() => true}>
+                                        <ScrollView
+                                            persistentScrollbar={true}
+                                            showsVerticalScrollIndicator={true}
+                                            indicatorStyle="black"
+                                        >
+                                            {timeOptions.map((time, index) => (
+                                                <TouchableOpacity
+                                                    key={index}
+                                                    style={styles.pickerItem}
+                                                    onPress={() => {
+                                                        setNewTeam({ ...newTeam, time: time });
+                                                        hidePicker();
+                                                    }}
+                                                >
+                                                    <Text style={styles.pickerItemText}>{time}</Text>
+                                                </TouchableOpacity>
+                                            ))}
+                                        </ScrollView>
+                                    </View>
+                                </TouchableOpacity>
+                            </Modal>
+
+                            <TouchableOpacity onPress={showPicker} style={styles.selectTouchable}>
+                                <Text style={styles.selectText}>인원을 선택해주세요.</Text>
+                            </TouchableOpacity>
+
+                            <Modal
+                                visible={pickerVisible}
+                                transparent={true}
+                                animationType="slide"
+                                onRequestClose={hidePicker}
+                            >
+                                <TouchableOpacity style={styles.modalOverlay} onPress={hidePicker} activeOpacity={1}>
+                                    <View style={styles.pickerContainer} showsVerticalScrollIndicator={false}>
+                                        <ScrollView>
+                                            {['1', '2', '3', '4', '5'].map((value) => (
+                                                <TouchableOpacity
+                                                    key={value}
+                                                    style={styles.pickerItem}
+                                                    onPress={() => {
+                                                        onValueChange(value);
+                                                        hidePicker();
+                                                    }}
+                                                >
+                                                    <Text style={styles.pickerItemText}>{`${value} vs ${value}`}</Text>
+                                                </TouchableOpacity>
+                                            ))}
+                                        </ScrollView>
+                                    </View>
+                                </TouchableOpacity>
+                            </Modal>
+
+
+                            <View style={styles.modalButtonContainer2}>
+
+                                <TouchableOpacity style={styles.addButton} onPress={addNewTeam}>
+                                    <Text style={styles.buttonText}>생성하기</Text>
+                                </TouchableOpacity>
+                                <TouchableOpacity style={styles.cancelButton} onPress={closeCreateModal}>
+                                    <Text style={styles.buttonText}>취소하기</Text>
+                                </TouchableOpacity>
+                            </View>
+                        </View>
+                    </View>
+                </Modal>
+
             </ScrollView>
         </SafeAreaView>
     );
@@ -202,6 +327,7 @@ const styles = StyleSheet.create({
         padding: 5,
         marginLeft: 15,
         borderRadius: 5,
+
     },
     createButtonText: {
         color: colors.white,
@@ -216,8 +342,8 @@ const styles = StyleSheet.create({
     card: {
         backgroundColor: colors.white,
         borderRadius: 5,
-        width: 250,
-        height: 150,
+        width: 220,
+        height: 130,
         marginRight: 15,
         padding: 10,
         flexDirection: 'row',
@@ -250,9 +376,6 @@ const styles = StyleSheet.create({
         alignSelf: 'flex-start',
         marginBottom: 3,
     },
-    cardContentLabel : {
-        fontWeight : 'bold',
-    },
     maxPerson: {
         position: 'absolute',
         right: 10,
@@ -266,7 +389,7 @@ const styles = StyleSheet.create({
         marginRight: 5,
     },
     courtContainer: {
-        width: '97%',
+        width: 336,
     },
     courtImage: {
         width: '95%',
@@ -293,19 +416,18 @@ const styles = StyleSheet.create({
         right: '19%',
     },
     pfButton: {
-        bottom: '20%',
+        bottom: '25%',
         left: '23%',
     },
     cButton: {
-        bottom: '20%',
-        right: '29%',
+        bottom: '25%',
+        right: '28%',
     },
     registerButton: {
         backgroundColor: colors.white,
         width: '40%',
         borderRadius: 20,
         padding: 10,
-        marginBottom : 15,
     },
     registerButtonText: {
         color: colors.black,
@@ -319,86 +441,160 @@ const styles = StyleSheet.create({
         alignItems: "center",
         marginTop: 22
     },
+
+    modalText: {
+        marginBottom: 15,
+        textAlign: "center"
+    },
+    cardTouchable: {
+    },
     modalOverlay: {
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: 'rgba(2, 2, 2, 0.5)',
+        backgroundColor: 'rgba(0, 0, 0, 0.5)',
     },
     modalView: {
         margin: 20,
-        backgroundColor: "white",
-        borderRadius: 15,
-        padding : 30,
-        shadowColor: colors.black,
-        shadowOffset: {
-            width: 0,
-            height: 2
-        },
+        backgroundColor: 'white',
+        borderRadius: 20,
+        padding: 35,
+        alignItems: 'center',
+        shadowColor: '#000',
         shadowOpacity: 0.25,
         shadowRadius: 3.84,
-        elevation: 5
+        elevation: 5,
     },
+
     modalTitle: {
-        width : 250,
-        fontSize: 15,
+        fontSize: 21,
         fontWeight: 'bold',
-        color: colors.black,
+        color: 'black',
         textAlign: 'center',
+    },
+    modalMiddle: {
+        fontSize: 17,
+        fontWeight: 'bold',
+        color: 'black',
     },
     modalCreatorName: {
         fontSize: 20,
         fontWeight: 'bold',
-    },
-    modalTextRed : {
-        color : colors.mainRed,
-        fontWeight: 'bold',
-    },
-    modalMiddle : {
-        width : 250,
-      alignItems : 'center',
-    },
-    modalMiddleText: {
-        fontSize: 14,
-        color: colors.black,
+        color: 'red',
+        marginBottom: 15,
     },
     modalLabel: {
-        fontSize: 13,
-        color: colors.black,
-        fontWeight:'bold',
+        fontSize: 16,
+        color: 'black',
+        fontWeight: 'bold',
     },
     modalContent: {
-        fontSize: 12,
-        marginBottom: 5,
+        fontSize: 16,
+        marginBottom: 10,
     },
     modalButtonContainer: {
-        width: 180,
         flexDirection: 'row',
-        marginTop: 10,
-        gap : 20,
+        justifyContent: 'space-around',
+        marginTop: 20,
+    },
+    modalButtonContainer2: {
+        flexDirection: 'row',
+        justifyContent: 'space-around',
+        marginTop: 20,
     },
     modalYesButton: {
-        backgroundColor: colors.mainRed,
-        paddingLeft: 30,
-        paddingRight: 30,
-        paddingTop: 10,
-        paddingBottom: 10,
+        backgroundColor: 'red',
+        padding: 10,
         borderRadius: 5,
+        marginHorizontal: 10,
     },
     modalNoButton: {
-        backgroundColor: colors.black,
-        paddingLeft: 30,
-        paddingRight: 30,
-        paddingTop: 10,
-        paddingBottom: 10,
+        backgroundColor: 'grey',
+        padding: 10,
         borderRadius: 5,
+        marginHorizontal: 10,
     },
     modalButtonText: {
-        color : colors.white,
-        fontSize : 12,
-        fontWeight : 'bold',
-        textAlign : 'center',
+        color: 'white',
+        fontSize: 16,
+        textAlign: 'center',
+    },
+    input: {
+        borderWidth: 1,
+        borderColor: 'white',
+        backgroundColor: '#F8F6F6',
+        padding: 13,
+        borderRadius: 5,
+        marginVertical: 5,
+        width: 220,
+        fontWeight: 'bold',
+    },
+    addButton: {
+        backgroundColor: '#E32424',
+        padding: 10,
+        marginVertical: 5,
+        borderRadius: 5,
+        width: '45%',
+        height: '85%',
+        alignItems: 'center',
+        marginRight: 10,
+        borderRadius:8,
+    },
+    cancelButton: {
+        backgroundColor: 'grey',
+        padding: 10,
+        marginVertical: 5,
+        borderRadius: 5,
+        width: '45%',
+        height: '85%',
+        alignItems: 'center',
+        borderRadius:8,
+    },
+    buttonText: {
+        color: 'white',
+        fontSize: 17,
+        fontWeight: 'bold',
+    },
+    selectTouchable: {
+        borderWidth: 1,
+        borderColor: 'white',
+        backgroundColor: '#F8F6F6',
+        paddingVertical: 13,
+        paddingHorizontal: 10,
+        borderRadius: 5,
+        marginVertical: 5,
+        width: 220,
+        alignSelf: 'center',
+    },
+    selectText: {
+        fontWeight: 'bold',
+        color: '#BBBBBB',
+        marginLeft: 3,
+    },
+    modalOverlay: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    },
+    pickerContainer: {
+        backgroundColor: 'white',
+        borderRadius: 5,
+        padding: 20,
+        maxHeight: 250,
+        width: '60%',
+    },
+    pickerItem: {
+        paddingVertical: 10,
+        paddingHorizontal: 15,
+        borderBottomWidth: 1,
+        borderBottomColor: '#ccc',
+    },
+    pickerItemText: {
+        textAlign: 'center',
+        fontSize: 18,
     },
 });
 
 export default Homes;
+
