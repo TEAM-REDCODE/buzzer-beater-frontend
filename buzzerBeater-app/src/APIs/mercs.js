@@ -3,7 +3,7 @@ import instance from "./instance";
 
 /**
  * 
- * @param {strint} position  ['c', 'pf', 'sf', 'sg', 'pg'] 중에서 1개로 요청보내야 함.
+ * @param {string} position  ['c', 'pf', 'sf', 'sg', 'pg'] 중에서 1개로 요청보내야 함.
  * @param {Date} avTime 
  * @returns 
  */
@@ -57,7 +57,7 @@ const getPosMercs = async (position) =>{
     return false
   })
 }
-
+// 아직 작동 안함
 const getMercs = async () =>{
   const endpoint = 'v1/mercs/'
   const apiURL = baseURL + endpoint

@@ -9,6 +9,8 @@ import Colors from '../../Common/Colors'
 import { Iconify } from 'react-native-iconify';
 import { UserContext } from '../../Common/UserContext';
 import { logout } from '../../APIs/signAPI';
+import { createMeet, RegMeet, getMeetinfo, getMeetMercs, getMeetDetail } from '../../APIs/meetAPI';
+import { createMercs, getPosMercs } from '../../APIs/mercs';
 import {NicknamePopup, PasswordPopup, PhysicalPopup, MecenearyPopup, PositonPopup} from '../UI/MyPagePopup';
 import { setMpos } from '../../APIs/userAPI';
 export default function MyPageScreen({navigation}) {
@@ -104,9 +106,9 @@ export default function MyPageScreen({navigation}) {
               <Text style={styles.iconText}>주 포지션 변경</Text>
             </View>
           </View> 
-
+          
           <View style={styles.leave}>
-            <TouchableOpacity onPress={()=>{setMpos("pf")}}>
+            <TouchableOpacity onPress={()=>{getMeetMercs('1', 'ap')}}>
               <View style={styles.leavebtn}>
                 <Text style={styles.leavetext}>회원 탈퇴하기</Text>
               </View>

@@ -96,6 +96,35 @@ const getMeetDetail = (ID) =>{
   })
 }
 /**
+ * 유저가 ID번호의 파티에 참가 API true of false return
+ * @param {int} ID
+ * @returns 1 파티 참여 성공
+ * @returns 2 이미 속해져있는 경우
+ * @returns 3 파티 생성 실패
+ */
+const RegMeet = (ID) =>{
+  const endpoint = 'v1/meets/'
+  const apiURL = baseURL+ endpoint +ID + 'reg'
+  instance.get(apiURL)
+  .then((res)=>{
+    console.log(res)
+    if (res.status === 200){
+      return 1
+    }
+    else if(res.status === 400){
+      //이미 등록이 되어있는 경우
+      return 2
+    }
+    else{
+      return 3
+    }
+  })
+  .catch((error)=>{
+    console.log(error)
+    return 3
+  })
+}
+/**
  * 삭제 성공시 True return
  * @param {string} ID 
  */
@@ -151,6 +180,52 @@ const setMeet = (ID, title, maxPerson, place, time) =>{
     return false
   })
 }
+/**
+ * 
+ * @param {string} Meetid 
+ * @param {string} mercsId
+ * @retrun true 용병 초대 성공
+ * @retrun flase 용병 초대 실패 
+ */
+const inviteMercs = (Meetid, mercsId) =>{
+  const endpoint = 'v1/meets/' + Meetid + '/mercs'
+  const apiURL = baseURL + endpoint
+  const requestData = {
+    'mercId': mercsId
+  }
+  const finalData = JSON.stringify(requestData)
+  
+  instance.post(apiURL, finalData)
+  .then((res)=>{
+    console.log(res)
+    if(res.status === 201){
+      return true
+    }
+    else{
+      return false
+    }
+  })
+  .catch((err)=>{
+    console.log(err)
+    return false
+  })
+}
+/**
+ * 
+ * @param {string} id 	meet 식별자
+ * @param {string} stage 용병 신청 진행 상황 신청중: ap(applying)/ 등록됨: ac(accepted)
+ */
+const getMeetMercs = (id, stage) =>{
+  const endpoint = 'v1/meets/' + id + '/mercs/' + stage
+  const apiURL = baseURL + endpoint
 
-export {getMeetinfo, createMeet, getMeetDetail, deleteMeet, setMeet}
+  instance.get(apiURL)
+  .then((res)=>{
+    console.log(res)
+
+  })
+
+}
+export {getMeetinfo, createMeet, getMeetDetail, 
+  deleteMeet, setMeet, RegMeet, inviteMercs, getMeetMercs}
 
