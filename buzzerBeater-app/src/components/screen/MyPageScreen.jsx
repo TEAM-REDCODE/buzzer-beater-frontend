@@ -108,7 +108,7 @@ export default function MyPageScreen({navigation}) {
           </View> 
           
           <View style={styles.leave}>
-            <TouchableOpacity onPress={()=>{getMeetMercs('1', 'ap')}}>
+            <TouchableOpacity onPress={()=>{RegMeet(1)}}>
               <View style={styles.leavebtn}>
                 <Text style={styles.leavetext}>회원 탈퇴하기</Text>
               </View>

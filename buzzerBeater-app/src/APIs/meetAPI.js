@@ -104,23 +104,20 @@ const getMeetDetail = (ID) =>{
  */
 const RegMeet = (ID) =>{
   const endpoint = 'v1/meets/'
-  const apiURL = baseURL+ endpoint +ID + 'reg'
+  const apiURL = baseURL+ endpoint +ID + '/reg'
   instance.get(apiURL)
   .then((res)=>{
     console.log(res)
     if (res.status === 200){
       return 1
     }
-    else if(res.status === 400){
-      //이미 등록이 되어있는 경우
-      return 2
-    }
-    else{
-      return 3
-    }
   })
   .catch((error)=>{
     console.log(error)
+    if(error.response.status === 400){
+      return 2
+    }
+
     return 3
   })
 }
@@ -160,7 +157,7 @@ const setMeet = (ID, title, maxPerson, place, time) =>{
 
   const requestData ={
     'title' : title, 
-    'maxPerson': maxPerson, 
+    'maxPerson': maxPerson,
     'place': place, 
     'time' : time
   }
