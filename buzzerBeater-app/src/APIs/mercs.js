@@ -98,4 +98,50 @@ const deleteMercs = async () =>{
   })
 
 }
-export {createMercs, getPosMercs, deleteMercs, getMercs}
+
+/**
+ * 나를 용병으로 신청한 농구팟을 수락합니다.
+ * @param {string} id 
+ * @retruns 
+ */
+const acceptMercsReq = (id) =>{
+  const endpoint = 'v1/mercs/meets/' + id + '/reg'
+  const apiURL = baseURL + endpoint
+  instance.get(apiURL)
+  .then((res)=>{
+    console.log(res)
+    if(res.status === 200){
+      return true
+    }else{
+      return false
+    }
+  })
+  .catch((err)=>{
+    console.log(err)
+    return false
+  })
+}
+/**
+ * 나를 용병 신청한 농구팟을 불러옵니다.
+ */
+const getMercsReq = () =>{
+  const endpoint = 'v1/mercs/meets'
+  const apiURL = baseURL + endpoint
+  instance.get(apiURL)
+  .then((res)=>{
+    console.log(res)
+    if(res.status===200){
+      return true
+    }
+    else{
+      return false
+    }
+  })
+  .catch((err)=>{
+    console.log(err)
+    return false
+  })
+
+}
+export {createMercs, getPosMercs, deleteMercs, getMercs, acceptMercsReq,
+  getMercsReq}

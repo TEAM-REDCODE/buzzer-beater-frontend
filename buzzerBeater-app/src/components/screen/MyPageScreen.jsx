@@ -9,8 +9,8 @@ import Colors from '../../Common/Colors'
 import { Iconify } from 'react-native-iconify';
 import { UserContext } from '../../Common/UserContext';
 import { logout } from '../../APIs/signAPI';
-import { createMeet, RegMeet, getMeetinfo, getMeetMercs, getMeetDetail } from '../../APIs/meetAPI';
-import { createMercs, getPosMercs } from '../../APIs/mercs';
+import { createMeet, RegMeet, getMeetinfo, getMeetMercs, inviteMercs } from '../../APIs/meetAPI';
+import { getMercsReq, deleteMercs, acceptMercsReq, createMercs} from '../../APIs/mercs';
 import {NicknamePopup, PasswordPopup, PhysicalPopup, MecenearyPopup, PositonPopup} from '../UI/MyPagePopup';
 import { setMpos } from '../../APIs/userAPI';
 export default function MyPageScreen({navigation}) {
