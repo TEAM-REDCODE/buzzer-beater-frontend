@@ -46,18 +46,11 @@ const signUp = async (nickname, email, password, height, mainPosition) => {
     }
     const finalData = JSON.stringify(requestData)
     console.log(finalData);
-    return await axios.post(apiURL, finalData, {
-        headers: {
-            'Content-Type': 'application/json', // JSON 데이터를 보내는 것을 명시
-        },
-        withCredentials : true
-    })
+    return await instance.post(apiURL, finalData)
     .then((res) => {
         const status = res.status
-        console.log(status)
         if (status === 201){
             alert('회원가입 성공')
-            window.location.href = ''
             return true;
         }
         else{

@@ -8,7 +8,6 @@ import {
     TouchableOpacity,
     View,
     Image,
-    Button
 } from 'react-native';
 import colors from "../../Common/Colors";
 import { Iconify } from 'react-native-iconify';
@@ -19,7 +18,7 @@ import Colors from "../../Common/Colors";
 
 let bigLogoImg = require('../../../assets/Buzzer-Beater_big_logo.png')
 
-const SignUp = () => {
+const SignUp = ({navigation}) => {
     const [nickname, onChangeNickname] = React.useState('');
     const [email, onChangeEmail] = React.useState('');
     const [password, onChangePassword] = React.useState('');
@@ -30,30 +29,28 @@ const SignUp = () => {
     const handleSignUp = async (nickname, email, password, height, mainPosition) => {
         height = parseFloat(height);
         try {
-            const response = await signUp(nickname, email, password, height, mainPosition);
-
-            if (response === true) {
-                if (!nickname || !email || !password || !height || !mainPosition) {
-                    alert('모든 항목은 필수입니다.');
-                }
-                else if (password !== password_Check) {
-                    alert('비밀번호가 일치하지 않습니다.');
-                }
-                else {
-                    // Handle successful login, e.g., navigate to another page
-                    console.log('Register successful', response.data);
-                    alert('로그인 창으로 이동');
-                }
-            } else {
-                // Handle unsuccessful login, show an alert or perform other actions
-                console.error('Register failed', response.error);
-                alert('회원가입 실패');
+            if (!nickname || !email || !password || !height || !mainPosition) {
+                alert('모든 항목은 필수입니다.');
             }
+            else if (password !== password_Check) {
+              alert('비밀번호가 일치하지 않습니다.');
+            }
+            else {
+              const response = await signUp(nickname, email, password, height, mainPosition);
+              if(response===true){
+                alert("회원가입 성공")
+                navigation.navigate('Start')
+              }else{
+                alert('회원가입 실패!!!')
+              }
+            }
+        
         } catch (error) {
             // Handle other errors
             console.error('signup error:', error);
             alert('에러 발생');
         }
+
     }
 
     return (
