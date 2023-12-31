@@ -101,13 +101,13 @@ const deleteMercs = async () =>{
 
 /**
  * 나를 용병으로 신청한 농구팟을 수락합니다.
- * @param {string} id 
+ * @param {string} id meet 고유 id값 
  * @retruns 
  */
-const acceptMercsReq = (id) =>{
+const acceptMercsReq = async (id) =>{
   const endpoint = 'v1/mercs/meets/' + id + '/reg'
   const apiURL = baseURL + endpoint
-  instance.get(apiURL)
+  return await instance.get(apiURL)
   .then((res)=>{
     console.log(res)
     if(res.status === 200){
@@ -124,14 +124,14 @@ const acceptMercsReq = (id) =>{
 /**
  * 나를 용병 신청한 농구팟을 불러옵니다.
  */
-const getMercsReq = () =>{
+const getMercsReq = async () =>{
   const endpoint = 'v1/mercs/meets'
   const apiURL = baseURL + endpoint
-  instance.get(apiURL)
+  return await instance.get(apiURL)
   .then((res)=>{
     console.log(res)
     if(res.status===200){
-      return true
+      return res.data
     }
     else{
       return false

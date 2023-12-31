@@ -13,45 +13,25 @@ import {
 import colors from "../../Common/Colors";
 import { Iconify } from 'react-native-iconify';
 import { getBelong } from '../../APIs/userAPI';
+import { getMercsReq } from '../../APIs/mercs';
 import {UserContext} from "../../Common/UserContext";
 import Colors from "../../Common/Colors";
-
-
+import DateParse from '../../Common/DateParse';
+import MercsListPopup from '../UI/MercsListPopup';
 const MercenaryList = ({navigation}) => {
     const { user, setUserData } = useContext(UserContext);
     const [belongList1, setBelongList1] = useState([]);
-
+    const [modalData, setModaData] = useState([]);
     const basketData = async () => {
         try {
-            // const basketResponse = [
-            //     [{
-            //         "_id": 1,
-            //         "title": "초보 환영",
-            //         "createdByNick": "First User",
-            //         "maxPerson": 5,
-            //         "place": "고려대학교 녹지",
-            //         "time": "12:00",
-            //         "createdAt": "2023-01-01T00:00:00Z",
-            //         "updatedAt": "2023-01-01T00:00:00Z"
-            //     },{
-            //         "_id": 2,
-            //         "title": "실력자 환영",
-            //         "createdByNick": "Second User",
-            //         "maxPerson": 8,
-            //         "place": "고려대학교 녹지",
-            //         "time": "18:00",
-            //         "createdAt": "2023-01-01T00:00:00Z",
-            //         "updatedAt": "2023-01-01T00:00:00Z"
-            //     }]
-            // ];
-
+            
             // getBelong 함수 호출
             const basketResponse = await getBelong();
             console.log('Response from getBelong:', basketResponse);
 
             // basketResponse가 object 타입인지 확인
-            if (basketResponse && typeof basketResponse === 'object' && Object.keys(basketResponse).length > 0) {
-                setBelongList1(basketResponse[0]);
+            if (basketResponse && Object.keys(basketResponse).length > 0) {
+                setBelongList1(basketResponse);
             } else {
                 setBelongList1([]);
             }
@@ -70,14 +50,17 @@ const MercenaryList = ({navigation}) => {
 
     const mercData = async () => {
         try {
-
             // getBelong 함수 호출
-            const mercResponse = await getBelong();
-            console.log('Response from getBelong:', mercResponse);
+            const mercResponse = await getMercsReq();
+            console.log('Response from getmercsReq:', mercResponse);
 
             // mercResponse가 object 타입인지 확인
-            if (mercResponse && typeof mercResponse === 'object' && Object.keys(mercResponse).length > 0) {
-                setBelongList2(mercResponse[0]);
+            if (mercResponse && Object.keys(mercResponse).length > 0) {
+                let validReq = mercResponse.filter((item) => {
+                    return item.MeetMerc && item.MeetMerc.stage === 'ap';
+                });
+                setBelongList2(validReq)
+                
             } else {
                 setBelongList2([]);
             }
@@ -102,9 +85,10 @@ const MercenaryList = ({navigation}) => {
     };
 
     // 카드 클릭 핸들러 함수
-    const handleCardPress = () => {
+    const handleCardPress = (data) => {
         // 모달을 보이게 설정
         setModalVisible(true);
+        setModaData(data)
     };
 
     return (
@@ -118,23 +102,30 @@ const MercenaryList = ({navigation}) => {
                             <ScrollView horizontal={true}>
                                 {belongList1.length > 0 ? (
                                     belongList1.map((item) => (
-                                        <TouchableOpacity key={item._id} style={styles.listBox} onPress={handleCardPress}>
+                                        <TouchableOpacity key={item._id} style={styles.listBox}>
+                                            {(item.maxNum !== item.count) && 
+                                              <Iconify 
+                                              icon="lets-icons:check-fill" color="#94cc5c" 
+                                            />
+                                            }
                                             <Iconify
                                                 icon="solar:basketball-bold-duotone"
                                                 size={50}
                                                 style={styles.iconStyle}
                                             />
-                                            <Text style={styles.title}>{item.title}</Text>
+                                            <ScrollView horizontal>
+                                              <Text style={styles.title}>{item.title}</Text>
+                                            </ScrollView>
                                             <View style={styles.titleUnderbar}></View>
                                             <Text style={styles.content}>
                                                 <Text style={styles.contentTextBold}>생성자 : </Text>{item.createdByNick}</Text>
                                             <Text style={styles.content}>
                                                 <Text style={styles.contentTextBold}>장소 : </Text>{item.place}</Text>
                                             <Text style={styles.content}>
-                                                <Text style={styles.contentTextBold}>시간 : </Text>{item.time}</Text>
+                                                <Text style={styles.contentTextBold}>시간 : </Text>{DateParse(item.time)}</Text>
                                             <View style={styles.maxPerson}>
                                                 <View style={styles.person}>
-                                                    <Text style={styles.maxNum}>{item.maxPerson}</Text>
+                                                    <Text style={styles.maxNum}>{item.count}/{item.maxPerson}</Text>
                                                     <Iconify icon="ion:person" size={20} color={colors.mainRed} />
                                                 </View>
                                             </View>
@@ -159,24 +150,31 @@ const MercenaryList = ({navigation}) => {
                             <Text style={styles.smallText}>{user.nickname}님을 용병으로 신청한 농구팟을 확인해보세요.</Text>
                             <ScrollView horizontal={true}>
                                 {belongList2.length > 0 ? (
-                                    belongList2.map((item) => (
-                                        <TouchableOpacity key={item._id} style={styles.listBox} onPress={handleCardPress}>
+                                    belongList2.map((item, idx) => (
+                                        <TouchableOpacity key={item._id} style={styles.listBox} onPress={()=>{handleCardPress(belongList2[idx])}}>
+                                            {(item.maxNum !== item.count) && 
+                                              <Iconify 
+                                              icon="lets-icons:check-fill" color="#94cc5c" 
+                                            />
+                                            }
                                             <Iconify
                                                 icon="solar:basketball-bold-duotone"
                                                 size={50}
                                                 style={styles.iconStyle}
                                             />
-                                            <Text style={styles.title}>{item.title}</Text>
+                                            <ScrollView horizontal>
+                                              <Text style={styles.title}>{item.title}</Text>
+                                            </ScrollView>
                                             <View style={styles.titleUnderbar}></View>
                                             <Text style={styles.content}>
                                                 <Text style={styles.contentTextBold}>생성자 : </Text>{item.createdByNick}</Text>
                                             <Text style={styles.content}>
                                                 <Text style={styles.contentTextBold}>장소 : </Text>{item.place}</Text>
                                             <Text style={styles.content}>
-                                                <Text style={styles.contentTextBold}>시간 : </Text>{item.time}</Text>
+                                                <Text style={styles.contentTextBold}>시간 : </Text>{DateParse(item.time)}</Text>
                                             <View style={styles.maxPerson}>
                                                 <View style={styles.person}>
-                                                    <Text style={styles.maxNum}>{item.maxPerson}</Text>
+                                                    <Text style={styles.maxNum}>{item.count}/{item.maxPerson}</Text>
                                                     <Iconify icon="ion:person" size={20} color={colors.mainRed} />
                                                 </View>
                                             </View>
@@ -202,51 +200,9 @@ const MercenaryList = ({navigation}) => {
                         </View>
                     </ScrollView>
                 </View>
+            <MercsListPopup visible={modalVisible} setModalVisible={setModalVisible} meetInfo={modalData}>
+            </MercsListPopup>
             </View>
-            {/* 모달 */}
-            {belongList1.map((item) => (
-                <Modal
-                    animationType="none"
-                    transparent={true}
-                    visible={modalVisible}
-                    onRequestClose={() => {
-                        setModalVisible(!modalVisible);
-                    }}
-                >
-                    <View style={styles.modalOverlay}>
-                        <View style={styles.modalView}>
-                            <Text style={[styles.modalTitle, { marginBottom: 8 }]}>
-                                <Text style={[styles.modalCreatorName, styles.modalTextRed]}>{item.createdByNick}</Text>
-                                님이 생성한 농구팟에{'\n'}참여하시겠습니까?
-                            </Text>
-                            <View style={styles.modalMiddle}>
-                                <Text style={[styles.modalMiddleText, { marginBottom: 10 }]}>{'✔ '}
-                                    <Text style={styles.modalTextRed}>장소</Text>와 <Text style={styles.modalTextRed}>시간</Text>을 확인해주세요.
-                                </Text>
-                                <View>
-                                    <Text style={styles.modalContent}>
-                                        <Text style={styles.modalLabel}>장소 : </Text>
-                                        {item.place}
-                                    </Text>
-                                    <Text style={styles.modalContent}>
-                                        <Text style={styles.modalLabel}>시간 : </Text>
-                                        {item.time}
-                                    </Text>
-                                </View>
-                                <View style={styles.modalButtonContainer}>
-                                    <TouchableOpacity style={styles.modalYesButton} onPress={closeModal}>
-                                        <Text style={styles.modalButtonText}>YES</Text>
-                                    </TouchableOpacity>
-                                    <TouchableOpacity style={styles.modalNoButton} onPress={closeModal}>
-                                        <Text style={styles.modalButtonText}>NO</Text>
-                                    </TouchableOpacity>
-                                </View>
-                            </View>
-                        </View>
-                    </View>
-                </Modal>
-                ))
-            }
         </SafeAreaView>
     );
 };
@@ -318,6 +274,7 @@ const styles = StyleSheet.create({
       fontWeight : 'bold',
       marginLeft : 15,
       marginBottom : 5,
+      width: 100,
     },
 
     titleUnderbar : {

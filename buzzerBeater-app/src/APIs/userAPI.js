@@ -48,11 +48,11 @@ const getUserInfo = async()=>{
 /**
  * 유저가 속해있는 파티 GET
  */
-const getBelong = async()=>{
+const getBelong = async ()=>{
   const endPoint = 'v1/users/belong'
   const apiURL = baseURL + endPoint
 
-  instance.get(apiURL)
+  return await instance.get(apiURL)
   .then((res)=>{
     if(res.status === 200){
       console.log(res)
