@@ -173,8 +173,9 @@ const styles = StyleSheet.create({
     },
 
     image : {
-        width : 330,
-        height : 60,
+        width: '90%',
+        height: 100,
+        resizeMode: 'contain',
     },
 
     signUpInput : {

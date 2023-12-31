@@ -4,8 +4,8 @@ import colors from "../../Common/Colors";
 import { Iconify } from 'react-native-iconify';
 import { Picker } from '@react-native-picker/picker';
 
-
 let court = require('../../../assets/court.png');
+
 const Homes = () => {
     const [ModalVisible, setModalVisible] = useState(false);
     const [pickerVisible, setPickerVisible] = useState(false);
@@ -623,7 +623,6 @@ const styles = StyleSheet.create({
         height: '85%',
         alignItems: 'center',
         marginRight: 10,
-        borderRadius: 8,
     },
     cancelButton: {
         backgroundColor: 'grey',
@@ -633,7 +632,6 @@ const styles = StyleSheet.create({
         width: '45%',
         height: '85%',
         alignItems: 'center',
-        borderRadius: 8,
     },
     buttonText: {
         color: 'white',

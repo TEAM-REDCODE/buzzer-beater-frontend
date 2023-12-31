@@ -11,6 +11,7 @@ import MyPageScreen from './src/components/screen/MyPageScreen';
 import Start from './src/components/screen/Start';
 import Homes from './src/components/screen/Homes';
 import { UserProvider } from './src/Common/UserContext';
+import Loading from "./src/components/screen/Loading";
 
 
 const Tab = createBottomTabNavigator();
