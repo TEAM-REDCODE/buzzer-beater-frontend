@@ -53,7 +53,7 @@ function MercsListPopup({ visible, setModalVisible, meetInfo}) {
                         </Text>
                         <Text style={styles.modalContent}>
                             <Text style={styles.modalLabel}>시간 : </Text>
-                            {DateParse(meetInfo.updatedAt)}
+                            {DateParse(meetInfo.time)}
                         </Text>
                     </View>
                     <View style={styles.modalButtonContainer}>
