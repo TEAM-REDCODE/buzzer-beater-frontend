@@ -13,6 +13,7 @@ import { createMeet, RegMeet, getMeetinfo, getMeetMercs, inviteMercs } from '../
 import { getMercsReq, deleteMercs, acceptMercsReq, createMercs} from '../../APIs/mercs';
 import {NicknamePopup, PasswordPopup, PhysicalPopup, MecenearyPopup, PositonPopup} from '../UI/MyPagePopup';
 import { setMpos } from '../../APIs/userAPI';
+import Loading from "./Loading";
 export default function MyPageScreen({navigation}) {
   const { user, setUserData } = useContext(UserContext);
   const [nicknamePopup, setNicknamePopup] = useState(false)
@@ -20,12 +21,14 @@ export default function MyPageScreen({navigation}) {
   const [physicalPopup, setPhysicalPopup] = useState(false)
   const [mecenearyPopup, setMecenearyPopup] = useState(false)
   const [positonPopup, setPositonPopup] = useState(false)
+  // 로딩화면
+  const [loading, setLoading] = React.useState(true);
 
   useEffect(() => {
     console.log(user);
   }, [user]);
   
-  const  handlePopup = (num) =>{
+  const handlePopup = (num) =>{
     if(num===0){
       setNicknamePopup(!nicknamePopup)
     }
@@ -49,6 +52,7 @@ export default function MyPageScreen({navigation}) {
   }
   return (
       <View style={styles.container}>
+        {loading ? <Loading/> : null}
         <View style={styles.wrapper}>
           <View style={styles.mypage}>
             <Iconify icon="solar:basketball-bold-duotone" size={80} color = {Colors.white} />

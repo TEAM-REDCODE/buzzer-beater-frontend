@@ -18,10 +18,16 @@ import {UserContext} from "../../Common/UserContext";
 import Colors from "../../Common/Colors";
 import DateParse from '../../Common/DateParse';
 import MercsListPopup from '../UI/MercsListPopup';
+import Spinner from "react-native-loading-spinner-overlay";
+import Loading from "./Loading";
+
 const MercenaryList = ({navigation}) => {
     const { user, setUserData } = useContext(UserContext);
     const [belongList1, setBelongList1] = useState([]);
-    const [modalData, setModaData] = useState([]);
+    const [modalData, setModalData] = useState([]);
+    // 로딩화면
+    const [loading, setLoading] = React.useState(true);
+
     const basketData = async () => {
         try {
             
@@ -32,6 +38,7 @@ const MercenaryList = ({navigation}) => {
             // basketResponse가 object 타입인지 확인
             if (basketResponse && Object.keys(basketResponse).length > 0) {
                 setBelongList1(basketResponse);
+                setLoading(false); // 로딩 완료
             } else {
                 setBelongList1([]);
             }
@@ -60,7 +67,7 @@ const MercenaryList = ({navigation}) => {
                     return item.MeetMerc && item.MeetMerc.stage === 'ap';
                 });
                 setBelongList2(validReq)
-                
+                setLoading(false); // 로딩 완료
             } else {
                 setBelongList2([]);
             }
@@ -88,13 +95,15 @@ const MercenaryList = ({navigation}) => {
     const handleCardPress = (data) => {
         // 모달을 보이게 설정
         setModalVisible(true);
-        setModaData(data)
+        setModalData(data)
     };
+
 
     return (
         <SafeAreaView style={styles.safeArea}>
             <View style={styles.container}>
                 <View style={styles.wrapper}>
+                    { loading ? (<Loading/>) : null }
                     <ScrollView style={styles.List}>
                         <View style={styles.listCol}>
                             <Text style={styles.bigText}>들어간 농구팟</Text>
@@ -103,9 +112,9 @@ const MercenaryList = ({navigation}) => {
                                 {belongList1.length > 0 ? (
                                     belongList1.map((item) => (
                                         <TouchableOpacity key={item._id} style={styles.listBox}>
-                                            {(item.maxNum !== item.count) && 
-                                              <Iconify 
-                                              icon="lets-icons:check-fill" color="#94cc5c" 
+                                            {(item.maxNum !== item.count) &&
+                                              <Iconify
+                                              icon="lets-icons:check-fill" color="#94cc5c"
                                             />
                                             }
                                             <Iconify
@@ -152,9 +161,9 @@ const MercenaryList = ({navigation}) => {
                                 {belongList2.length > 0 ? (
                                     belongList2.map((item, idx) => (
                                         <TouchableOpacity key={item._id} style={styles.listBox} onPress={()=>{handleCardPress(belongList2[idx])}}>
-                                            {(item.maxNum !== item.count) && 
-                                              <Iconify 
-                                              icon="lets-icons:check-fill" color="#94cc5c" 
+                                            {(item.maxNum !== item.count) &&
+                                              <Iconify
+                                              icon="lets-icons:check-fill" color="#94cc5c"
                                             />
                                             }
                                             <Iconify
@@ -220,6 +229,7 @@ const styles = StyleSheet.create({
 
     wrapper : {
         flexGrow : 1,
+        backgroundColor : colors.black,
     },
 
     List : {

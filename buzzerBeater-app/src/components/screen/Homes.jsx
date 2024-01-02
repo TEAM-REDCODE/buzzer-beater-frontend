@@ -3,6 +3,8 @@ import { View, Text, ScrollView, StyleSheet, TouchableOpacity, Image, SafeAreaVi
 import colors from "../../Common/Colors";
 import { Iconify } from 'react-native-iconify';
 import { Picker } from '@react-native-picker/picker';
+import Spinner from "react-native-loading-spinner-overlay";
+import Loading from "./Loading";
 
 let court = require('../../../assets/court.png');
 
@@ -26,6 +28,8 @@ const Homes = () => {
         "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00", "19:00", "20:00", "21:00", "22:00", "23:00", "24:00",
     ];
 
+    // 로딩화면
+    const [loading, setLoading] = React.useState(true);
 
     const showPicker = () => setPickerVisible(true);
     const hidePicker = () => setPickerVisible(false);
@@ -75,313 +79,313 @@ const Homes = () => {
 
     return (
         <SafeAreaView style={styles.screenContainer}>
-            <ScrollView>
-                {/* 모집 중인 농구팟 섹션 */}
-                <View style={styles.sectionContainer}>
-                    <View style={styles.header}>
-                        <View style={styles.listHeader}>
-                            <Text style={styles.headerTitle}>모집 중인 농구팟</Text>
-                            <TouchableOpacity onPress={openCreateModal} style={styles.createButton}>
-                                <Text style={styles.createButtonText}>농구팟 생성하기</Text>
-                            </TouchableOpacity>
-                        </View>
-                        <Text style={styles.description}>
-                            참여하고 싶은 농구팟을 확인하고 참여해보세요 !!!
-                        </Text>
-                    </View>
-                    <ScrollView horizontal={true}>
-                        <TouchableOpacity onPress={handleCardPress} style={styles.cardTouchable}>
-                            <View style={styles.card}>
-                                <View style={styles.cardContentContainer}>
-                                    <Iconify
-                                        icon="solar:basketball-bold-duotone"
-                                        size={60}
-                                        color={colors.mainRed}
-                                    />
-                                    <View style={styles.cardTextContainer}>
-                                        <View style={styles.cardTitle}>
-                                            <Text style={styles.cardTitleText}>초보 환영</Text>
-                                        </View>
-                                        <View style={styles.cardContent}>
-                                            <Text style={styles.cardContentText}>생성자 : slrspdla</Text>
-                                            <Text style={styles.cardContentText}>장소 : 고려대학교 농구장</Text>
-                                            <Text style={styles.cardContentText}>시간 : 16:00</Text>
-                                        </View>
-                                    </View>
-                                </View>
-                                <View style={styles.maxPerson}>
-                                    <Text style={styles.maxNum}>4/6</Text>
-                                    <Iconify
-                                        icon="ion:person"
-                                        size={20}
-                                        color={colors.mainRed}
-                                    />
-                                </View>
+            { loading ? <Loading/> : null }
+                <ScrollView>
+                    {/* 모집 중인 농구팟 섹션 */}
+                    <View style={styles.sectionContainer}>
+                        <View style={styles.header}>
+                            <View style={styles.listHeader}>
+                                <Text style={styles.headerTitle}>모집 중인 농구팟</Text>
+                                <TouchableOpacity onPress={openCreateModal} style={styles.createButton}>
+                                    <Text style={styles.createButtonText}>농구팟 생성하기</Text>
+                                </TouchableOpacity>
                             </View>
-                        </TouchableOpacity>
-                    </ScrollView>
-                </View>
-                {/* 랜덤 용병 섹션 */}
-                <View style={styles.sectionContainer}>
-                    <View style={styles.header}>
-                        <Text style={styles.headerTitle}>랜덤 용병</Text>
-                        <Text style={styles.description}>
-                            등록된 용병을 확인하고 함께 농구를 즐겨보세요 !!!
-                        </Text>
-                    </View>
-                    <View style={styles.courtContainer}>
-                        <Image source={court} style={styles.courtImage} />
-                        <View style={[styles.positionButtonContainer, styles.pgButton]}>
-                            <TouchableOpacity>
-                                <Iconify icon='ic:round-person-pin' size={40} />
-                            </TouchableOpacity>
-                            <Text style={styles.positionButtonText}>PG</Text>
-                        </View>
-                        <View style={[styles.positionButtonContainer, styles.sgButton]}>
-                            <TouchableOpacity>
-                                <Iconify icon='ic:round-person-pin' size={40} />
-                            </TouchableOpacity>
-                            <Text style={styles.positionButtonText}>SG</Text>
-                        </View>
-                        <View style={[styles.positionButtonContainer, styles.sfButton]}>
-                            <TouchableOpacity>
-                                <Iconify icon='ic:round-person-pin' size={40} />
-                            </TouchableOpacity>
-                            <Text style={styles.positionButtonText}>SF</Text>
-                        </View>
-                        <View style={[styles.positionButtonContainer, styles.pfButton]}>
-                            <TouchableOpacity>
-                                <Iconify icon='ic:round-person-pin' size={40} />
-                            </TouchableOpacity>
-                            <Text style={styles.positionButtonText}>PF</Text>
-                        </View>
-                        <View style={[styles.positionButtonContainer, styles.cButton]}>
-                            <TouchableOpacity>
-                                <Iconify icon='ic:round-person-pin' size={40} />
-                            </TouchableOpacity>
-                            <Text style={styles.positionButtonText}>C</Text>
-                        </View>
-                    </View>
-                </View>
-                <View style={styles.sectionContainer}>
-                    <View style={styles.header}>
-                        <Text style={styles.headerTitle}>용병 등록하기</Text>
-                        <Text style={styles.description}>
-                            용병 등록을 통해서 새로운 사람들과 농구를 즐겨보세요 !!!
-                        </Text>
-                    </View>
-                    <TouchableOpacity style={styles.registerButton} onPress={openMercenaryModal}>
-                        <Text style={styles.registerButtonText}>용병 등록하러 가기{' →'} </Text>
-                    </TouchableOpacity>
-                </View>
-                {/* 모달 */}
-                <Modal
-                    animationType="none"
-                    transparent={true}
-                    visible={ModalVisible}
-                    onRequestClose={() => {
-                        setModalVisible(!ModalVisible);
-                    }}
-                >
-                    <View style={styles.modalOverlay}>
-                        <View style={styles.modalView}>
-                            <Text style={[styles.modalTitle, { marginBottom: 8 }]}>
-                                <Text style={styles.modalCreatorName}>slrspdla</Text>
-                                님이 생성한 농구팟에 참여하시겠습니까{'?'}
+                            <Text style={styles.description}>
+                                참여하고 싶은 농구팟을 확인하고 참여해보세요 !!!
                             </Text>
-                            <Text style={[styles.modalMiddle, { marginBottom: 10 }]}>{'✔'}장소와 시간을 확인해주세요.</Text>
-                            <Text style={styles.modalContent}>
-                                <Text style={styles.modalLabel}>장소 :</Text>
-                                고려대학교 농구장</Text>
-                            <Text style={styles.modalContent}>
-                                <Text style={styles.modalLabel}>시간 :</Text>
-                                16:00</Text>
-                            <View style={styles.modalButtonContainer}>
-                                <TouchableOpacity style={styles.modalYesButton} onPress={closeModal}>
-                                    <Text style={styles.modalButtonText}>YES</Text>
+                        </View>
+                        <ScrollView horizontal={true}>
+                            <TouchableOpacity onPress={handleCardPress} style={styles.cardTouchable}>
+                                <View style={styles.card}>
+                                    <View style={styles.cardContentContainer}>
+                                        <Iconify
+                                            icon="solar:basketball-bold-duotone"
+                                            size={60}
+                                            color={colors.mainRed}
+                                        />
+                                        <View style={styles.cardTextContainer}>
+                                            <View style={styles.cardTitle}>
+                                                <Text style={styles.cardTitleText}>초보 환영</Text>
+                                            </View>
+                                            <View style={styles.cardContent}>
+                                                <Text style={styles.cardContentText}>생성자 : slrspdla</Text>
+                                                <Text style={styles.cardContentText}>장소 : 고려대학교 농구장</Text>
+                                                <Text style={styles.cardContentText}>시간 : 16:00</Text>
+                                            </View>
+                                        </View>
+                                    </View>
+                                    <View style={styles.maxPerson}>
+                                        <Text style={styles.maxNum}>4/6</Text>
+                                        <Iconify
+                                            icon="ion:person"
+                                            size={20}
+                                            color={colors.mainRed}
+                                        />
+                                    </View>
+                                </View>
+                            </TouchableOpacity>
+                        </ScrollView>
+                    </View>
+                    {/* 랜덤 용병 섹션 */}
+                    <View style={styles.sectionContainer}>
+                        <View style={styles.header}>
+                            <Text style={styles.headerTitle}>랜덤 용병</Text>
+                            <Text style={styles.description}>
+                                등록된 용병을 확인하고 함께 농구를 즐겨보세요 !!!
+                            </Text>
+                        </View>
+                        <View style={styles.courtContainer}>
+                            <Image source={court} style={styles.courtImage} />
+                            <View style={[styles.positionButtonContainer, styles.pgButton]}>
+                                <TouchableOpacity>
+                                    <Iconify icon='ic:round-person-pin' size={40} />
                                 </TouchableOpacity>
-                                <TouchableOpacity style={styles.modalNoButton} onPress={closeModal}>
-                                    <Text style={styles.modalButtonText}>NO</Text>
+                                <Text style={styles.positionButtonText}>PG</Text>
+                            </View>
+                            <View style={[styles.positionButtonContainer, styles.sgButton]}>
+                                <TouchableOpacity>
+                                    <Iconify icon='ic:round-person-pin' size={40} />
                                 </TouchableOpacity>
+                                <Text style={styles.positionButtonText}>SG</Text>
+                            </View>
+                            <View style={[styles.positionButtonContainer, styles.sfButton]}>
+                                <TouchableOpacity>
+                                    <Iconify icon='ic:round-person-pin' size={40} />
+                                </TouchableOpacity>
+                                <Text style={styles.positionButtonText}>SF</Text>
+                            </View>
+                            <View style={[styles.positionButtonContainer, styles.pfButton]}>
+                                <TouchableOpacity>
+                                    <Iconify icon='ic:round-person-pin' size={40} />
+                                </TouchableOpacity>
+                                <Text style={styles.positionButtonText}>PF</Text>
+                            </View>
+                            <View style={[styles.positionButtonContainer, styles.cButton]}>
+                                <TouchableOpacity>
+                                    <Iconify icon='ic:round-person-pin' size={40} />
+                                </TouchableOpacity>
+                                <Text style={styles.positionButtonText}>C</Text>
                             </View>
                         </View>
                     </View>
-                </Modal>
-                {/* "농구팟 생성하기" 모달 */}
-                <Modal
-                    animationType="none"
-                    transparent={true}
-                    visible={isCreateModalVisible}
-                    onRequestClose={closeCreateModal}
-                >
-                    <View style={styles.modalOverlay}>
-                        <View style={styles.modalView}>
-                            <Text style={[styles.modalTitle, { marginBottom: 8 }]}>농구팟 생성하기</Text>
-                            <Text style={[styles.modalMiddle, { marginBottom: 10 }]}>아래의 정보를 작성해주세요.</Text>
-                            <TextInput
-                                style={styles.input}
-                                placeholder="제목을 입력해주세요."
-                                onChangeText={(text) => setNewTeam({ ...newTeam, title: text })}
-                                value={newTeam.title}
-                            />
-                            <TextInput
-                                style={styles.input}
-                                placeholder="장소를 입력해주세요."
-                                onChangeText={(text) => setNewTeam({ ...newTeam, location: text })}
-                                value={newTeam.location}
-                            />
-
-                            <TouchableOpacity onPress={showPicker} style={styles.selectTouchable}>
-                                <Text style={styles.selectText}>시간을 선택해주세요.</Text>
-                            </TouchableOpacity>
-
-                            <Modal
-                                visible={pickerVisible}
-                                transparent={true}
-                                animationType="slide"
-                                onRequestClose={hidePicker}
-                            >
-                                <TouchableOpacity style={styles.modalOverlay} onPress={hidePicker} activeOpacity={1}>
-                                    <View style={styles.pickerContainer} onStartShouldSetResponder={() => true}>
-                                        <ScrollView
-                                            persistentScrollbar={true}
-                                            showsVerticalScrollIndicator={true}
-                                            indicatorStyle="black"
-                                        >
-                                            {timeOptions.map((time, index) => (
-                                                <TouchableOpacity
-                                                    key={index}
-                                                    style={styles.pickerItem}
-                                                    onPress={() => {
-                                                        setNewTeam({ ...newTeam, time: time });
-                                                        hidePicker();
-                                                    }}
-                                                >
-                                                    <Text style={styles.pickerItemText}>{time}</Text>
-                                                </TouchableOpacity>
-                                            ))}
-                                        </ScrollView>
-                                    </View>
-                                </TouchableOpacity>
-                            </Modal>
-
-                            <TouchableOpacity onPress={showPicker} style={styles.selectTouchable}>
-                                <Text style={styles.selectText}>인원을 선택해주세요.</Text>
-                            </TouchableOpacity>
-
-                            <Modal
-                                visible={pickerVisible}
-                                transparent={true}
-                                animationType="slide"
-                                onRequestClose={hidePicker}
-                            >
-                                <TouchableOpacity style={styles.modalOverlay} onPress={hidePicker} activeOpacity={1}>
-                                    <View style={styles.pickerContainer} showsVerticalScrollIndicator={false}>
-                                        <ScrollView>
-                                            {['1', '2', '3', '4', '5'].map((value) => (
-                                                <TouchableOpacity
-                                                    key={value}
-                                                    style={styles.pickerItem}
-                                                    onPress={() => {
-                                                        onValueChange(value);
-                                                        hidePicker();
-                                                    }}
-                                                >
-                                                    <Text style={styles.pickerItemText}>{`${value} vs ${value}`}</Text>
-                                                </TouchableOpacity>
-                                            ))}
-                                        </ScrollView>
-                                    </View>
-                                </TouchableOpacity>
-                            </Modal>
-
-
-                            <View style={styles.modalButtonContainer2}>
-
-                                <TouchableOpacity style={styles.addButton} onPress={addNewTeam}>
-                                    <Text style={styles.buttonText}>생성하기</Text>
-                                </TouchableOpacity>
-                                <TouchableOpacity style={styles.cancelButton} onPress={closeCreateModal}>
-                                    <Text style={styles.buttonText}>취소하기</Text>
-                                </TouchableOpacity>
+                    <View style={styles.sectionContainer}>
+                        <View style={styles.header}>
+                            <Text style={styles.headerTitle}>용병 등록하기</Text>
+                            <Text style={styles.description}>
+                                용병 등록을 통해서 새로운 사람들과 농구를 즐겨보세요 !!!
+                            </Text>
+                        </View>
+                        <TouchableOpacity style={styles.registerButton} onPress={openMercenaryModal}>
+                            <Text style={styles.registerButtonText}>용병 등록하러 가기{' →'} </Text>
+                        </TouchableOpacity>
+                    </View>
+                    {/* 모달 */}
+                    <Modal
+                        animationType="none"
+                        transparent={true}
+                        visible={ModalVisible}
+                        onRequestClose={() => {
+                            setModalVisible(!ModalVisible);
+                        }}
+                    >
+                        <View style={styles.modalOverlay}>
+                            <View style={styles.modalView}>
+                                <Text style={[styles.modalTitle, { marginBottom: 8 }]}>
+                                    <Text style={styles.modalCreatorName}>slrspdla</Text>
+                                    님이 생성한 농구팟에 참여하시겠습니까{'?'}
+                                </Text>
+                                <Text style={[styles.modalMiddle, { marginBottom: 10 }]}>{'✔'}장소와 시간을 확인해주세요.</Text>
+                                <Text style={styles.modalContent}>
+                                    <Text style={styles.modalLabel}>장소 :</Text>
+                                    고려대학교 농구장</Text>
+                                <Text style={styles.modalContent}>
+                                    <Text style={styles.modalLabel}>시간 :</Text>
+                                    16:00</Text>
+                                <View style={styles.modalButtonContainer}>
+                                    <TouchableOpacity style={styles.modalYesButton} onPress={closeModal}>
+                                        <Text style={styles.modalButtonText}>YES</Text>
+                                    </TouchableOpacity>
+                                    <TouchableOpacity style={styles.modalNoButton} onPress={closeModal}>
+                                        <Text style={styles.modalButtonText}>NO</Text>
+                                    </TouchableOpacity>
+                                </View>
                             </View>
                         </View>
-                    </View>
-                </Modal>
-                {/* "용병 등록하기" 모달 */}
-                <Modal
-                    animationType="none"
-                    transparent={true}
-                    visible={isMercenaryModalVisible}
-                    onRequestClose={closeMercenaryModal}
-                >
-                    <View style={styles.modalOverlay}>
-                        <View style={styles.modalView}>
-                            <Text style={[styles.modalTitle, { marginBottom: 8 }]}>용병 등록하기</Text>
-                            <Text style={[styles.modalMiddle, { marginBottom: 10 }]}>아래의 정보를 작성해주세요.</Text>
-                            <TextInput
-                                style={styles.input}
-                                placeholder="이름을 입력해주세요."
-                                onChangeText={(text) => setNewTeam({ ...newTeam, nickname: text })}
-                                value={newTeam.title}
-                            />
-                            <TextInput
-                                style={styles.input}
-                                placeholder="포지션을 입력해주세요."
-                                onChangeText={(text) => setNewTeam({ ...newTeam, mainPosition: text })}
-                                value={newTeam.location}
-                            />
-                            <TextInput
-                                style={styles.input}
-                                placeholder="키를 입력해주세요."
-                                onChangeText={(text) => setNewTeam({ ...newTeam, height: text })}
-                                value={newTeam.location}
-                            />
-                            <TouchableOpacity onPress={showPicker} style={styles.selectTouchable}>
-                                <Text style={styles.selectText}>공 소유 여부 {'→'}</Text>
-                            </TouchableOpacity>
+                    </Modal>
+                    {/* "농구팟 생성하기" 모달 */}
+                    <Modal
+                        animationType="none"
+                        transparent={true}
+                        visible={isCreateModalVisible}
+                        onRequestClose={closeCreateModal}
+                    >
+                        <View style={styles.modalOverlay}>
+                            <View style={styles.modalView}>
+                                <Text style={[styles.modalTitle, { marginBottom: 8 }]}>농구팟 생성하기</Text>
+                                <Text style={[styles.modalMiddle, { marginBottom: 10 }]}>아래의 정보를 작성해주세요.</Text>
+                                <TextInput
+                                    style={styles.input}
+                                    placeholder="제목을 입력해주세요."
+                                    onChangeText={(text) => setNewTeam({ ...newTeam, title: text })}
+                                    value={newTeam.title}
+                                />
+                                <TextInput
+                                    style={styles.input}
+                                    placeholder="장소를 입력해주세요."
+                                    onChangeText={(text) => setNewTeam({ ...newTeam, location: text })}
+                                    value={newTeam.location}
+                                />
 
-                            <Modal
-                                visible={pickerVisible}
-                                transparent={true}
-                                onRequestClose={hidePicker}
-                            >
-                                <TouchableOpacity style={styles.modalOverlay} onPress={hidePicker} activeOpacity={1}>
-                                    <View style={styles.possessionPickerContainer} onStartShouldSetResponder={() => true}>
-                                        <TouchableOpacity
-                                            style={styles.possessionOption}
-                                            onPress={() => {
-                                                hidePicker();
-                                            }}>
-                                            <Text style={styles.possessionOptionText}>O</Text>
-                                        </TouchableOpacity>
-                                        <TouchableOpacity
-                                            style={styles.possessionOption}
-                                            onPress={() => {
-                                                hidePicker();
-                                            }}>
-                                            <Text style={styles.possessionOptionText}>X</Text>
-                                        </TouchableOpacity>
-                                    </View>
+                                <TouchableOpacity onPress={showPicker} style={styles.selectTouchable}>
+                                    <Text style={styles.selectText}>시간을 선택해주세요.</Text>
                                 </TouchableOpacity>
-                            </Modal>
 
-                            <View style={styles.modalButtonContainer2}>
+                                <Modal
+                                    visible={pickerVisible}
+                                    transparent={true}
+                                    animationType="slide"
+                                    onRequestClose={hidePicker}
+                                >
+                                    <TouchableOpacity style={styles.modalOverlay} onPress={hidePicker} activeOpacity={1}>
+                                        <View style={styles.pickerContainer} onStartShouldSetResponder={() => true}>
+                                            <ScrollView
+                                                persistentScrollbar={true}
+                                                showsVerticalScrollIndicator={true}
+                                                indicatorStyle="black"
+                                            >
+                                                {timeOptions.map((time, index) => (
+                                                    <TouchableOpacity
+                                                        key={index}
+                                                        style={styles.pickerItem}
+                                                        onPress={() => {
+                                                            setNewTeam({ ...newTeam, time: time });
+                                                            hidePicker();
+                                                        }}
+                                                    >
+                                                        <Text style={styles.pickerItemText}>{time}</Text>
+                                                    </TouchableOpacity>
+                                                ))}
+                                            </ScrollView>
+                                        </View>
+                                    </TouchableOpacity>
+                                </Modal>
 
-                                <TouchableOpacity style={styles.addButton} onPress={() => {
-                                    closeMercenaryModal();
-                                }}>
-                                    <Text style={styles.buttonText}>등록하기</Text>
+                                <TouchableOpacity onPress={showPicker} style={styles.selectTouchable}>
+                                    <Text style={styles.selectText}>인원을 선택해주세요.</Text>
                                 </TouchableOpacity>
-                                <TouchableOpacity style={styles.cancelButton} onPress={closeMercenaryModal}>
-                                    <Text style={styles.buttonText}>취소하기</Text>
-                                </TouchableOpacity>
+
+                                <Modal
+                                    visible={pickerVisible}
+                                    transparent={true}
+                                    animationType="slide"
+                                    onRequestClose={hidePicker}
+                                >
+                                    <TouchableOpacity style={styles.modalOverlay} onPress={hidePicker} activeOpacity={1}>
+                                        <View style={styles.pickerContainer} showsVerticalScrollIndicator={false}>
+                                            <ScrollView>
+                                                {['1', '2', '3', '4', '5'].map((value) => (
+                                                    <TouchableOpacity
+                                                        key={value}
+                                                        style={styles.pickerItem}
+                                                        onPress={() => {
+                                                            onValueChange(value);
+                                                            hidePicker();
+                                                        }}
+                                                    >
+                                                        <Text style={styles.pickerItemText}>{`${value} vs ${value}`}</Text>
+                                                    </TouchableOpacity>
+                                                ))}
+                                            </ScrollView>
+                                        </View>
+                                    </TouchableOpacity>
+                                </Modal>
+
+
+                                <View style={styles.modalButtonContainer2}>
+
+                                    <TouchableOpacity style={styles.addButton} onPress={addNewTeam}>
+                                        <Text style={styles.buttonText}>생성하기</Text>
+                                    </TouchableOpacity>
+                                    <TouchableOpacity style={styles.cancelButton} onPress={closeCreateModal}>
+                                        <Text style={styles.buttonText}>취소하기</Text>
+                                    </TouchableOpacity>
+                                </View>
                             </View>
                         </View>
-                    </View>
-                </Modal>
+                    </Modal>
+                    {/* "용병 등록하기" 모달 */}
+                    <Modal
+                        animationType="none"
+                        transparent={true}
+                        visible={isMercenaryModalVisible}
+                        onRequestClose={closeMercenaryModal}
+                    >
+                        <View style={styles.modalOverlay}>
+                            <View style={styles.modalView}>
+                                <Text style={[styles.modalTitle, { marginBottom: 8 }]}>용병 등록하기</Text>
+                                <Text style={[styles.modalMiddle, { marginBottom: 10 }]}>아래의 정보를 작성해주세요.</Text>
+                                <TextInput
+                                    style={styles.input}
+                                    placeholder="이름을 입력해주세요."
+                                    onChangeText={(text) => setNewTeam({ ...newTeam, nickname: text })}
+                                    value={newTeam.title}
+                                />
+                                <TextInput
+                                    style={styles.input}
+                                    placeholder="포지션을 입력해주세요."
+                                    onChangeText={(text) => setNewTeam({ ...newTeam, mainPosition: text })}
+                                    value={newTeam.location}
+                                />
+                                <TextInput
+                                    style={styles.input}
+                                    placeholder="키를 입력해주세요."
+                                    onChangeText={(text) => setNewTeam({ ...newTeam, height: text })}
+                                    value={newTeam.location}
+                                />
+                                <TouchableOpacity onPress={showPicker} style={styles.selectTouchable}>
+                                    <Text style={styles.selectText}>공 소유 여부 {'→'}</Text>
+                                </TouchableOpacity>
 
-            </ScrollView>
+                                <Modal
+                                    visible={pickerVisible}
+                                    transparent={true}
+                                    onRequestClose={hidePicker}
+                                >
+                                    <TouchableOpacity style={styles.modalOverlay} onPress={hidePicker} activeOpacity={1}>
+                                        <View style={styles.possessionPickerContainer} onStartShouldSetResponder={() => true}>
+                                            <TouchableOpacity
+                                                style={styles.possessionOption}
+                                                onPress={() => {
+                                                    hidePicker();
+                                                }}>
+                                                <Text style={styles.possessionOptionText}>O</Text>
+                                            </TouchableOpacity>
+                                            <TouchableOpacity
+                                                style={styles.possessionOption}
+                                                onPress={() => {
+                                                    hidePicker();
+                                                }}>
+                                                <Text style={styles.possessionOptionText}>X</Text>
+                                            </TouchableOpacity>
+                                        </View>
+                                    </TouchableOpacity>
+                                </Modal>
+
+                                <View style={styles.modalButtonContainer2}>
+
+                                    <TouchableOpacity style={styles.addButton} onPress={() => {
+                                        closeMercenaryModal();
+                                    }}>
+                                        <Text style={styles.buttonText}>등록하기</Text>
+                                    </TouchableOpacity>
+                                    <TouchableOpacity style={styles.cancelButton} onPress={closeMercenaryModal}>
+                                        <Text style={styles.buttonText}>취소하기</Text>
+                                    </TouchableOpacity>
+                                </View>
+                            </View>
+                        </View>
+                    </Modal>
+                </ScrollView>
         </SafeAreaView>
     );
 };

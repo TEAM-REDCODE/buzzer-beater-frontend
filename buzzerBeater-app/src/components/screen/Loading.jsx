@@ -7,40 +7,13 @@ import colors from "../../Common/Colors";
 // let gif = require('../../../assets/Buzzer-Beater_small_logo.png')
 
 const Loading = () => {
-    const [loading, setLoading] = React.useState(false);
-
-    const startLoading = () => {
-        setLoading(true);
-        setTimeout(() => {
-            setLoading(false);
-        }, 3000);
-    };
-
     return (
-        <SafeAreaView style={styles.safeArea}>
-            <View style={styles.container}>
-                <View style={styles.wrapper}>
-                    <Spinner
-                        visible={loading}
-                        overlayColor={'rgba(0, 0, 0, 0.25)'}
-                        color={colors.white}
-                        textContent={"BUZZER BEATER"}
-                        textStyle={{color : colors.white, fontStyle : 'italic', fontSize : 30,}}
-                    >
-                    </Spinner>
-
-                    {/*TouchableOpacity는 로딩화면 연결하면 삭제해도 됨!*/}
-                    <TouchableOpacity style={{
-                        width : 100,
-                        height : 50,
-                        left : '36.5%',
-                        top : '660%',
-                        backgroundColor : colors.black
-                    }} onPress={startLoading}/>
-
-                </View>
-            </View>
-        </SafeAreaView>
+        <Spinner
+            overlayColor={'rgba(0, 0, 0, 0.25)'}
+            color={colors.white}
+            textContent={"BUZZER BEATER"}
+            textStyle={{color : colors.white, fontStyle : 'italic', fontSize : 30,}}
+        />
     );
 };
 

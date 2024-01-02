@@ -14,6 +14,7 @@ import { Iconify } from 'react-native-iconify';
 import {signIn, signUp} from "../../APIs/signAPI";
 import passowrdVerify from "./account/passwordValidation";
 import Colors from "../../Common/Colors";
+import Loading from "./Loading";
 
 
 let bigLogoImg = require('../../../assets/Buzzer-Beater_big_logo.png')
@@ -25,6 +26,9 @@ const SignUp = ({navigation}) => {
     const [password_Check, onChangePW_Check] = React.useState('');
     const [height, onChangeHeight] = React.useState('');
     const [mainPosition, onChangePosition] = React.useState('');
+
+    // 로딩화면
+    const [loading, setLoading] = React.useState(true);
 
     const handleSignUp = async (nickname, email, password, height, mainPosition) => {
         height = parseFloat(height);
@@ -39,6 +43,7 @@ const SignUp = ({navigation}) => {
               const response = await signUp(nickname, email, password, height, mainPosition);
               if(response===true){
                 alert("회원가입 성공")
+                setLoading(false);
                 navigation.navigate('Start')
               }else{
                 alert('회원가입 실패!!!')
@@ -56,6 +61,7 @@ const SignUp = ({navigation}) => {
     return (
         <SafeAreaView style={styles.safeArea}>
             <ScrollView style={styles.container} contentContainerStyle={{flexGrow : 1}}>
+                {loading ? <Loading /> : null}
                 <View style={styles.wrapper}>
                     <Image style={styles.image} source={bigLogoImg} />
                     <View style={styles.signUpInput}>

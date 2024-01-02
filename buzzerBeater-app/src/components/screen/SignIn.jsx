@@ -4,6 +4,8 @@ import colors from "../../Common/Colors";
 import { signIn } from "../../APIs/signAPI"
 import { getUserInfo } from '../../APIs/userAPI';
 import { UserContext } from '../../Common/UserContext';
+import Loading from "./Loading";
+import Spinner from "react-native-loading-spinner-overlay";
 
 let bigLogoImg = require('../../../assets/Buzzer-Beater_big_logo.png')
 
@@ -12,6 +14,9 @@ const SignIn = ({navigation}) => {
 
     const [email, onChangeEmail] = React.useState('');
     const [password, onChangePassword] = React.useState('');
+
+    // 로딩화면
+    const [loading, setLoading] = React.useState(true);
 
     const handleSignIn = async (email, password) => {
 
@@ -31,6 +36,7 @@ const SignIn = ({navigation}) => {
                     mainPosition: userResponse.mainPosition,
                     nickname: userResponse.nickname
                 })
+                setLoading(false);
                 navigation.navigate('Homes')
             } else {
                 // Handle unsuccessful login, show an alert or perform other actions
@@ -48,6 +54,7 @@ const SignIn = ({navigation}) => {
     return (
         <SafeAreaView style={styles.safeArea}>
             <View style={styles.container}>
+                {loading ? <Loading /> : null}
                 <View style={styles.wrapper}>
                     <Image style={styles.image} source={bigLogoImg} />
                     <View style={styles.signInInput}>
