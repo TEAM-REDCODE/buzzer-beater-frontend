@@ -8,8 +8,8 @@ import { getMeetinfo, createMeet } from '../../APIs/meetAPI';
 import { UserContext } from '../../Common/UserContext';
 let court = require('../../../assets/court.png');
 
-const Homes = ({navigation}) => {
-  const { user, setUserData } = useContext(UserContext);
+const Homes = ({ navigation }) => {
+    const { user, setUserData } = useContext(UserContext);
 
     const [ModalVisible, setModalVisible] = useState(false);
     const [pickerVisible, setPickerVisible] = useState(false);
@@ -21,10 +21,16 @@ const Homes = ({navigation}) => {
         place: '',
         time: new Date(),
         maxPerson: '1',
+        nickname: '',
+        mainPosition: '',
+        height: '',
+        hasBall: undefined,
     });
-    
+
+
+
     const [meetList, setMeetList] = useState([])
-    const [modalData, setModaData] = useState({ createdByNick: '', place: '', time: ''});
+    const [modalData, setModaData] = useState({ createdByNick: '', place: '', time: '' });
 
     const timeOptions = [
         "00:00", "01:00", "02:00", "03:00", "04:00", "05:00", "06:00", "07:00", "08:00", "09:00",
@@ -40,52 +46,52 @@ const Homes = ({navigation}) => {
      * @param {*} time 
      * @param {*} userId 
      */
-    const meetSubmit = async (title, maxPerson, place, time, userId) =>{
-      const res = await createMeet(title, maxPerson, place, time, userId)
-      if(res === true){
-        alert("파티 생성 성공")
-      }else{
-        alert("파티 생성 실패")
-      } 
+    const meetSubmit = async (title, maxPerson, place, time, userId) => {
+        const res = await createMeet(title, maxPerson, place, time, userId)
+        if (res === true) {
+            alert("파티 생성 성공")
+        } else {
+            alert("파티 생성 실패")
+        }
     }
     const basketData = async () => {
-      try {
-          
-          // getBelong 함수 호출
-          const basketResponse = await getMeetinfo();
-          console.log('Response from getMeetInfo:', basketResponse);
-          if(basketResponse.data && basketResponse.data.meets){
-            // basketResponse가 object 타입인지 확인
-            if (basketResponse.data.meets && Object.keys(basketResponse.data.meets).length > 0) {
-              setMeetList(basketResponse.data.meets);
-              console.log('first')
-              console.log(basketResponse.data.meets)
-            } else {
-              setMeetList([]);
-            }
-          }else{
-            setMeetList([]);
-            return
-          }
-          
+        try {
 
-      } catch (error) {
-          console.error('Error while fetching belong list', error);
-          alert('에러 발생!')
-      }
-  };
-  useEffect(()=>{
-    console.log(newTeam)
-  },[newTeam])
-  useEffect(() => {
-    //마운트 시에
-    basketData()
-    // 언마운트 시에
-    return () => {
-      // None
-    }
-  }, [])
-    
+            // getBelong 함수 호출
+            const basketResponse = await getMeetinfo();
+            console.log('Response from getMeetInfo:', basketResponse);
+            if (basketResponse.data && basketResponse.data.meets) {
+                // basketResponse가 object 타입인지 확인
+                if (basketResponse.data.meets && Object.keys(basketResponse.data.meets).length > 0) {
+                    setMeetList(basketResponse.data.meets);
+                    console.log('first')
+                    console.log(basketResponse.data.meets)
+                } else {
+                    setMeetList([]);
+                }
+            } else {
+                setMeetList([]);
+                return
+            }
+
+
+        } catch (error) {
+            console.error('Error while fetching belong list', error);
+            alert('에러 발생!')
+        }
+    };
+    useEffect(() => {
+        console.log(newTeam)
+    }, [newTeam])
+    useEffect(() => {
+        //마운트 시에
+        basketData()
+        // 언마운트 시에
+        return () => {
+            // None
+        }
+    }, [])
+
 
     const showPicker = () => setPickerVisible(true);
     const hidePicker = () => setPickerVisible(false);
@@ -111,7 +117,7 @@ const Homes = ({navigation}) => {
         setModalVisible(false);
     };
 
-    
+
 
     const handleCardPress = (index) => {
         setModaData(meetList[index])
@@ -127,6 +133,59 @@ const Homes = ({navigation}) => {
     const closeMercenaryModal = () => {
         setIsMercenaryModalVisible(false);
     };
+
+    const [isMercenaryListModalVisible, setIsMercenaryListModalVisible] = useState(false);
+
+    const [selectedPosition, setSelectedPosition] = useState('');
+
+    // 용병 목록 더미데이터
+    const [mercenaries, setMercenaries] = useState([
+        {
+            id: 1,
+            nickname: "pizza",
+            mainPosition: "PG",
+            height: "180cm",
+            time: "11:00",
+        },
+        {
+            id: 2,
+            nickname: "sam",
+            mainPosition: "SG",
+            height: "175cm",
+            time: "12:00",
+        }
+    ]);
+    const renderMercenaries = () => {
+        return mercenaries.map((mercenary, index) => (
+            <View key={index} style={styles.mercenaryCard}>
+                <Text style={styles.mercenaryName}>{mercenary.nickname}</Text>
+                <Text style={styles.mercenaryDetail}>키: {mercenary.height}</Text>
+                <Text style={styles.mercenaryDetail}>포지션: {mercenary.mainPosition}</Text>
+                <Text style={styles.mercenaryDetail}>가능한 시간: {mercenary.time}</Text>
+            </View>
+        ));
+    };
+    const [isMercenariesModalVisible, setIsMercenariesModalVisible] = useState(false);
+
+    const openMercenaryListModal = (position) => {
+        setSelectedPosition(position);
+        setIsMercenaryListModalVisible(true);
+    };
+    const closeMercenaryListModal = () => {
+        setIsMercenaryListModalVisible(false);
+    };
+
+    const handlePositionPress = (position) => {
+        // 선택된 포지션에 해당 용병만 필터링
+        const filteredMercenaries = mercenaries.filter(mercenary => mercenary.position === position);
+        // 필터링된 용병 목록을 상태로 설정
+        setMercenaries(filteredMercenaries);
+        openMercenaryListModal();
+    };
+    const setHasBall = (hasBall) => {
+        setNewTeam({ ...newTeam, hasBall: hasBall === 'O' });
+    };
+
 
     return (
         <SafeAreaView style={styles.screenContainer}>
@@ -145,55 +204,55 @@ const Homes = ({navigation}) => {
                         </Text>
                     </View>
                     <ScrollView horizontal={true}>
-                      {meetList.length > 0 ? (
-                        meetList.map((item, idx)=>(
-                          <TouchableOpacity key={item._id} onPress={()=>{handleCardPress(idx)}} style={styles.cardTouchable}>
-                            <View style={styles.card}>
-                              <View style={styles.cardContentContainer}>
-                                <Iconify
-                                    icon="solar:basketball-bold-duotone"
-                                    size={60}
-                                    color={colors.mainRed}
-                                />
-                                <View style={styles.cardTextContainer}>
-                                  <View style={styles.cardTitle}>
-                                    <Text style={styles.cardTitleText}>{item.title}</Text>
-                                  </View>
-                                  <View style={styles.cardContent}>
-                                    <Text style={styles.cardContentText}>{item.createdByNick}</Text>
-                                    <Text style={styles.cardContentText}>{item.place}</Text>
-                                    <Text style={styles.cardContentText}>{DateParse(item.time)}</Text>
-                                  </View>
-                                </View>
-                              </View>
-                              <View style={styles.maxPerson}>
-                              <Text style={styles.maxNum}>{item.count}/{item.maxPerson}</Text>
-                              <Iconify
-                                icon="ion:person"
-                                size={20}
-                                color={colors.mainRed}
-                              />
-                              </View>
-                            </View>
-                            
-                        </TouchableOpacity>
-                        )))
-                      :(
-                        <TouchableOpacity style={styles.listBox}>
-                          <View style={styles.card}>
-                              <View style={styles.cardContentContainer}>
-                                <Iconify
-                                    icon="solar:basketball-bold-duotone"
-                                    size={60}
-                                    color={colors.mainRed}
-                                />
-                                <View style={styles.cardTextContainer}>
-                                  <Text>데이터가 없습니다...</Text>
-                                </View>
-                              </View>
-                            </View>
-                        </TouchableOpacity>
-                      )}
+                        {meetList.length > 0 ? (
+                            meetList.map((item, idx) => (
+                                <TouchableOpacity key={item._id} onPress={() => { handleCardPress(idx) }} style={styles.cardTouchable}>
+                                    <View style={styles.card}>
+                                        <View style={styles.cardContentContainer}>
+                                            <Iconify
+                                                icon="solar:basketball-bold-duotone"
+                                                size={60}
+                                                color={colors.mainRed}
+                                            />
+                                            <View style={styles.cardTextContainer}>
+                                                <View style={styles.cardTitle}>
+                                                    <Text style={styles.cardTitleText}>{item.title}</Text>
+                                                </View>
+                                                <View style={styles.cardContent}>
+                                                    <Text style={styles.cardContentText}>{item.createdByNick}</Text>
+                                                    <Text style={styles.cardContentText}>{item.place}</Text>
+                                                    <Text style={styles.cardContentText}>{DateParse(item.time)}</Text>
+                                                </View>
+                                            </View>
+                                        </View>
+                                        <View style={styles.maxPerson}>
+                                            <Text style={styles.maxNum}>{item.count}/{item.maxPerson}</Text>
+                                            <Iconify
+                                                icon="ion:person"
+                                                size={20}
+                                                color={colors.mainRed}
+                                            />
+                                        </View>
+                                    </View>
+
+                                </TouchableOpacity>
+                            )))
+                            : (
+                                <TouchableOpacity style={styles.listBox}>
+                                    <View style={styles.card}>
+                                        <View style={styles.cardContentContainer}>
+                                            <Iconify
+                                                icon="solar:basketball-bold-duotone"
+                                                size={60}
+                                                color={colors.mainRed}
+                                            />
+                                            <View style={styles.cardTextContainer}>
+                                                <Text>데이터가 없습니다...</Text>
+                                            </View>
+                                        </View>
+                                    </View>
+                                </TouchableOpacity>
+                            )}
                     </ScrollView>
                 </View>
                 {/* 랜덤 용병 섹션 */}
@@ -207,31 +266,31 @@ const Homes = ({navigation}) => {
                     <View style={styles.courtContainer}>
                         <Image source={court} style={styles.courtImage} />
                         <View style={[styles.positionButtonContainer, styles.pgButton]}>
-                            <TouchableOpacity>
+                            <TouchableOpacity onPress={() => handlePositionPress('PG')}>
                                 <Iconify icon='ic:round-person-pin' size={40} />
                             </TouchableOpacity>
                             <Text style={styles.positionButtonText}>PG</Text>
                         </View>
                         <View style={[styles.positionButtonContainer, styles.sgButton]}>
-                            <TouchableOpacity>
+                            <TouchableOpacity onPress={() => handlePositionPress('SG')}>
                                 <Iconify icon='ic:round-person-pin' size={40} />
                             </TouchableOpacity>
                             <Text style={styles.positionButtonText}>SG</Text>
                         </View>
                         <View style={[styles.positionButtonContainer, styles.sfButton]}>
-                            <TouchableOpacity>
+                            <TouchableOpacity onPress={() => handlePositionPress('SF')}>
                                 <Iconify icon='ic:round-person-pin' size={40} />
                             </TouchableOpacity>
                             <Text style={styles.positionButtonText}>SF</Text>
                         </View>
                         <View style={[styles.positionButtonContainer, styles.pfButton]}>
-                            <TouchableOpacity>
+                            <TouchableOpacity onPress={() => handlePositionPress('PF')}>
                                 <Iconify icon='ic:round-person-pin' size={40} />
                             </TouchableOpacity>
                             <Text style={styles.positionButtonText}>PF</Text>
                         </View>
                         <View style={[styles.positionButtonContainer, styles.cButton]}>
-                            <TouchableOpacity>
+                            <TouchableOpacity onPress={() => handlePositionPress('C')}>
                                 <Iconify icon='ic:round-person-pin' size={40} />
                             </TouchableOpacity>
                             <Text style={styles.positionButtonText}>C</Text>
@@ -267,10 +326,10 @@ const Homes = ({navigation}) => {
                             <Text style={[styles.modalMiddle, { marginBottom: 10 }]}>{'✔'}장소와 시간을 확인해주세요.</Text>
                             <Text style={styles.modalContent}>
                                 <Text style={styles.modalLabel}>장소 :{modalData.place}</Text>
-                                </Text>
+                            </Text>
                             <Text style={styles.modalContent}>
                                 <Text style={styles.modalLabel}>시간 : {DateParse(modalData.time)}</Text>
-                                </Text>
+                            </Text>
                             <View style={styles.modalButtonContainer}>
                                 <TouchableOpacity style={styles.modalYesButton} onPress={closeModal}>
                                     <Text style={styles.modalButtonText}>YES</Text>
@@ -341,10 +400,10 @@ const Homes = ({navigation}) => {
                             </Modal>
 
                             <TouchableOpacity onPress={showPicker} style={styles.selectTouchable}>
-                                {newTeam.maxPerson==='1'?(
-                                  <Text style={styles.selectText}>인원을 선택해주세요.</Text>
-                                ):(
-                                  <Text style={styles.determineText}>{newTeam.maxPerson/2} vs {newTeam.maxPerson/2}</Text>
+                                {newTeam.maxPerson === '1' ? (
+                                    <Text style={styles.selectText}>인원을 선택해주세요.</Text>
+                                ) : (
+                                    <Text style={styles.determineText}>{newTeam.maxPerson / 2} vs {newTeam.maxPerson / 2}</Text>
                                 )}
                             </TouchableOpacity>
 
@@ -362,7 +421,7 @@ const Homes = ({navigation}) => {
                                                     key={value}
                                                     style={styles.pickerItem}
                                                     onPress={() => {
-                                                        onValueChange(value*2);
+                                                        onValueChange(value * 2);
                                                         hidePicker();
                                                     }}
                                                 >
@@ -377,9 +436,9 @@ const Homes = ({navigation}) => {
 
                             <View style={styles.modalButtonContainer2}>
 
-                                <TouchableOpacity style={styles.addButton} onPress={async ()=>{
-                                  await meetSubmit(newTeam.title, newTeam.maxPerson, newTeam.place, newTeam.time, user.userId)
-                                  navigation.navigate('Homes')
+                                <TouchableOpacity style={styles.addButton} onPress={async () => {
+                                    await meetSubmit(newTeam.title, newTeam.maxPerson, newTeam.place, newTeam.time, user.userId)
+                                    navigation.navigate('Homes')
                                 }}>
                                     <Text style={styles.buttonText}>생성하기</Text>
                                 </TouchableOpacity>
@@ -405,23 +464,26 @@ const Homes = ({navigation}) => {
                                 style={styles.input}
                                 placeholder="이름을 입력해주세요."
                                 onChangeText={(text) => setNewTeam({ ...newTeam, nickname: text })}
-                                value={newTeam.title}
+                                value={newTeam.nickname}
                             />
                             <TextInput
                                 style={styles.input}
                                 placeholder="포지션을 입력해주세요."
                                 onChangeText={(text) => setNewTeam({ ...newTeam, mainPosition: text })}
-                                value={newTeam.location}
+                                value={newTeam.mainPosition}
                             />
                             <TextInput
                                 style={styles.input}
                                 placeholder="키를 입력해주세요."
                                 onChangeText={(text) => setNewTeam({ ...newTeam, height: text })}
-                                value={newTeam.location}
+                                value={newTeam.height}
                             />
                             <TouchableOpacity onPress={showPicker} style={styles.selectTouchable}>
-                                <Text style={styles.selectText}>공 소유 여부 {'→'}</Text>
+                                <Text style={styles.selectText}>
+                                    공 소유 여부: {newTeam.hasBall !== undefined ? (newTeam.hasBall ? 'O' : 'X') : ''}
+                                </Text>
                             </TouchableOpacity>
+
 
                             <Modal
                                 visible={pickerVisible}
@@ -433,6 +495,7 @@ const Homes = ({navigation}) => {
                                         <TouchableOpacity
                                             style={styles.possessionOption}
                                             onPress={() => {
+                                                setHasBall('O');
                                                 hidePicker();
                                             }}>
                                             <Text style={styles.possessionOptionText}>O</Text>
@@ -440,14 +503,15 @@ const Homes = ({navigation}) => {
                                         <TouchableOpacity
                                             style={styles.possessionOption}
                                             onPress={() => {
+                                                setHasBall('X');
                                                 hidePicker();
                                             }}>
                                             <Text style={styles.possessionOptionText}>X</Text>
                                         </TouchableOpacity>
                                     </View>
                                 </TouchableOpacity>
-                            </Modal>
 
+                            </Modal>
                             <View style={styles.modalButtonContainer2}>
 
                                 <TouchableOpacity style={styles.addButton} onPress={() => {
@@ -455,10 +519,44 @@ const Homes = ({navigation}) => {
                                 }}>
                                     <Text style={styles.buttonText}>등록하기</Text>
                                 </TouchableOpacity>
-                                <TouchableOpacity style={styles.cancelButton} onPress={closeMercenaryModal}>
+                                <TouchableOpacity style={styles.cancelButton} onPress={() => {
+                                    setNewTeam({
+                                        title: '',
+                                        place: '',
+                                        time: new Date(),
+                                        maxPerson: '1',
+                                        nickname: '',
+                                        mainPosition: '',
+                                        height: '',
+                                        hasBall: undefined,
+                                    }); // 모든 필드를 초기화
+                                    closeMercenaryModal();
+                                }}>
                                     <Text style={styles.buttonText}>취소하기</Text>
                                 </TouchableOpacity>
+
                             </View>
+                        </View>
+                    </View>
+                </Modal>
+                {/* 랜덤 용병 선택 모달 */}
+                <Modal
+                    animationType="slide"
+                    transparent={true}
+                    visible={isMercenaryListModalVisible}
+                    onRequestClose={closeMercenaryListModal}
+                >
+                    <View style={styles.modalOverlay}>
+                        <View style={styles.modalView}>
+                            <Text style={styles.modalTitle}>랜덤 용병 선택하기</Text>
+                            {renderMercenaries()}
+
+                            <TouchableOpacity
+                                style={styles.cancelButton}
+                                onPress={closeMercenaryListModal}
+                            >
+                                <Text style={styles.buttonText}>닫기</Text>
+                            </TouchableOpacity>
                         </View>
                     </View>
                 </Modal>
@@ -719,6 +817,15 @@ const styles = StyleSheet.create({
         height: '85%',
         alignItems: 'center',
     },
+    cancles: {
+        backgroundColor: 'red',
+        padding: 10,
+        marginVertical: 5,
+        borderRadius: 5,
+        width: '50%',
+        height: '50%',
+        alignItems: 'center',
+    },
     buttonText: {
         color: 'white',
         fontSize: 17,
@@ -741,10 +848,10 @@ const styles = StyleSheet.create({
         marginLeft: 3,
     },
     determineText: {
-      fontWeight: 'bold',
-      color: colors.black,
-      marginLeft: 3,
-  },
+        fontWeight: 'bold',
+        color: colors.black,
+        marginLeft: 3,
+    },
     pickerContainer: {
         backgroundColor: 'white',
         borderRadius: 5,
@@ -766,7 +873,7 @@ const styles = StyleSheet.create({
         backgroundColor: 'white',
         borderRadius: 5,
         padding: 20,
-        width: '50%', 
+        width: '50%',
     },
     possessionOption: {
         padding: 10,
@@ -779,18 +886,45 @@ const styles = StyleSheet.create({
         fontSize: 18,
     },
 
-    noDataIconStyle : {
-      marginTop : 50,
-      marginLeft : 45,
-      marginBottom : 20,
-      color : colors.mainRed,
+    noDataIconStyle: {
+        marginTop: 50,
+        marginLeft: 45,
+        marginBottom: 20,
+        color: colors.mainRed,
     },
 
-  noDataText : {
-    textAlign : 'center',
-    fontSize : 13,
-    fontWeight : 'bold',
-  },
+    noDataText: {
+        textAlign: 'center',
+        fontSize: 13,
+        fontWeight: 'bold',
+    },
+    mercenariesListContainer: {
+        width: '100%',
+        padding: 10,
+    },
+    mercenaryCard: {
+        backgroundColor: 'white',
+        borderRadius: 8,
+        padding: 16,
+        marginBottom: 10,
+        flexDirection: 'row',
+        alignItems: 'center',
+    },
+    mercenaryImage: {
+        width: 50,
+        height: 50,
+        borderRadius: 25,
+        marginRight: 16,
+    },
+    mercenaryName: {
+        fontSize: 18,
+        fontWeight: 'bold',
+        color: 'black',
+    },
+    mercenaryDetail: {
+        fontSize: 14,
+        color: 'grey',
+    },
 });
 
 export default Homes;
