@@ -20,17 +20,17 @@ const Stack = createNativeStackNavigator();
 export default function App() {
 
   return (
-    <UserProvider>
-      <NavigationContainer>
-          <Stack.Navigator initialRouteName='Homes'>
-            <Stack.Screen name='Start' component={Start} options={{headerShown: false}}/>
-            <Stack.Screen name='SignIn' component={SignIn} options={loginHeaderOptions}/>
-            <Stack.Screen name='SignUp' component={SignUp} options={signUpHeaderOptions}/>
-            <Stack.Screen name='MyPageScreen' component={MyPageScreen} options={myPageHeaderOptions}/>
-            <Stack.Screen name='Homes' component={Homes} options={commonHeaderOptions}/>
-            <Stack.Screen name='MercenaryList' component={MercenaryList} options={commonHeaderOptions}/>
-          </Stack.Navigator>
-      </NavigationContainer>
-    </UserProvider>
+      <UserProvider>
+          <NavigationContainer>
+              <Stack.Navigator initialRouteName='Start'>
+                  <Stack.Screen name='Start' component={Start} options={{headerShown: false}}/>
+                  <Stack.Screen name='SignIn' component={SignIn} options={loginHeaderOptions}/>
+                  <Stack.Screen name='SignUp' component={SignUp} options={signUpHeaderOptions}/>
+                  <Stack.Screen name='MyPageScreen' component={MyPageScreen} options={myPageHeaderOptions}/>
+                  <Stack.Screen name='Homes' component={Homes} options={commonHeaderOptions}/>
+                  <Stack.Screen name='MercenaryList' component={MercenaryList} options={commonHeaderOptions}/>
+              </Stack.Navigator>
+          </NavigationContainer>
+      </UserProvider>
   );
 }

@@ -6,6 +6,7 @@ import { Picker } from '@react-native-picker/picker';
 import DateParse from '../../Common/DateParse';
 import { getMeetinfo, createMeet } from '../../APIs/meetAPI';
 import { UserContext } from '../../Common/UserContext';
+import Colors from "../../Common/Colors";
 let court = require('../../../assets/court.png');
 
 const Homes = ({ navigation }) => {
@@ -27,14 +28,13 @@ const Homes = ({ navigation }) => {
         hasBall: undefined,
     });
 
-
-
     const [meetList, setMeetList] = useState([])
     const [modalData, setModaData] = useState({ createdByNick: '', place: '', time: '' });
 
     const timeOptions = [
         "00:00", "01:00", "02:00", "03:00", "04:00", "05:00", "06:00", "07:00", "08:00", "09:00",
-        "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00", "19:00", "20:00", "21:00", "22:00", "23:00", "24:00",
+        "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00", "19:00",
+        "20:00", "21:00", "22:00", "23:00", "24:00",
     ];
 
     // Submit 함수
@@ -56,7 +56,6 @@ const Homes = ({ navigation }) => {
     }
     const basketData = async () => {
         try {
-
             // getBelong 함수 호출
             const basketResponse = await getMeetinfo();
             console.log('Response from getMeetInfo:', basketResponse);
@@ -92,7 +91,6 @@ const Homes = ({ navigation }) => {
         }
     }, [])
 
-
     const showPicker = () => setPickerVisible(true);
     const hidePicker = () => setPickerVisible(false);
 
@@ -104,7 +102,6 @@ const Homes = ({ navigation }) => {
     const openCreateModal = () => {
         setIsCreateModalVisible(true);
     };
-
     const closeCreateModal = () => {
         setIsCreateModalVisible(false);
     };
@@ -112,15 +109,12 @@ const Homes = ({ navigation }) => {
     const openModal = () => {
         setModalVisible(true);
     };
-
     const closeModal = () => {
         setModalVisible(false);
     };
 
-
-
     const handleCardPress = (index) => {
-        setModaData(meetList[index])
+        // setModaData(meetList[index])
         openModal();
     };
 
@@ -206,12 +200,12 @@ const Homes = ({ navigation }) => {
                     <ScrollView horizontal={true}>
                         {meetList.length > 0 ? (
                             meetList.map((item, idx) => (
-                                <TouchableOpacity key={item._id} onPress={() => { handleCardPress(idx) }} style={styles.cardTouchable}>
+                                <TouchableOpacity key={item._id} onPress={() => { handleCardPress(idx) }}>
                                     <View style={styles.card}>
                                         <View style={styles.cardContentContainer}>
                                             <Iconify
                                                 icon="solar:basketball-bold-duotone"
-                                                size={60}
+                                                size={80}
                                                 color={colors.mainRed}
                                             />
                                             <View style={styles.cardTextContainer}>
@@ -219,14 +213,26 @@ const Homes = ({ navigation }) => {
                                                     <Text style={styles.cardTitleText}>{item.title}</Text>
                                                 </View>
                                                 <View style={styles.cardContent}>
-                                                    <Text style={styles.cardContentText}>{item.createdByNick}</Text>
-                                                    <Text style={styles.cardContentText}>{item.place}</Text>
-                                                    <Text style={styles.cardContentText}>{DateParse(item.time)}</Text>
+                                                    <Text style={styles.cardContentText}>
+                                                        <Text style={styles.cardContentLabel}>생성자 : </Text>
+                                                        {item.createdByNick}
+                                                    </Text>
+                                                    <Text style={styles.cardContentText}>
+                                                        <Text style={styles.cardContentLabel}>장소 : </Text>
+                                                        {item.place}
+                                                    </Text>
+                                                    <Text style={styles.cardContentText}>
+                                                        <Text style={styles.cardContentLabel}>시간 : </Text>
+                                                        {DateParse(item.time)}
+                                                    </Text>
                                                 </View>
                                             </View>
                                         </View>
                                         <View style={styles.maxPerson}>
-                                            <Text style={styles.maxNum}>{item.count}/{item.maxPerson}</Text>
+                                            <Text style={styles.maxNum}>
+                                                {item.count} /
+                                                <Text style={styles.cardContentLabel}> {item.maxPerson}</Text>
+                                            </Text>
                                             <Iconify
                                                 icon="ion:person"
                                                 size={20}
@@ -234,7 +240,6 @@ const Homes = ({ navigation }) => {
                                             />
                                         </View>
                                     </View>
-
                                 </TouchableOpacity>
                             )))
                             : (
@@ -243,11 +248,11 @@ const Homes = ({ navigation }) => {
                                         <View style={styles.cardContentContainer}>
                                             <Iconify
                                                 icon="solar:basketball-bold-duotone"
-                                                size={60}
+                                                size={80}
                                                 color={colors.mainRed}
                                             />
                                             <View style={styles.cardTextContainer}>
-                                                <Text>데이터가 없습니다...</Text>
+                                                <Text style={styles.cardTitleText}>데이터가 없습니다.</Text>
                                             </View>
                                         </View>
                                     </View>
@@ -308,7 +313,8 @@ const Homes = ({ navigation }) => {
                         <Text style={styles.registerButtonText}>용병 등록하러 가기{' →'} </Text>
                     </TouchableOpacity>
                 </View>
-                {/* 모달 */}
+
+                {/* 농구팟 확인 모달 */}
                 <Modal
                     animationType="none"
                     transparent={true}
@@ -320,27 +326,41 @@ const Homes = ({ navigation }) => {
                     <View style={styles.modalOverlay}>
                         <View style={styles.modalView}>
                             <Text style={[styles.modalTitle, { marginBottom: 8 }]}>
-                                <Text style={styles.modalCreatorName}>{modalData.createdByNick}</Text>
-                                님이 생성한 농구팟에 참여하시겠습니까{'?'}
+                                <Text style={[styles.modalCreatorName, styles.modalTextRed]}>{modalData.createdByNick}</Text>
+                                님이 생성한{'\n'}농구팟에 참여하시겠습니까?
                             </Text>
-                            <Text style={[styles.modalMiddle, { marginBottom: 10 }]}>{'✔'}장소와 시간을 확인해주세요.</Text>
-                            <Text style={styles.modalContent}>
-                                <Text style={styles.modalLabel}>장소 :{modalData.place}</Text>
-                            </Text>
-                            <Text style={styles.modalContent}>
-                                <Text style={styles.modalLabel}>시간 : {DateParse(modalData.time)}</Text>
-                            </Text>
-                            <View style={styles.modalButtonContainer}>
-                                <TouchableOpacity style={styles.modalYesButton} onPress={closeModal}>
-                                    <Text style={styles.modalButtonText}>YES</Text>
-                                </TouchableOpacity>
-                                <TouchableOpacity style={styles.modalNoButton} onPress={closeModal}>
-                                    <Text style={styles.modalButtonText}>NO</Text>
-                                </TouchableOpacity>
+                            <View style={styles.modalMiddle}>
+                                <Text style={[styles.modalMiddleText, { marginBottom: 10 }]}>{'✔ '}
+                                    <Text style={styles.modalTextRed}>장소</Text>와 <Text style={styles.modalTextRed}>시간</Text>을 확인해주세요.
+                                </Text>
+                                <View>
+                                    <Text style={styles.modalContent}>
+                                        <Text style={styles.modalLabel}>장소 : </Text>
+                                        {modalData.place}
+                                    </Text>
+                                    <Text style={styles.modalContent}>
+                                        <Text style={styles.modalLabel}>시간 : </Text>
+                                        {DateParse(modalData.time)}
+                                    </Text>
+                                </View>
+                            </View>
+
+                            <View style={styles.buttonList}>
+                                <View style={{borderRadius: 5, backgroundColor: Colors.mainRed}}>
+                                    <TouchableOpacity onPress={closeModal}>
+                                        <Text style={styles.button}>YES</Text>
+                                    </TouchableOpacity>
+                                </View>
+                                <View style={{borderRadius: 5, backgroundColor: Colors.black}}>
+                                    <TouchableOpacity onPress={closeModal}>
+                                        <Text style={styles.button}>NO</Text>
+                                    </TouchableOpacity>
+                                </View>
                             </View>
                         </View>
                     </View>
                 </Modal>
+
                 {/* "농구팟 생성하기" 모달 */}
                 <Modal
                     animationType="none"
@@ -350,8 +370,8 @@ const Homes = ({ navigation }) => {
                 >
                     <View style={styles.modalOverlay}>
                         <View style={styles.modalView}>
-                            <Text style={[styles.modalTitle, { marginBottom: 8 }]}>농구팟 생성하기</Text>
-                            <Text style={[styles.modalMiddle, { marginBottom: 10 }]}>아래의 정보를 작성해주세요.</Text>
+                            <Text style={[styles.modalCreateTitle, { marginBottom: 8 }]}>농구팟 생성하기</Text>
+                            <Text style={[styles.modalCreateMiddle, { marginBottom: 10 }]}>아래의 정보를 작성해주세요.</Text>
                             <TextInput
                                 style={styles.input}
                                 placeholder="제목을 입력해주세요."
@@ -365,10 +385,11 @@ const Homes = ({ navigation }) => {
                                 value={newTeam.location}
                             />
 
-                            <TouchableOpacity onPress={showPicker} style={styles.selectTouchable}>
-                                <Text style={styles.selectText}>시간을 선택해주세요.</Text>
+                            <TouchableOpacity onPress={showPicker} style={styles.input}>
+                                <Text style={styles.selectText}>
+                                    <Text style={styles.selectTextRed}>시간</Text>을 선택해주세요.</Text>
                             </TouchableOpacity>
-
+                            {/* 시간 선택 모달 */}
                             <Modal
                                 visible={pickerVisible}
                                 transparent={true}
@@ -399,14 +420,15 @@ const Homes = ({ navigation }) => {
                                 </TouchableOpacity>
                             </Modal>
 
-                            <TouchableOpacity onPress={showPicker} style={styles.selectTouchable}>
+                            <TouchableOpacity onPress={showPicker} style={styles.input}>
                                 {newTeam.maxPerson === '1' ? (
-                                    <Text style={styles.selectText}>인원을 선택해주세요.</Text>
+                                    <Text style={styles.selectText}>
+                                        <Text style={styles.selectTextRed}>인원</Text>을 선택해주세요.</Text>
                                 ) : (
                                     <Text style={styles.determineText}>{newTeam.maxPerson / 2} vs {newTeam.maxPerson / 2}</Text>
                                 )}
                             </TouchableOpacity>
-
+                            {/* 인원 선택 모달 */}
                             <Modal
                                 visible={pickerVisible}
                                 transparent={true}
@@ -433,22 +455,25 @@ const Homes = ({ navigation }) => {
                                 </TouchableOpacity>
                             </Modal>
 
-
-                            <View style={styles.modalButtonContainer2}>
-
-                                <TouchableOpacity style={styles.addButton} onPress={async () => {
-                                    await meetSubmit(newTeam.title, newTeam.maxPerson, newTeam.place, newTeam.time, user.userId)
-                                    navigation.navigate('Homes')
-                                }}>
-                                    <Text style={styles.buttonText}>생성하기</Text>
-                                </TouchableOpacity>
-                                <TouchableOpacity style={styles.cancelButton} onPress={closeCreateModal}>
-                                    <Text style={styles.buttonText}>취소하기</Text>
-                                </TouchableOpacity>
+                            <View style={styles.buttonList}>
+                                <View style={{borderRadius: 5, backgroundColor: Colors.mainRed}}>
+                                    <TouchableOpacity onPress={async () => {
+                                        await meetSubmit(newTeam.title, newTeam.maxPerson, newTeam.place, newTeam.time, user.userId)
+                                        navigation.navigate('Homes')
+                                    }}>
+                                        <Text style={styles.button}>생성하기</Text>
+                                    </TouchableOpacity>
+                                </View>
+                                <View style={{borderRadius: 5, backgroundColor: Colors.black}}>
+                                    <TouchableOpacity onPress={closeCreateModal}>
+                                        <Text style={styles.button}>취소하기</Text>
+                                    </TouchableOpacity>
+                                </View>
                             </View>
                         </View>
                     </View>
                 </Modal>
+
                 {/* "용병 등록하기" 모달 */}
                 <Modal
                     animationType="none"
@@ -483,8 +508,7 @@ const Homes = ({ navigation }) => {
                                     공 소유 여부: {newTeam.hasBall !== undefined ? (newTeam.hasBall ? 'O' : 'X') : ''}
                                 </Text>
                             </TouchableOpacity>
-
-
+                            {/* 공 소유 여부 모달 */}
                             <Modal
                                 visible={pickerVisible}
                                 transparent={true}
@@ -510,31 +534,31 @@ const Homes = ({ navigation }) => {
                                         </TouchableOpacity>
                                     </View>
                                 </TouchableOpacity>
-
                             </Modal>
-                            <View style={styles.modalButtonContainer2}>
 
-                                <TouchableOpacity style={styles.addButton} onPress={() => {
-                                    closeMercenaryModal();
-                                }}>
-                                    <Text style={styles.buttonText}>등록하기</Text>
-                                </TouchableOpacity>
-                                <TouchableOpacity style={styles.cancelButton} onPress={() => {
-                                    setNewTeam({
-                                        title: '',
-                                        place: '',
-                                        time: new Date(),
-                                        maxPerson: '1',
-                                        nickname: '',
-                                        mainPosition: '',
-                                        height: '',
-                                        hasBall: undefined,
-                                    }); // 모든 필드를 초기화
-                                    closeMercenaryModal();
-                                }}>
-                                    <Text style={styles.buttonText}>취소하기</Text>
-                                </TouchableOpacity>
-
+                            <View style={styles.buttonList}>
+                                <View style={{borderRadius: 5, backgroundColor: Colors.mainRed}}>
+                                    <TouchableOpacity onPress={() => {closeMercenaryModal();}}>
+                                        <Text style={styles.button}>등록하기</Text>
+                                    </TouchableOpacity>
+                                </View>
+                                <View style={{borderRadius: 5, backgroundColor: Colors.black}}>
+                                    <TouchableOpacity onPress={() => {
+                                        setNewTeam({
+                                            title: '',
+                                            place: '',
+                                            time: new Date(),
+                                            maxPerson: '1',
+                                            nickname: '',
+                                            mainPosition: '',
+                                            height: '',
+                                            hasBall: undefined,
+                                        }); // 모든 필드를 초기화
+                                        closeMercenaryModal();
+                                    }}>
+                                        <Text style={styles.button}>취소하기</Text>
+                                    </TouchableOpacity>
+                                </View>
                             </View>
                         </View>
                     </View>
@@ -592,7 +616,6 @@ const styles = StyleSheet.create({
         padding: 5,
         marginLeft: 15,
         borderRadius: 5,
-
     },
     createButtonText: {
         color: colors.white,
@@ -607,8 +630,8 @@ const styles = StyleSheet.create({
     card: {
         backgroundColor: colors.white,
         borderRadius: 5,
-        width: 220,
-        height: 130,
+        width: 250,
+        height: 150,
         marginRight: 15,
         padding: 10,
         paddingBottom: 20,
@@ -628,7 +651,7 @@ const styles = StyleSheet.create({
         borderStyle: 'solid',
     },
     cardTitleText: {
-        fontSize: 16,
+        fontSize: 18,
         fontWeight: 'bold',
         color: colors.black,
         marginBottom: 3,
@@ -637,10 +660,14 @@ const styles = StyleSheet.create({
         marginTop: 7,
     },
     cardContentText: {
-        fontSize: 12,
+        fontSize: 14,
         color: colors.black,
         alignSelf: 'flex-start',
         marginBottom: 3,
+    },
+    cardContentLabel : {
+        fontSize : 15,
+        fontWeight : 'bold',
     },
     maxPerson: {
         position: 'absolute',
@@ -650,7 +677,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     maxNum: {
-        fontSize: 12,
+        fontSize: 15,
         color: colors.black,
         marginRight: 5,
     },
@@ -701,151 +728,106 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         textAlign: 'center',
     },
-    centeredView: {
-        flex: 1,
-        justifyContent: "center",
-        alignItems: "center",
-        marginTop: 22
-    },
 
-    modalText: {
-        marginBottom: 15,
-        textAlign: "center"
-    },
-    cardTouchable: {
-    },
+    // 모달 스타일
     modalOverlay: {
         flex: 1,
+        backgroundColor: 'rgba(2, 2, 2, 0.5)',
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: 'rgba(0, 0, 0, 0.5)',
     },
     modalView: {
-        margin: 20,
-        backgroundColor: 'white',
+        width : 350,
+        backgroundColor: Colors.white,
         borderRadius: 20,
-        padding: 35,
+        padding: 30,
         alignItems: 'center',
-        shadowColor: '#000',
+        shadowColor: Colors.black,
+        shadowOffset: {
+            width: 0,
+            height: 2,
+        },
         shadowOpacity: 0.25,
-        shadowRadius: 3.84,
+        shadowRadius: 4,
         elevation: 5,
+        margin: 20,
     },
-
     modalTitle: {
-        fontSize: 21,
-        fontWeight: 'bold',
-        color: 'black',
-        textAlign: 'center',
-    },
-    modalMiddle: {
-        fontSize: 17,
-        fontWeight: 'bold',
-        color: 'black',
-    },
-    modalCreatorName: {
+        width : 280,
         fontSize: 20,
         fontWeight: 'bold',
-        color: 'red',
-        marginBottom: 15,
-    },
-    modalLabel: {
-        textAlign: 'left',
-        fontSize: 16,
-        color: 'black',
-        fontWeight: 'bold',
-
-    },
-    modalContent: {
-        textAlign: 'left',
-        fontSize: 16,
-        marginBottom: 10,
-    },
-    modalButtonContainer: {
-        flexDirection: 'row',
-        justifyContent: 'space-around',
-        marginTop: 20,
-    },
-    modalButtonContainer2: {
-        flexDirection: 'row',
-        justifyContent: 'space-around',
-        marginTop: 20,
-    },
-    modalYesButton: {
-        backgroundColor: 'red',
-        padding: 10,
-        borderRadius: 5,
-        marginHorizontal: 10,
-    },
-    modalNoButton: {
-        backgroundColor: 'grey',
-        padding: 10,
-        borderRadius: 5,
-        marginHorizontal: 10,
-    },
-    modalButtonText: {
-        color: 'white',
-        fontSize: 16,
+        color: colors.black,
         textAlign: 'center',
     },
-    input: {
-        borderWidth: 1,
-        borderColor: 'white',
-        backgroundColor: '#F8F6F6',
-        padding: 13,
-        borderRadius: 5,
-        marginVertical: 5,
-        width: 220,
+    modalCreatorName: {
+        fontSize: 25,
         fontWeight: 'bold',
     },
-    addButton: {
-        backgroundColor: '#E32424',
-        padding: 10,
-        marginVertical: 5,
-        borderRadius: 5,
-        width: '45%',
-        height: '85%',
-        alignItems: 'center',
-        marginRight: 10,
+    modalTextRed : {
+        color : colors.mainRed,
+        fontWeight: 'bold',
     },
-    cancelButton: {
-        backgroundColor: 'grey',
-        padding: 10,
-        marginVertical: 5,
-        borderRadius: 5,
-        width: '45%',
-        height: '85%',
-        alignItems: 'center',
+    modalMiddle : {
+        width : 230,
+        alignItems : 'center',
     },
-    cancles: {
-        backgroundColor: 'red',
-        padding: 10,
-        marginVertical: 5,
-        borderRadius: 5,
-        width: '50%',
-        height: '50%',
-        alignItems: 'center',
+    modalMiddleText: {
+        fontSize: 18,
+        color: colors.black,
     },
-    buttonText: {
-        color: 'white',
+    modalLabel: {
         fontSize: 17,
+        color: colors.black,
+        fontWeight:'bold',
+    },
+    modalContent: {
+        fontSize: 16,
+        marginBottom: 5,
+    },
+    buttonList:{
+        width: 280,
+        marginTop: 15,
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'center',
+        gap: 20,
+    },
+    button:{
+        paddingLeft: 30,
+        paddingRight: 30,
+        paddingTop: 10,
+        paddingBottom: 10,
+        color: Colors.white,
+        fontWeight: 'bold',
+        fontSize: 15,
+    },
+
+    modalCreateTitle: {
+        width: 280,
+        color: Colors.mainRed,
+        fontSize: 20,
         fontWeight: 'bold',
     },
-    selectTouchable: {
-        borderWidth: 1,
-        borderColor: 'white',
-        backgroundColor: '#F8F6F6',
-        paddingVertical: 13,
-        paddingHorizontal: 10,
-        borderRadius: 5,
-        marginVertical: 5,
-        width: 220,
-        alignSelf: 'center',
+    modalCreateMiddle: {
+        width: 280,
+        marginBottom : 10,
+        color: Colors.black,
+        fontWeight: 'bold',
+        fontSize : 15,
+    },
+    input: {
+        width: 280,
+        padding : 15,
+        borderRadius : 5,
+        backgroundColor : 'white',
+        marginBottom : 8,
     },
     selectText: {
-        fontWeight: 'bold',
-        color: '#BBBBBB',
-        marginLeft: 3,
+        color: '#CCCCCC',
+        fontSize : 14,
+    },
+    selectTextRed : {
+        color : colors.warning,
     },
     determineText: {
         fontWeight: 'bold',
@@ -928,5 +910,3 @@ const styles = StyleSheet.create({
 });
 
 export default Homes;
-
-

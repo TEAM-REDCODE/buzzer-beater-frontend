@@ -7,8 +7,6 @@ import passowrdVerify from '../screen/account/passwordValidation';
 import { setNickname, getUserInfo, setHeight} from '../../APIs/userAPI';
 import { UserContext } from '../../Common/UserContext';
 
-
-
 const NicknamePopup = ({ modalVisible, setModalVisible, userName }) => {
   const [newName, setNewName] = useState("")
   const { user, setUserData } = useContext(UserContext);
@@ -70,12 +68,12 @@ const NicknamePopup = ({ modalVisible, setModalVisible, userName }) => {
                 <View style={styles.buttonList}>
                   <View style={{borderRadius: 5, backgroundColor: Colors.mainRed}}>
                     <TouchableOpacity>
-                      <Text style={styles.submitBtn} onPress={handleSubmit}>변경</Text>
+                      <Text style={styles.button} onPress={handleSubmit}>변경</Text>
                     </TouchableOpacity>
                   </View>
                   <View style={{borderRadius: 5, backgroundColor: Colors.black}}>
                     <TouchableOpacity>
-                      <Text style={styles.cancelBtn} onPress={closeModal}>취소</Text>
+                      <Text style={styles.button} onPress={closeModal}>취소</Text>
                     </TouchableOpacity>
                   </View>
                 </View>
@@ -166,7 +164,6 @@ const PasswordPopup = ({ modalVisible, setModalVisible }) => {
                   </View>
               </View>
           </View>
-
             <TextInput style={styles.input}
               placeholder="새 비밀번호를 재입력해주세요"
               placeholderTextColor="gray"
@@ -176,12 +173,12 @@ const PasswordPopup = ({ modalVisible, setModalVisible }) => {
             <View style={styles.buttonList}>
                   <View style={{borderRadius: 5, backgroundColor: Colors.mainRed}}>
                     <TouchableOpacity>
-                      <Text style={styles.submitBtn}>변경</Text>
+                      <Text style={styles.button}>변경</Text>
                     </TouchableOpacity>
                   </View>
                   <View style={{borderRadius: 5, backgroundColor: Colors.black}}>
                     <TouchableOpacity>
-                      <Text style={styles.cancelBtn} onPress={closeModal}>취소</Text>
+                      <Text style={styles.button} onPress={closeModal}>취소</Text>
                     </TouchableOpacity>
                   </View>
             </View>
@@ -250,12 +247,12 @@ const PhysicalPopup = ({ modalVisible, setModalVisible, setUserData}) => {
             <View style={styles.buttonList}>
                   <View style={{borderRadius: 5, backgroundColor: Colors.mainRed}}>
                     <TouchableOpacity>
-                      <Text style={styles.submitBtn} onPress={() =>{handleSubmit(newHeight)}}>변경</Text>
+                      <Text style={styles.button} onPress={() =>{handleSubmit(newHeight)}}>변경</Text>
                     </TouchableOpacity>
                   </View>
                   <View style={{borderRadius: 5, backgroundColor: Colors.black}}>
                     <TouchableOpacity>
-                      <Text style={styles.cancelBtn} onPress={closeModal}>취소</Text>
+                      <Text style={styles.button} onPress={closeModal}>취소</Text>
                     </TouchableOpacity>
                   </View>
             </View>
@@ -269,7 +266,6 @@ const PhysicalPopup = ({ modalVisible, setModalVisible, setUserData}) => {
 const MecenearyPopup = ({ modalVisible, setModalVisible, mercen }) => {
   const [yn, setYn] = useState(true)
 
-  
   const closeModal = () => {
     setModalVisible(false);
   };
@@ -297,8 +293,6 @@ const MecenearyPopup = ({ modalVisible, setModalVisible, mercen }) => {
             }
           </View>
         </View>
-        
-        
       </TouchableWithoutFeedback>
     </Modal>
   );
@@ -329,18 +323,13 @@ const PositonPopup = ({ modalVisible, setModalVisible, position, setMpos}) => {
         })
         setNewPosition("")
         alert("포지션 변경 성공")
-  
       }
       else{
         alert("포지션 변경 실패")
-  
       }
     }catch{
       alert("error occured")
     }
-
-    
-    
   }
   return (
     <Modal
@@ -370,12 +359,12 @@ const PositonPopup = ({ modalVisible, setModalVisible, position, setMpos}) => {
             <View style={styles.buttonList}>
                   <View style={{borderRadius: 5, backgroundColor: Colors.mainRed}}>
                     <TouchableOpacity>
-                      <Text style={styles.submitBtn} onPress={handleSumbit}>변경</Text>
+                      <Text style={styles.button} onPress={handleSumbit}>변경</Text>
                     </TouchableOpacity>
                   </View>
                   <View style={{borderRadius: 5, backgroundColor: Colors.black}}>
                     <TouchableOpacity>
-                      <Text style={styles.cancelBtn} onPress={closeModal}>취소</Text>
+                      <Text style={styles.button} onPress={closeModal}>취소</Text>
                     </TouchableOpacity>
                   </View>
             </View>
@@ -396,7 +385,7 @@ const styles = StyleSheet.create({
   modalView: {
     width : 350,
     backgroundColor: Colors.white,
-    borderRadius: 20,
+    borderRadius: 10,
     padding: 20,
     alignItems: 'center',
     shadowColor: Colors.black,
@@ -439,10 +428,10 @@ const styles = StyleSheet.create({
   },
   smallText: {
     width: 280,
-    fontSize: 9,
+    fontSize: 13,
     marginTop : 5,
     fontWeight : 'bold',
-    color: Colors.warning, // 예시: 빨간색과 투명도 0.5
+    color: Colors.warning,
   },
   input: {
     width: 280,
@@ -459,7 +448,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     gap: 20,
   },
-  submitBtn:{
+  button:{
     paddingLeft: 30,
     paddingRight: 30,
     paddingTop: 10,
@@ -468,16 +457,6 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: 15,
   },
-  cancelBtn:{
-    paddingLeft: 30,
-    paddingRight: 30,
-    paddingTop: 10,
-    paddingBottom: 10,
-    color: Colors.white,
-    fontWeight: 'bold',
-    fontSize: 15,
-  },
-  
   validation : {
     width: 260,
     height : 52,
@@ -489,11 +468,9 @@ const styles = StyleSheet.create({
     borderColor: 'red',
     borderwidth: 1,
   },
-
   valiList : {
       display : 'flex',
   },
-
   valiButton : {
     height : 20,
     flexDirection : 'row',
@@ -501,7 +478,6 @@ const styles = StyleSheet.create({
     marginTop : 3,
     left : 3,
   },
-
   valiText : {
       color : Colors.black,
       fontSize : 10,
