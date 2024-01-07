@@ -2,17 +2,15 @@ import React, { useState, useEffect, useContext } from 'react';
 import { View, Text, ScrollView, StyleSheet, TouchableOpacity, Image, SafeAreaView, Modal, TextInput } from 'react-native';
 import colors from "../../Common/Colors";
 import { Iconify } from 'react-native-iconify';
-import { Picker } from '@react-native-picker/picker';
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import DateParse from '../../Common/DateParse';
 import { getMeetinfo, createMeet, RegMeet, inviteMercs } from '../../APIs/meetAPI';
 import { UserContext } from '../../Common/UserContext';
 import Colors from "../../Common/Colors";
-import { useIsFocused } from '@react-navigation/native';
 import { createMercs, getPosMercs } from '../../APIs/mercs';
 import { getBelong } from '../../APIs/userAPI';
-let court = require('../../../assets/court.png');
 
+let court = require('../../../assets/court.png');
 const Homes = () => {
 
     const { user, setUserData } = useContext(UserContext);
@@ -252,7 +250,7 @@ const Homes = () => {
                                                 <View style={styles.cardContent}>
                                                     <Text style={styles.cardContentText}>
                                                         <Text style={styles.cardContentLabel}>생성자 : </Text>
-                                                        {item.createdByNick}
+                                                        {item.nickname}
                                                     </Text>
                                                     <Text style={styles.cardContentText}>
                                                         <Text style={styles.cardContentLabel}>장소 : </Text>
@@ -267,8 +265,7 @@ const Homes = () => {
                                         </View>
                                         <View style={styles.maxPerson}>
                                             <Text style={styles.maxNum}>
-                                                {item.count} /
-                                                <Text style={styles.cardContentLabel}> {item.maxPerson}</Text>
+                                                {item.count} / {item.maxPerson}
                                             </Text>
                                             <Iconify
                                                 icon="ion:person"
@@ -289,7 +286,7 @@ const Homes = () => {
                                                 color={colors.mainRed}
                                             />
                                             <View style={styles.cardTextContainer}>
-                                                <Text style={styles.cardTitleText}>데이터가 없습니다.</Text>
+                                                <Text style={styles.noDataText}>데이터가 없습니다.</Text>
                                             </View>
                                         </View>
                                     </View>
@@ -545,8 +542,8 @@ const Homes = () => {
                                 )}
                             </TouchableOpacity>
 
-                            <TouchableOpacity onPress={showPicker} style={styles.selectTouchable}>
-                                <Text style={styles.selectText}>
+                            <TouchableOpacity onPress={showPicker} style={styles.input}>
+                                <Text style={styles.determineText}>
                                     공 소유 여부: {newTeam.hasBall !== undefined ? (newTeam.hasBall ? 'O' : 'X') : ''}
                                 </Text>
                             </TouchableOpacity>
@@ -644,6 +641,7 @@ const Homes = () => {
                         </View>
                     </View>
                 </Modal>
+
                 {/* 랜덤 용병 선택 모달 */}
                 <Modal
                     animationType="slide"
@@ -655,7 +653,15 @@ const Homes = () => {
                         <View style={styles.modalView}>
                             <Text style={styles.modalTitle}>랜덤 용병 선택하기</Text>
                             {mercenaries.length === 0 ? (
-                                <Text>해당 용병이 없습니다.</Text>
+                                    <View style={styles.modalMiddle}>
+                                        <Iconify
+                                            icon="ion:person"
+                                            size={50}
+                                            color={colors.mainRed}
+                                            style={{margin : 15,}}
+                                        />
+                                        <Text style={styles.noDataText}>해당 용병이 없습니다.</Text>
+                                    </View>
                                 ) : (
                                 <>
                                     {mercenaries.map((mercenary, index) => (
@@ -688,13 +694,13 @@ const Homes = () => {
                                     ))}
                                 </>
                                 )}
-
-                            <TouchableOpacity
-                                style={styles.cancelButton}
-                                onPress={closeMercenaryListModal}
-                            >
-                                <Text style={styles.buttonText}>닫기</Text>
-                            </TouchableOpacity>
+                            <View style={styles.buttonList}>
+                                <View style={{borderRadius: 5, backgroundColor: Colors.black}}>
+                                    <TouchableOpacity onPress={closeMercenaryListModal}>
+                                        <Text style={styles.button}>닫기</Text>
+                                    </TouchableOpacity>
+                                </View>
+                            </View>
                         </View>
                     </View>
                 </Modal>
@@ -764,19 +770,20 @@ const Homes = () => {
                                                 color={colors.mainRed}
                                             />
                                             <View style={styles.cardTextContainer}>
-                                                <Text style={styles.cardTitleText}>데이터가 없습니다.</Text>
+                                                <Text style={styles.noDataText}>데이터가 없습니다.</Text>
                                             </View>
                                         </View>
                                     </View>
                                 </TouchableOpacity>
                             )}
                         </ScrollView>
-                        <TouchableOpacity
-                                style={styles.cancelButton}
-                                onPress={()=>{setInviteMeetVisible(false)}}
-                            >
-                                <Text style={styles.buttonText}>닫기</Text>
-                        </TouchableOpacity>
+                        <View style={styles.buttonList}>
+                            <View style={{borderRadius: 5, backgroundColor: Colors.black}}>
+                                <TouchableOpacity onPress={closeMercenaryListModal}>
+                                    <Text style={styles.button}>닫기</Text>
+                                </TouchableOpacity>
+                            </View>
+                        </View>
                     </View>
                 </View>
 
@@ -1075,7 +1082,7 @@ const styles = StyleSheet.create({
 
     noDataText: {
         textAlign: 'center',
-        fontSize: 13,
+        fontSize: 15,
         fontWeight: 'bold',
     },
     mercenariesListContainer: {
