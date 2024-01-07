@@ -42,7 +42,7 @@ const createMercs = async (position, avTime) =>{
 const getPosMercs = async (position) =>{
   const endpoint = 'v1/mercs/'
   const apiURL = baseURL + endpoint + position
-  instance.get(apiURL)
+  return await instance.get(apiURL)
   .then((res) =>{
     console.log(res.data)
     if(res.status === 200){

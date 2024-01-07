@@ -58,7 +58,7 @@ const getMeetinfo = async (page, size) => {
   })
   .then((res)=>{
     if(res.status === 200){
-      console.log(res)
+      // console.log(res)
       return res
     }
     else{
@@ -100,12 +100,12 @@ const getMeetDetail = (ID) =>{
  * @param {int} ID
  * @returns 1 파티 참여 성공
  * @returns 2 이미 속해져있는 경우
- * @returns 3 파티 생성 실패
+ * @returns 3 파티 참가 실패
  */
-const RegMeet = (ID) =>{
+const RegMeet = async (ID) =>{
   const endpoint = 'v1/meets/'
   const apiURL = baseURL+ endpoint +ID + '/reg'
-  instance.get(apiURL)
+  return await instance.get(apiURL)
   .then((res)=>{
     console.log(res)
     if (res.status === 200){
@@ -184,7 +184,7 @@ const setMeet = (ID, title, maxPerson, place, time) =>{
  * @retrun true 용병 초대 성공
  * @retrun flase 용병 초대 실패 
  */
-const inviteMercs = (Meetid, mercsId) =>{
+const inviteMercs = async (Meetid, mercsId) =>{
   const endpoint = 'v1/meets/' + Meetid + '/mercs'
   const apiURL = baseURL + endpoint
   const requestData = {
@@ -192,7 +192,7 @@ const inviteMercs = (Meetid, mercsId) =>{
   }
   const finalData = JSON.stringify(requestData)
   
-  instance.post(apiURL, finalData)
+  return await instance.post(apiURL, finalData)
   .then((res)=>{
     console.log(res)
     if(res.status === 201){

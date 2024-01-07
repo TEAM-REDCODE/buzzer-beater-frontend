@@ -3,24 +3,32 @@ import { View, Text, ScrollView, StyleSheet, TouchableOpacity, Image, SafeAreaVi
 import colors from "../../Common/Colors";
 import { Iconify } from 'react-native-iconify';
 import { Picker } from '@react-native-picker/picker';
+import DateTimePickerModal from "react-native-modal-datetime-picker";
 import DateParse from '../../Common/DateParse';
-import { getMeetinfo, createMeet } from '../../APIs/meetAPI';
+import { getMeetinfo, createMeet, RegMeet, inviteMercs } from '../../APIs/meetAPI';
 import { UserContext } from '../../Common/UserContext';
 import Colors from "../../Common/Colors";
+import { useIsFocused } from '@react-navigation/native';
+import { createMercs, getPosMercs } from '../../APIs/mercs';
+import { getBelong } from '../../APIs/userAPI';
 let court = require('../../../assets/court.png');
 
-const Homes = ({ navigation }) => {
+const Homes = () => {
+
     const { user, setUserData } = useContext(UserContext);
 
     const [ModalVisible, setModalVisible] = useState(false);
     const [pickerVisible, setPickerVisible] = useState(false);
-
+    
+    // DatePicker
+    const [datePickerOn, setDatePickerOn] = useState(false)
+    // TimePicker
+    const [timePickerOn, setTimePickerOn] = useState(false)
     const [isCreateModalVisible, setIsCreateModalVisible] = useState(false);
-    const [teams, setTeams] = useState([]);
     const [newTeam, setNewTeam] = useState({
         title: '',
         place: '',
-        time: new Date(),
+        time: '',
         maxPerson: '1',
         nickname: '',
         mainPosition: '',
@@ -28,14 +36,28 @@ const Homes = ({ navigation }) => {
         hasBall: undefined,
     });
 
+    const [newMercs, setNewMercs] = useState({
+        position: '',
+        avTime: '',
+    })
     const [meetList, setMeetList] = useState([])
     const [modalData, setModaData] = useState({ createdByNick: '', place: '', time: '' });
 
-    const timeOptions = [
-        "00:00", "01:00", "02:00", "03:00", "04:00", "05:00", "06:00", "07:00", "08:00", "09:00",
-        "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00", "19:00",
-        "20:00", "21:00", "22:00", "23:00", "24:00",
-    ];
+    // 자기가 속해있는 파티 리스트
+    const [myMeet, setMyMeet] = useState([])
+    const [targetMercs, settargetMercs] = useState("")
+    const [inviteMeetVisible, setInviteMeetVisible] = useState(false)
+    const handleMercsCard = async (id) => {
+        //1. myMeet data 갱신
+        const res = await getBelong()
+        if(res && res.length > 0){
+            setMyMeet(res)
+        }
+        //2. 초대할 파티리스트 모달 On 
+        settargetMercs(id)
+        setInviteMeetVisible(true)
+    }
+
 
     // Submit 함수
     /**
@@ -54,17 +76,52 @@ const Homes = ({ navigation }) => {
             alert("파티 생성 실패")
         }
     }
+    const regisSubmit = async(id) =>{
+        const res = await RegMeet(id)
+        if (res === 1){
+            alert("파티 참가 성공!!")
+        }else if (res === 2){
+            alert("이미 참가한 파티 입니다.")
+        }else{
+            alert("파티 참가 실패!!")
+        }
+    }
+
+    const inviteSubmit = async(meetId, mercsId) =>{
+        try{
+            const res = await inviteMercs(meetId, mercsId)
+            if(res === true){
+                alert("초대 성공")
+            }else{
+                alert("초대 실패")
+            }
+        }catch{
+            alert("에러 발생")
+        }
+        
+    }
+
+    const regMercsSubmit = async(pos, avTime)=>{
+        try{
+            const res = await createMercs(pos, avTime)
+            if(res === true){
+                alert("용병 등록 성공")
+            }else{
+                alert("용병 등록 실패")
+            }
+
+        }catch{
+            alert("에러 발생")
+        }
+    }
     const basketData = async () => {
         try {
             // getBelong 함수 호출
             const basketResponse = await getMeetinfo();
-            console.log('Response from getMeetInfo:', basketResponse);
             if (basketResponse.data && basketResponse.data.meets) {
                 // basketResponse가 object 타입인지 확인
                 if (basketResponse.data.meets && Object.keys(basketResponse.data.meets).length > 0) {
                     setMeetList(basketResponse.data.meets);
-                    console.log('first')
-                    console.log(basketResponse.data.meets)
                 } else {
                     setMeetList([]);
                 }
@@ -79,18 +136,17 @@ const Homes = ({ navigation }) => {
             alert('에러 발생!')
         }
     };
-    useEffect(() => {
-        console.log(newTeam)
-    }, [newTeam])
+    
     useEffect(() => {
         //마운트 시에
         basketData()
+        console.log('home Mount!!')
         // 언마운트 시에
         return () => {
             // None
         }
     }, [])
-
+    const [positionPicker, setPositionPicker] = useState(false)
     const showPicker = () => setPickerVisible(true);
     const hidePicker = () => setPickerVisible(false);
 
@@ -114,7 +170,8 @@ const Homes = ({ navigation }) => {
     };
 
     const handleCardPress = (index) => {
-        // setModaData(meetList[index])
+        setModaData(meetList[index])
+        console.log(modalData)
         openModal();
     };
 
@@ -133,32 +190,12 @@ const Homes = ({ navigation }) => {
     const [selectedPosition, setSelectedPosition] = useState('');
 
     // 용병 목록 더미데이터
-    const [mercenaries, setMercenaries] = useState([
-        {
-            id: 1,
-            nickname: "pizza",
-            mainPosition: "PG",
-            height: "180cm",
-            time: "11:00",
-        },
-        {
-            id: 2,
-            nickname: "sam",
-            mainPosition: "SG",
-            height: "175cm",
-            time: "12:00",
-        }
+    const [mercenaries, setMercenaries] =useState([
+        
     ]);
-    const renderMercenaries = () => {
-        return mercenaries.map((mercenary, index) => (
-            <View key={index} style={styles.mercenaryCard}>
-                <Text style={styles.mercenaryName}>{mercenary.nickname}</Text>
-                <Text style={styles.mercenaryDetail}>키: {mercenary.height}</Text>
-                <Text style={styles.mercenaryDetail}>포지션: {mercenary.mainPosition}</Text>
-                <Text style={styles.mercenaryDetail}>가능한 시간: {mercenary.time}</Text>
-            </View>
-        ));
-    };
+    
+   
+    
     const [isMercenariesModalVisible, setIsMercenariesModalVisible] = useState(false);
 
     const openMercenaryListModal = (position) => {
@@ -169,11 +206,11 @@ const Homes = ({ navigation }) => {
         setIsMercenaryListModalVisible(false);
     };
 
-    const handlePositionPress = (position) => {
-        // 선택된 포지션에 해당 용병만 필터링
-        const filteredMercenaries = mercenaries.filter(mercenary => mercenary.position === position);
-        // 필터링된 용병 목록을 상태로 설정
-        setMercenaries(filteredMercenaries);
+    const handlePositionPress = async (position) => {
+        // 선택된 포지션에 해당 용병 Get요청 보내기
+        res = await getPosMercs(position)
+        console.log('mercRes : ',res)
+        setMercenaries(res.mercs);
         openMercenaryListModal();
     };
     const setHasBall = (hasBall) => {
@@ -271,31 +308,31 @@ const Homes = ({ navigation }) => {
                     <View style={styles.courtContainer}>
                         <Image source={court} style={styles.courtImage} />
                         <View style={[styles.positionButtonContainer, styles.pgButton]}>
-                            <TouchableOpacity onPress={() => handlePositionPress('PG')}>
+                            <TouchableOpacity onPress={() => handlePositionPress('pg')}>
                                 <Iconify icon='ic:round-person-pin' size={40} />
                             </TouchableOpacity>
                             <Text style={styles.positionButtonText}>PG</Text>
                         </View>
                         <View style={[styles.positionButtonContainer, styles.sgButton]}>
-                            <TouchableOpacity onPress={() => handlePositionPress('SG')}>
+                            <TouchableOpacity onPress={() => handlePositionPress('sg')}>
                                 <Iconify icon='ic:round-person-pin' size={40} />
                             </TouchableOpacity>
                             <Text style={styles.positionButtonText}>SG</Text>
                         </View>
                         <View style={[styles.positionButtonContainer, styles.sfButton]}>
-                            <TouchableOpacity onPress={() => handlePositionPress('SF')}>
+                            <TouchableOpacity onPress={() => handlePositionPress('sf')}>
                                 <Iconify icon='ic:round-person-pin' size={40} />
                             </TouchableOpacity>
                             <Text style={styles.positionButtonText}>SF</Text>
                         </View>
                         <View style={[styles.positionButtonContainer, styles.pfButton]}>
-                            <TouchableOpacity onPress={() => handlePositionPress('PF')}>
+                            <TouchableOpacity onPress={() => handlePositionPress('pf')}>
                                 <Iconify icon='ic:round-person-pin' size={40} />
                             </TouchableOpacity>
                             <Text style={styles.positionButtonText}>PF</Text>
                         </View>
                         <View style={[styles.positionButtonContainer, styles.cButton]}>
-                            <TouchableOpacity onPress={() => handlePositionPress('C')}>
+                            <TouchableOpacity onPress={() => handlePositionPress('c')}>
                                 <Iconify icon='ic:round-person-pin' size={40} />
                             </TouchableOpacity>
                             <Text style={styles.positionButtonText}>C</Text>
@@ -347,7 +384,12 @@ const Homes = ({ navigation }) => {
 
                             <View style={styles.buttonList}>
                                 <View style={{borderRadius: 5, backgroundColor: Colors.mainRed}}>
-                                    <TouchableOpacity onPress={closeModal}>
+                                    <TouchableOpacity onPress={async ()=>{
+                                        //파티 참가 api
+                                        await regisSubmit(modalData._id)
+                                        closeModal()
+                                        basketData()
+                                    }}>
                                         <Text style={styles.button}>YES</Text>
                                     </TouchableOpacity>
                                 </View>
@@ -385,40 +427,27 @@ const Homes = ({ navigation }) => {
                                 value={newTeam.location}
                             />
 
-                            <TouchableOpacity onPress={showPicker} style={styles.input}>
-                                <Text style={styles.selectText}>
+                            <TouchableOpacity onPress={()=>{setDatePickerOn(true)}} style={styles.input}>
+                                {newTeam.time === '' ? (
+                                    <Text style={styles.selectText}>
                                     <Text style={styles.selectTextRed}>시간</Text>을 선택해주세요.</Text>
+                                    ):(
+                                    <Text style={styles.determineText}>{DateParse(newTeam.time)}</Text>
+
+                                )}
                             </TouchableOpacity>
-                            {/* 시간 선택 모달 */}
-                            <Modal
-                                visible={pickerVisible}
-                                transparent={true}
-                                animationType="slide"
-                                onRequestClose={hidePicker}
-                            >
-                                <TouchableOpacity style={styles.modalOverlay} onPress={hidePicker} activeOpacity={1}>
-                                    <View style={styles.pickerContainer} onStartShouldSetResponder={() => true}>
-                                        <ScrollView
-                                            persistentScrollbar={true}
-                                            showsVerticalScrollIndicator={true}
-                                            indicatorStyle="black"
-                                        >
-                                            {timeOptions.map((time, index) => (
-                                                <TouchableOpacity
-                                                    key={index}
-                                                    style={styles.pickerItem}
-                                                    onPress={() => {
-                                                        setNewTeam({ ...newTeam, time: time });
-                                                        hidePicker();
-                                                    }}
-                                                >
-                                                    <Text style={styles.pickerItemText}>{time}</Text>
-                                                </TouchableOpacity>
-                                            ))}
-                                        </ScrollView>
-                                    </View>
-                                </TouchableOpacity>
-                            </Modal>
+                            
+                            {/* DatePicker */}
+                            <DateTimePickerModal
+                                isVisible={datePickerOn}
+                                mode="datetime"
+                                onConfirm={(date)=>{
+                                    setNewTeam({...newTeam, time:date})
+                                    setDatePickerOn(false)
+                                    }
+                                }
+                                onCancel={()=>{setDatePickerOn(false)}}
+                            />      
 
                             <TouchableOpacity onPress={showPicker} style={styles.input}>
                                 {newTeam.maxPerson === '1' ? (
@@ -454,12 +483,22 @@ const Homes = ({ navigation }) => {
                                     </View>
                                 </TouchableOpacity>
                             </Modal>
-
+                            
                             <View style={styles.buttonList}>
                                 <View style={{borderRadius: 5, backgroundColor: Colors.mainRed}}>
                                     <TouchableOpacity onPress={async () => {
                                         await meetSubmit(newTeam.title, newTeam.maxPerson, newTeam.place, newTeam.time, user.userId)
-                                        navigation.navigate('Homes')
+                                        await basketData()
+                                        setNewTeam({
+                                            title: '',
+                                            place: '',
+                                            time: '',
+                                            maxPerson: '1',
+                                            nickname: '',
+                                            mainPosition: '',
+                                            height: '',
+                                            hasBall: undefined,
+                                        })
                                     }}>
                                         <Text style={styles.button}>생성하기</Text>
                                     </TouchableOpacity>
@@ -485,29 +524,69 @@ const Homes = ({ navigation }) => {
                         <View style={styles.modalView}>
                             <Text style={[styles.modalTitle, { marginBottom: 8 }]}>용병 등록하기</Text>
                             <Text style={[styles.modalMiddle, { marginBottom: 10 }]}>아래의 정보를 작성해주세요.</Text>
-                            <TextInput
-                                style={styles.input}
-                                placeholder="이름을 입력해주세요."
-                                onChangeText={(text) => setNewTeam({ ...newTeam, nickname: text })}
-                                value={newTeam.nickname}
-                            />
-                            <TextInput
-                                style={styles.input}
-                                placeholder="포지션을 입력해주세요."
-                                onChangeText={(text) => setNewTeam({ ...newTeam, mainPosition: text })}
-                                value={newTeam.mainPosition}
-                            />
-                            <TextInput
-                                style={styles.input}
-                                placeholder="키를 입력해주세요."
-                                onChangeText={(text) => setNewTeam({ ...newTeam, height: text })}
-                                value={newTeam.height}
-                            />
+                            
+                            <TouchableOpacity onPress={()=>{setPositionPicker(true)}} style={styles.input}>
+                                {newMercs.position === '' ? (
+                                    <Text style={styles.selectText}>
+                                    <Text style={styles.selectTextRed}>포지션</Text>을 선택해주세요.</Text>
+                                    ):(
+                                    <Text style={styles.determineText}>{newMercs.position}</Text>
+
+                                )}
+                            </TouchableOpacity>
+                            
+                            <TouchableOpacity onPress={()=>{setTimePickerOn(true)}} style={styles.input}>
+                                {newMercs.avTime === '' ? (
+                                    <Text style={styles.selectText}>
+                                    <Text style={styles.selectTextRed}>시간</Text>을 선택해주세요.</Text>
+                                    ):(
+                                    <Text style={styles.determineText}>{DateParse(newMercs.avTime)}</Text>
+
+                                )}
+                            </TouchableOpacity>
+
                             <TouchableOpacity onPress={showPicker} style={styles.selectTouchable}>
                                 <Text style={styles.selectText}>
                                     공 소유 여부: {newTeam.hasBall !== undefined ? (newTeam.hasBall ? 'O' : 'X') : ''}
                                 </Text>
                             </TouchableOpacity>
+                            {/* 포지션 Picker */}
+                            <Modal
+                                visible={positionPicker}
+                                transparent={true}
+                                animationType="slide"
+                                onRequestClose={()=>{setPositionPicker(false)}}
+                            >
+                                <TouchableOpacity style={styles.modalOverlay} onPress={()=>{setPositionPicker(false)}} activeOpacity={1}>
+                                    <View style={styles.pickerContainer} showsVerticalScrollIndicator={false}>
+                                        <ScrollView>
+                                            {['c', 'pf', 'sf', 'sg', 'pg'].map((value,index) => (
+                                                <TouchableOpacity
+                                                    key={index}
+                                                    style={styles.pickerItem}
+                                                    onPress={() => {
+                                                        setNewMercs({...newMercs, position: value});
+                                                        setPositionPicker(false)
+                                                    }}
+                                                >
+                                                    <Text style={styles.pickerItemText}>{value}</Text>
+                                                </TouchableOpacity>
+                                            ))}
+                                        </ScrollView>
+                                    </View>
+                                </TouchableOpacity>
+                            </Modal>
+                            {/* TimePicker */}
+                            <DateTimePickerModal
+                                isVisible={timePickerOn}
+                                mode="time"
+                                onConfirm={(date)=>{
+                                    setNewMercs({...newMercs, avTime:date})
+                                    setTimePickerOn(false)
+                                    }
+                                }
+                                onCancel={()=>{setDatePickerOn(false)}}
+                            />
                             {/* 공 소유 여부 모달 */}
                             <Modal
                                 visible={pickerVisible}
@@ -538,7 +617,9 @@ const Homes = ({ navigation }) => {
 
                             <View style={styles.buttonList}>
                                 <View style={{borderRadius: 5, backgroundColor: Colors.mainRed}}>
-                                    <TouchableOpacity onPress={() => {closeMercenaryModal();}}>
+                                    <TouchableOpacity onPress={() => {
+                                        regMercsSubmit(newMercs.position, newMercs.avTime)
+                                        closeMercenaryModal();}}>
                                         <Text style={styles.button}>등록하기</Text>
                                     </TouchableOpacity>
                                 </View>
@@ -573,7 +654,40 @@ const Homes = ({ navigation }) => {
                     <View style={styles.modalOverlay}>
                         <View style={styles.modalView}>
                             <Text style={styles.modalTitle}>랜덤 용병 선택하기</Text>
-                            {renderMercenaries()}
+                            {mercenaries.length === 0 ? (
+                                <Text>해당 용병이 없습니다.</Text>
+                                ) : (
+                                <>
+                                    {mercenaries.map((mercenary, index) => (
+                                        <TouchableOpacity key={index} style={styles.mercenaryCard} onPress={()=>{handleMercsCard(mercenary._id)}}>
+
+                                        {/* 아이콘 영역 */}
+                                        <View>
+                                            <Iconify
+                                                icon="solar:basketball-bold-duotone"
+                                                size={80}
+                                                color={colors.mainRed}
+                                            />
+                                        </View>
+                                        {/* 용병 정보 영역 */}
+                                        <View>
+                                            <Text style={styles.mercenaryName}>{mercenary["User.nickname"]}</Text>
+                                            <Text style={styles.mercenaryDetail}>키: {mercenary["User.height"]}</Text>
+                                            <Text style={styles.mercenaryDetail}>포지션: {mercenary.position}</Text>
+                                            <Text style={styles.mercenaryDetail}>가능한 시간: {DateParse(mercenary.avTime)}</Text>
+                                        </View>
+                                        {/* 선택 영역 */}
+                                        <View>
+                                            <Iconify
+                                                icon="lets-icons:check-fill"
+                                                color="#94cc5c"
+                                            />
+                                        </View>
+                                    </TouchableOpacity>
+
+                                    ))}
+                                </>
+                                )}
 
                             <TouchableOpacity
                                 style={styles.cancelButton}
@@ -585,6 +699,90 @@ const Homes = ({ navigation }) => {
                     </View>
                 </Modal>
 
+                {/* 초대할 파티 리스트 모달 */}
+                <Modal
+                    animationType="slide"
+                    transparent={true}
+                    visible={inviteMeetVisible}
+                    onRequestClose={()=>{setInviteMeetVisible(false)}}
+                >
+                <View style={styles.modalOverlay}>
+                    <View style={styles.modalView}>
+                        <Text style={styles.modalTitle}>초대할 농구팟 선택하기</Text>
+                        <ScrollView >
+                        {myMeet.length > 0 ? (
+                            myMeet.map((item) => (
+                                <TouchableOpacity key={item._id} onPress={() => { (inviteSubmit(item._id, targetMercs)) }}>
+                                    <View style={styles.card}>
+                                        <View style={styles.cardContentContainer}>
+                                            <Iconify
+                                                icon="solar:basketball-bold-duotone"
+                                                size={80}
+                                                color={colors.mainRed}
+                                            />
+                                            <View style={styles.cardTextContainer}>
+                                                <View style={styles.cardTitle}>
+                                                    <Text style={styles.cardTitleText}>{item.title}</Text>
+                                                </View>
+                                                <View style={styles.cardContent}>
+                                                    <Text style={styles.cardContentText}>
+                                                        <Text style={styles.cardContentLabel}>생성자 : </Text>
+                                                        {item.createdByNick}
+                                                    </Text>
+                                                    <Text style={styles.cardContentText}>
+                                                        <Text style={styles.cardContentLabel}>장소 : </Text>
+                                                        {item.place}
+                                                    </Text>
+                                                    <Text style={styles.cardContentText}>
+                                                        <Text style={styles.cardContentLabel}>시간 : </Text>
+                                                        {DateParse(item.time)}
+                                                    </Text>
+                                                </View>
+                                            </View>
+                                        </View>
+                                        <View style={styles.maxPerson}>
+                                            <Text style={styles.maxNum}>
+                                                {item.count} /
+                                                <Text style={styles.cardContentLabel}> {item.maxPerson}</Text>
+                                            </Text>
+                                            <Iconify
+                                                icon="ion:person"
+                                                size={20}
+                                                color={colors.mainRed}
+                                            />
+                                        </View>
+                                    </View>
+                                </TouchableOpacity>
+                            )))
+                            : (
+                                <TouchableOpacity style={styles.listBox}>
+                                    <View style={styles.card}>
+                                        <View style={styles.cardContentContainer}>
+                                            <Iconify
+                                                icon="solar:basketball-bold-duotone"
+                                                size={80}
+                                                color={colors.mainRed}
+                                            />
+                                            <View style={styles.cardTextContainer}>
+                                                <Text style={styles.cardTitleText}>데이터가 없습니다.</Text>
+                                            </View>
+                                        </View>
+                                    </View>
+                                </TouchableOpacity>
+                            )}
+                        </ScrollView>
+                        <TouchableOpacity
+                                style={styles.cancelButton}
+                                onPress={()=>{setInviteMeetVisible(false)}}
+                            >
+                                <Text style={styles.buttonText}>닫기</Text>
+                        </TouchableOpacity>
+                    </View>
+                </View>
+
+                
+                
+                </Modal>
             </ScrollView>
         </SafeAreaView>
     );

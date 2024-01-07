@@ -51,7 +51,7 @@ const getUserInfo = async()=>{
 const getBelong = async ()=>{
   const endPoint = 'v1/users/belong'
   const apiURL = baseURL + endPoint
-
+  
   return await instance.get(apiURL)
   .then((res)=>{
     if(res.status === 200){
