@@ -801,7 +801,7 @@ const styles = StyleSheet.create({
         backgroundColor: colors.black,
     },
     sectionContainer: {
-        marginLeft: 28,
+        marginLeft: 25,
         marginTop: 20,
     },
     listHeader: {
@@ -812,20 +812,20 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
     },
     headerTitle: {
-        fontSize: 20,
+        fontSize: 23,
         fontWeight: 'bold',
         color: colors.white,
     },
     createButton: {
         backgroundColor: colors.mainRed,
-        padding: 5,
-        marginLeft: 15,
+        padding: 6,
+        marginLeft: 13,
         borderRadius: 5,
     },
     createButtonText: {
         color: colors.white,
         fontWeight: 'bold',
-        fontSize: 12,
+        fontSize: 13,
     },
     description: {
         color: colors.white,
