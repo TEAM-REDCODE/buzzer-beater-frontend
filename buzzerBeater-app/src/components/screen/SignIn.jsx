@@ -60,6 +60,7 @@ const SignIn = ({navigation}) => {
                     <View style={styles.signInInput}>
                         <TextInput
                             style={styles.input}
+                            placeholderTextColor={colors.gray}
                             onChangeText={onChangeEmail}
                             value={email}
                             placeholder="학교 이메일을 입력하세요."
@@ -67,6 +68,7 @@ const SignIn = ({navigation}) => {
                         />
                         <TextInput
                             style={styles.input}
+                            placeholderTextColor={colors.gray}
                             onChangeText={onChangePassword}
                             value={password}
                             secureTextEntry={true}
@@ -103,7 +105,7 @@ const styles = StyleSheet.create({
 
     image : {
         width: '90%',
-        height: 100,
+        height : 100,
         resizeMode: 'contain',
     },
 
@@ -115,17 +117,17 @@ const styles = StyleSheet.create({
     input: {
         width : 300,
         height : 50,
-        margin : 13,
+        margin : 10,
         borderRadius : 5,
         padding : 10,
         backgroundColor : colors.white,
     },
 
     button: {
-        padding : 15,
-        marginBottom : 15,
         width : 300,
-        margin : 15,
+        padding : 18,
+        marginBottom : 15,
+        margin : 20,
         borderRadius : 5,
         backgroundColor : colors.mainRed,
     },

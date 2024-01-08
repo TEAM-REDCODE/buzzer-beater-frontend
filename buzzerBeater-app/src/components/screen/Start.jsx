@@ -1,49 +1,39 @@
 import React from 'react';
-import {View, Text, TouchableOpacity, Image, ImageBackground, StyleSheet, SafeAreaView} from 'react-native';
-import { Video, ResizeMode } from 'expo-av';
+import {View, Text, TouchableOpacity, Image, StyleSheet } from 'react-native';
 import colors from '../../Common/Colors';
 
 let bigLogoImg = require('../../../assets/Buzzer-Beater_big_logo.png')
-let video = require('../../../assets/basketballVideo.mp4')
+let start = require('../../../assets/start.png')
 
 export default function Start({ navigation }) {
-  return (
-      <View style={styles.container}>
-        <Video
-          source={video}
-          style={styles.backgroundVideo}
-          muted={true}
-          shouldPlay={true}
-          isLooping
-          resizeMode={"cover"}
-          rate={1.0}
-          ignoreSilentSwitch={"obey"}
-        />
-        <View style={styles.bottomContainer}>
-          <Image source={bigLogoImg} style={styles.logo} />
-          <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('SignIn')}>
-            <Text style={styles.buttonText}>로그인</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('SignUp')}>
-            <Text style={styles.buttonText}>회원가입</Text>
-          </TouchableOpacity>
+
+    return (
+        <View style={styles.container}>
+          <Image source={start} resizeMode='cover' style={styles.backgroundImg}/>
+          <View style={styles.bottomContainer}>
+            <Image source={bigLogoImg} style={styles.logo} />
+            <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('SignIn')}>
+              <Text style={styles.buttonText}>로그인</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('SignUp')}>
+              <Text style={styles.buttonText}>회원가입</Text>
+            </TouchableOpacity>
+          </View>
         </View>
-      </View>
-  );
-}
+    );
+  }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor : colors.black,
   },
-  backgroundVideo: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    bottom: 0,
-    right: 0,
+
+  backgroundImg : {
+    width: '100%',
+    height : '100%'
   },
+
   bottomContainer: {
     position: 'absolute',
     bottom: 50,
@@ -51,19 +41,22 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingBottom: 10,
   },
+
   logo: {
     width: '90%',
     height: 100,
     resizeMode: 'contain',
   },
+
   button: {
-    backgroundColor: colors.white,
-    padding : 15,
-    borderRadius : 5,
+    width : 300,
+    padding : 18,
     marginBottom : 15,
-    width : '75%',
+    borderRadius : 5,
+    backgroundColor: colors.white,
     alignItems : 'center',
   },
+
   buttonText: {
     fontSize : 18,
     color : colors.black,

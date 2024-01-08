@@ -1,12 +1,9 @@
 import React, {useContext, useEffect, useState} from 'react';
 import {
-    Image,
-    Modal,
     SafeAreaView,
     ScrollView,
     StyleSheet,
     Text,
-    TextInput,
     TouchableOpacity,
     View
 } from 'react-native';
@@ -18,13 +15,13 @@ import {UserContext} from "../../Common/UserContext";
 import Colors from "../../Common/Colors";
 import DateParse from '../../Common/DateParse';
 import MercsListPopup from '../UI/MercsListPopup';
-import Spinner from "react-native-loading-spinner-overlay";
 import Loading from "./Loading";
 
 const MercenaryList = ({navigation}) => {
     const { user, setUserData } = useContext(UserContext);
     const [belongList1, setBelongList1] = useState([]);
     const [modalData, setModalData] = useState([]);
+
     // 로딩화면
     const [loading, setLoading] = React.useState(true);
 
@@ -104,7 +101,7 @@ const MercenaryList = ({navigation}) => {
             <View style={styles.container}>
                 <View style={styles.wrapper}>
                     { loading ? (<Loading/>) : null }
-                    <ScrollView style={styles.List}>
+                    <ScrollView>
                         <View style={styles.listCol}>
                             <Text style={styles.bigText}>들어간 농구팟</Text>
                             <Text style={styles.smallText}>본인이 들어간 농구팟을 확인해보세요.</Text>
@@ -114,8 +111,10 @@ const MercenaryList = ({navigation}) => {
                                         <TouchableOpacity key={item._id} style={styles.listBox}>
                                             {(item.maxNum !== item.count) &&
                                               <Iconify
-                                              icon="lets-icons:check-fill" color="#94cc5c"
-                                            />
+                                              icon="lets-icons:check-fill"
+                                              style={styles.checkIcon}
+                                              color={colors.check}
+                                              />
                                             }
                                             <Iconify
                                                 icon="solar:basketball-bold-duotone"
@@ -163,8 +162,10 @@ const MercenaryList = ({navigation}) => {
                                         <TouchableOpacity key={item._id} style={styles.listBox} onPress={()=>{handleCardPress(belongList2[idx])}}>
                                             {(item.maxNum !== item.count) &&
                                               <Iconify
-                                              icon="lets-icons:check-fill" color="#94cc5c"
-                                            />
+                                              icon="lets-icons:check-fill"
+                                              style={styles.checkIcon}
+                                              color={colors.check}
+                                              />
                                             }
                                             <Iconify
                                                 icon="solar:basketball-bold-duotone"
@@ -223,18 +224,15 @@ const styles = StyleSheet.create({
 
     container : {
         width : '100%',
+        height : '100%',
         display : 'flex',
         backgroundColor : colors.black,
     },
 
     wrapper : {
         flexGrow : 1,
-        backgroundColor : colors.black,
-    },
-
-    List : {
-        width : '100%',
-        height : '100%',
+        justifyContent : 'center',
+        alignItems : 'center',
     },
 
     topLine : {
@@ -245,12 +243,12 @@ const styles = StyleSheet.create({
 
     listCol : {
       width : '95%',
-      marginLeft : 25,
+      marginLeft : 20,
       marginBottom : 25,
     },
 
     bigText : {
-      marginTop : 15,
+      marginTop : 20,
       fontSize : 20,
       fontWeight : 'bold',
       color : colors.white,
@@ -258,17 +256,20 @@ const styles = StyleSheet.create({
 
     smallText : {
         marginTop : 10,
-        fontSize : 15,
         color : colors.white,
     },
 
     listBox : {
-        width : 160,
-        height : 230,
+        width : 175,
+        height : 250,
         borderRadius : 5,
         marginTop : 20,
         marginRight : 13,
         backgroundColor : colors.white,
+    },
+
+    checkIcon : {
+
     },
 
     iconStyle : {

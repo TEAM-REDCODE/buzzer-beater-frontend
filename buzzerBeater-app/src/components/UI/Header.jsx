@@ -9,15 +9,12 @@ const commonHeaderOptions = ({ navigation }) => ({
     backgroundColor: Colors.black,
   },
   headerLeft: () => (
-    <View style={styles.logoimg}>
-      <Image source={logoImg} style={styles.logo}  resizeMode="contain" />
-    </View>
+      <Image source={logoImg} style={styles.logo}  resizeMode="cover" />
   ),
   headerRight: () => (
     <View style={styles.rightHead}>
-        <Iconify icon="mingcute:announcement-line" size = {30} color = {Colors.white} />
       <TouchableOpacity onPress={() => navigation.navigate('MercenaryList')}>
-          <Iconify icon="fluent:task-list-square-person-20-regular" size = {30} color = {Colors.white} />
+          <Iconify icon="fluent:person-chat-24-regular" size = {30} color = {Colors.white} />
       </TouchableOpacity>
       <TouchableOpacity onPress={() => navigation.navigate('MyPageScreen')}>
           <Iconify icon="eva:person-fill" size = {30} color = {Colors.white} />
@@ -32,19 +29,16 @@ const myPageHeaderOptions = ({ navigation }) => ({
     backgroundColor: Colors.black,
   },
   headerLeft: () => (
-      <View style={styles.logoimg}>
-          <Image source={logoImg} style={styles.logo} resizeMode="contain" />
-      </View>
+      <Image source={logoImg} style={styles.logo} resizeMode="contain" />
   ),
   headerRight: () => (
     <View style={styles.rightHead}>
-        <Iconify icon="mingcute:announcement-line" size={30} color ={Colors.white} />
       <TouchableOpacity onPress={() => navigation.navigate('MercenaryList')}>
-          <Iconify icon="fluent:task-list-square-person-20-regular" size={30} color ={Colors.white} />
+          <Iconify icon="fluent:person-chat-24-regular" size={30} color ={Colors.white} />
       </TouchableOpacity>
       <TouchableOpacity onPress={() => navigation.goBack()}>
         {/* Use TouchableOpacity for the closeBtn with onPress */}
-          <Iconify icon="majesticons:close-line" size={35} color = {Colors.white} />
+          <Iconify icon="majesticons:close-line" size={30} color = {Colors.white} />
       </TouchableOpacity>
     </View>
   ),
@@ -56,15 +50,15 @@ const loginHeaderOptions = ({ navigation }) => ({
     backgroundColor: Colors.black,
   },
   headerLeft: () => (
-    <View style={{ marginLeft: 23 }}>
+    <View style={{ marginLeft: 20 }}>
       <Text style={styles.signText}>로그인</Text>
     </View>
   ),
   headerRight: () => (
-    <View style={{marginRight: 15 }}>
+    <View style={{marginRight: 20 }}>
       <TouchableOpacity onPress={() => navigation.goBack()}>
         {/* Use TouchableOpacity for the closeBtn with onPress */}
-          <Iconify icon="majesticons:close-line" size={30} color = {Colors.white} />
+          <Iconify icon="majesticons:close-line" size={28} color = {Colors.white} />
       </TouchableOpacity>
     </View>
   ),
@@ -76,15 +70,15 @@ const signUpHeaderOptions = ({ navigation }) => ({
     backgroundColor: Colors.black,
   },
   headerLeft: () => (
-    <View style={{ marginLeft: 25 }}>
+    <View style={{ marginLeft: 20 }}>
       <Text style={styles.signText}>회원가입</Text>
     </View>
   ),
   headerRight: () => (
-    <View style={{marginRight: 15 }}>
+    <View style={{marginRight: 20 }}>
       <TouchableOpacity onPress={() => navigation.goBack()}>
         {/* Use TouchableOpacity for the closeBtn with onPress */}
-          <Iconify icon="majesticons:close-line" size={30} color ={Colors.white} />
+          <Iconify icon="majesticons:close-line" size={28} color ={Colors.white} />
       </TouchableOpacity>
     </View>
   ),
@@ -92,14 +86,10 @@ const signUpHeaderOptions = ({ navigation }) => ({
 
 const styles = StyleSheet.create({
 
-    logoimg : {
-        height : 55,
-    },
-
     logo : {
-        width : 55,
-        height : 55,
-        marginLeft : 15,
+        width : 50,
+        height : 45,
+        marginLeft : 10,
     },
 
     rightHead : {
@@ -111,7 +101,7 @@ const styles = StyleSheet.create({
 
     signText : {
         color : Colors.white,
-        fontSize : 23,
+        fontSize : 22,
         fontWeight : 'bold',
     },
 
