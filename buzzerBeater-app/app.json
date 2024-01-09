@@ -4,12 +4,12 @@
     "slug": "buzzerBeater-app",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/BuzzerBeater_icon.png",
     "userInterfaceStyle": "light",
     "splash": {
-      "image": "./assets/splash.png",
+      "image": "./assets/BuzzerBeater_splash.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#222222"
     },
     "assetBundlePatterns": [
       "**/*"
@@ -19,8 +19,8 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
+        "foregroundImage": "./assets/BuzzerBeater_icon.png",
+        "backgroundColor": "#222222"
       }
     },
     "web": {

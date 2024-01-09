@@ -1,5 +1,6 @@
 import React, {useContext, useEffect, useState} from 'react'
-import { 
+import {
+  SafeAreaView,
   View, 
   Text, 
   TouchableOpacity,
@@ -14,6 +15,7 @@ import { getMercsReq, deleteMercs, acceptMercsReq, createMercs} from '../../APIs
 import {NicknamePopup, PasswordPopup, PhysicalPopup, MecenearyPopup, PositonPopup} from '../UI/MyPagePopup';
 import { setMpos } from '../../APIs/userAPI';
 import Loading from "./Loading";
+import colors from "../../Common/Colors";
 export default function MyPageScreen({navigation}) {
   const { user, setUserData } = useContext(UserContext);
   const [nicknamePopup, setNicknamePopup] = useState(false)
@@ -51,80 +53,86 @@ export default function MyPageScreen({navigation}) {
     navigation.navigate('Start')
   }
   return (
-      <View style={styles.container}>
-        {loading ? <Loading/> : null}
-        <View style={styles.wrapper}>
-          <View style={styles.mypage}>
-            <Iconify icon="solar:basketball-bold-duotone" size={80} color = {Colors.white} />
-            <Text style={styles.mypageText}>{user.nickname}</Text>
-            <TouchableOpacity style={styles.logout} onPress={()=>{handleLogout(navigation)}}>
-              <Text style={styles.logoutbtn}>로그아웃</Text>
-            </TouchableOpacity>
-          </View>
-          
-          <Text style={styles.subtitle}>개인 정보</Text>
-          <View style={styles.iconList}>
-            {/* SetNicname */}
-            <NicknamePopup modalVisible={nicknamePopup} setModalVisible={setNicknamePopup} userName={user.nickname}/>
-            <View style={styles.iconBtn}>
-              <TouchableOpacity onPress={()=>{handlePopup(0)}}>
-                <Iconify icon="mdi:rename-outline" size={50} style={styles.iconStyle} />
-              </TouchableOpacity >
-              <Text style={styles.iconText}>닉네임 변경</Text>
-            </View>
-            {/* SetPassword  */}
-            <PasswordPopup modalVisible={passwordPopup} setModalVisible={setPasswordPopup} />
-            <View style={styles.iconBtn}>
-              <TouchableOpacity onPress={()=>{(handlePopup(1))}}>
-                <Iconify icon="mdi:password-outline" size={50} style={styles.iconStyle} />
-              </TouchableOpacity >
-              <Text style={styles.iconText}>비밀번호 변경</Text>
-            </View>
-            {/* SetPhysical */}
-            <PhysicalPopup modalVisible={physicalPopup} setModalVisible={setPhysicalPopup} setUserData={setUserData} />
-            <View style={styles.iconBtn}>
-              <TouchableOpacity onPress={()=>{(handlePopup(2))}}>
-                <Iconify icon="mdi:human-male-height" size={50} style={styles.iconStyle} />
+      <SafeAreaView style={styles.safeArea}>
+        <View style={styles.container}>
+          {loading ? <Loading/> : null}
+          <View style={styles.wrapper}>
+            <View style={styles.mypage}>
+              <Iconify icon="solar:basketball-bold-duotone" size={85} color = {Colors.white} />
+              <Text style={styles.mypageText}>{user.nickname}</Text>
+              <TouchableOpacity onPress={()=>{handleLogout(navigation)}}>
+                <Text style={styles.logoutbtn}>로그아웃</Text>
               </TouchableOpacity>
-              <Text style={styles.iconText}>피지컬 수정</Text>
             </View>
-          </View>
-          
-          <Text style={styles.subtitle}>용병등록 / 주 포지션</Text>
-          <View style={styles.iconList}>
-            {/* Get Mercenary */}
-            <MecenearyPopup modalVisible={mecenearyPopup} setModalVisible={setMecenearyPopup} mercen={user.isMercenary}/>
-            <View style={styles.iconBtn}>
-              <TouchableOpacity onPress={()=>{handlePopup(3)}}>
-                <Iconify icon="fa6-solid:basketball" size={45} style={styles.iconStyle} />
-              </TouchableOpacity>
-              <Text style={styles.iconText}>용병 등록 확인</Text>
+            <View style={styles.subContainer}>
+              <Text style={styles.subtitle}>개인 정보</Text>
+              <View style={styles.iconList}>
+                {/* SetNicname */}
+                <NicknamePopup modalVisible={nicknamePopup} setModalVisible={setNicknamePopup} userName={user.nickname}/>
+                <View style={styles.iconBtn}>
+                  <TouchableOpacity onPress={()=>{handlePopup(0)}}>
+                    <Iconify icon="mdi:rename-box-outline" size={60} style={styles.iconStyle} />
+                  </TouchableOpacity >
+                  <Text style={styles.iconText}>닉네임 변경</Text>
+                </View>
+                {/* SetPassword  */}
+                <PasswordPopup modalVisible={passwordPopup} setModalVisible={setPasswordPopup} />
+                <View style={styles.iconBtn}>
+                  <TouchableOpacity onPress={()=>{(handlePopup(1))}}>
+                    <Iconify icon="mdi:password-outline" size={60} style={styles.iconStyle} />
+                  </TouchableOpacity >
+                  <Text style={styles.iconText}>비밀번호 변경</Text>
+                </View>
+                {/* SetPhysical */}
+                <PhysicalPopup modalVisible={physicalPopup} setModalVisible={setPhysicalPopup} setUserData={setUserData} />
+                <View style={styles.iconBtn}>
+                  <TouchableOpacity onPress={()=>{(handlePopup(2))}}>
+                    <Iconify icon="mdi:human-male-height-variant" size={60} style={styles.iconStyle} />
+                  </TouchableOpacity>
+                  <Text style={styles.iconText}>피지컬 수정</Text>
+                </View>
+              </View>
+            </View>
+            <View style={styles.subContainer}>
+              <Text style={styles.subtitle}>용병 등록 / 주 포지션</Text>
+              <View style={styles.iconList}>
+                {/* Get Mercenary */}
+                <MecenearyPopup modalVisible={mecenearyPopup} setModalVisible={setMecenearyPopup} mercen={user.isMercenary}/>
+                <View style={styles.iconBtn}>
+                  <TouchableOpacity onPress={()=>{handlePopup(3)}}>
+                    <Iconify icon="mdi:register" size={60} style={styles.iconStyle} />
+                  </TouchableOpacity>
+                  <Text style={styles.iconText}>용병 등록 확인</Text>
+                </View>
+
+                {/* Set Positon */}
+                <PositonPopup modalVisible={positonPopup} setModalVisible={setPositonPopup} position={user.mainPosition} setMpos={setMpos}/>
+                <View style={styles.iconBtn}>
+                  <TouchableOpacity onPress={()=>{handlePopup(4)}}>
+                    <Iconify icon="icon-park-outline:basketball-clothes" size={60} style={styles.iconStyle} />
+                  </TouchableOpacity>
+                  <Text style={styles.iconText}>주 포지션 변경</Text>
+                </View>
+              </View>
             </View>
 
-            {/* Set Positon */}
-            <PositonPopup modalVisible={positonPopup} setModalVisible={setPositonPopup} position={user.mainPosition} setMpos={setMpos}/>
-            <View style={styles.iconBtn}>
-              <TouchableOpacity onPress={()=>{handlePopup(4)}}>
-                <Iconify icon="gis:position-man" size={45} style={styles.iconStyle} />
+            <View style={styles.leave}>
+              <TouchableOpacity onPress={()=>{inviteMercs(3, 'd286cbe7-6587-416e-8746-a86c3a1f6488')}}>
+                <View style={styles.leavebtn}>
+                  <Text style={styles.leavetext}>회원 탈퇴하기</Text>
+                </View>
               </TouchableOpacity>
-              <Text style={styles.iconText}>주 포지션 변경</Text>
             </View>
-          </View> 
-          
-          <View style={styles.leave}>
-            <TouchableOpacity onPress={()=>{inviteMercs(3, 'd286cbe7-6587-416e-8746-a86c3a1f6488')}}>
-              <View style={styles.leavebtn}>
-                <Text style={styles.leavetext}>회원 탈퇴하기</Text>
-              </View>
-            </TouchableOpacity>
           </View>
         </View>
-      </View>
-      
+      </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
+  safeArea : {
+    backgroundColor : colors.black,
+  },
 
   container : {
     width : '100%',
@@ -134,57 +142,56 @@ const styles = StyleSheet.create({
   },
 
   wrapper : {
-    marginTop : '4%',
     flexGrow : 1,
-    justifyContent : 'flex-start',
+    justifyContent : 'center',
     alignItems : 'center',
   },
 
   mypage : {
-    width :'84%',
+    width :'90%',
+    marginTop : 25,
     flexDirection : 'row',
     justifyContent : 'space-between',
     alignItems : 'center',
-    marginTop : 10,
   },
 
   mypageText : {
     fontSize : 25,
     color : Colors.white,
-    flexGrow : 0.7,
+    flexGrow : 0.8,
     fontWeight : 'bold',
-  },
-
-  logout : {
-    width : '23%',
-    height : '36%',
   },
 
   logoutbtn:{
     color : Colors.mainRed,
     fontWeight : 'bold',
-    fontSize : 12,
+    fontSize : 15,
     textAlign : 'center',
     borderColor : Colors.mainRed,
     borderWidth : 1.5,
-    borderRadius : 15,
-    padding : 5,
+    borderRadius : 5,
+    padding : 8,
+    marginRight : 10,
+  },
+
+  subContainer : {
+    width : 330,
+    marginLeft : '6%',
+    marginTop : '5%',
+    marginBottom : '5%',
   },
 
   subtitle : {
-    width : '80%',
     color :Colors.white,
     fontSize : 20,
     fontWeight : 'bold',
-    marginTop : '10%',
     marginBottom : '5%',
   },
 
   iconList : {
-    width :'80%',
     display : 'flex',
     flexDirection : 'row',
-    gap : 22,
+    gap : 20,
   },
 
   iconBtn : {
@@ -194,27 +201,29 @@ const styles = StyleSheet.create({
 
   iconStyle : {
     color : Colors.white,
-    marginBottom : '10%',
+    marginBottom : '5%',
   },
 
   iconText : {
     fontSize : 13,
     color : Colors.white,
-    marginTop : '10%',
+    marginTop : '5%',
+    marginBottom : '5%',
+    fontWeight : 'bold',
   },
 
   leave : {
     flexGrow : 0.8,
-    width : '84%',
+    width : '90%',
+    marginRight : 10,
     display : 'flex',
     justifyContent : 'flex-end',
-    alignItems : 'flex-end'
+    alignItems : 'flex-end',
   },
 
   leavebtn : {
-    width : '50%',
-    borderRadius : 20,
-    padding : 8,
+    borderRadius : 5,
+    padding : 10,
     backgroundColor : Colors.mainRed,
   },
 
@@ -223,9 +232,8 @@ const styles = StyleSheet.create({
     fontWeight : 'bold',
     fontSize : 13,
     textAlign : 'center',
-    marginLeft : 10,
-    marginRight : 10,
-    padding : 3,
+    marginLeft : 15,
+    marginRight : 15,
   }
   
 });

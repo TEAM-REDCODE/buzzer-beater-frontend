@@ -65,88 +65,102 @@ const SignUp = ({navigation}) => {
                 <View style={styles.wrapper}>
                     <Image style={styles.image} source={bigLogoImg} />
                     <View style={styles.signUpInput}>
-                        <Text style={styles.subtitle}>
-                            닉네임 입력 <Text style={styles.star}>*</Text>
-                        </Text>
-                        <TextInput
-                            style={styles.input}
-                            onChangeText={onChangeNickname}
-                            placeholder="닉네임을 입력하세요."
-                            keyboardType="ascii-capable"
-                        />
-                        <Text style={styles.subtitle}>
-                            이메일 / 비밀번호 입력 <Text style={styles.star}>*</Text>
-                        </Text>
-                        <TextInput
-                            style={styles.input}
-                            onChangeText={onChangeEmail}
-                            placeholder="학교 이메일을 입력하세요."
-                            keyboardType="url"
-                        />
-                        <TextInput
-                            style={[styles.input, styles.topMargin]}
-                            onChangeText={onChangePassword}
-                            secureTextEntry={true}
-                            placeholder="비밀번호를 입력하세요."
-                        />
-                        <View style={styles.validation}>
-                            <View style={styles.valiList}>
-                                <View style={styles.valiButton}>
-                                    {passowrdVerify(password, 1)?
-                                        <Iconify icon="ri:checkbox-circle-fill" size={13} color={Colors.mainRed} />
-                                        :<Iconify icon="ri:checkbox-circle-line" size={13} color={Colors.white} />
-                                    }
-                                    <Text style={styles.valiText}>총 8글자 이상</Text>
-                                </View>
-                                <View style={styles.valiButton}>
-                                    {passowrdVerify(password, 3)?
-                                        <Iconify icon="ri:checkbox-circle-fill" size={13} color={Colors.mainRed} />
-                                        :<Iconify icon="ri:checkbox-circle-line" size={13} color={Colors.white} />
-                                    }
-                                    <Text style={styles.valiText}>1개 이상의 대문자 포함</Text>
-                                </View>
-                            </View>
-                            <View style={styles.valiList}>
-                                <View style={styles.valiButton}>
-                                    {passowrdVerify(password, 2)?
-                                        <Iconify icon="ri:checkbox-circle-fill" size={13} color={Colors.mainRed} />
-                                        :<Iconify icon="ri:checkbox-circle-line" size={13} color={Colors.white} />
-                                    }
-                                    <Text style={styles.valiText}>1개 이상의 소문자 포함</Text>
-                                </View>
-                                <View style={styles.valiButton}>
-                                    {passowrdVerify(password, 4)?
-                                        <Iconify icon="ri:checkbox-circle-fill" size={13} color={Colors.mainRed} />
-                                        :<Iconify icon="ri:checkbox-circle-line" size={13} color={Colors.white} />
-                                    }
-                                    <Text style={styles.valiText}>숫자, 특수문자 포함</Text>
-                                </View>
-                            </View>
+                        <View style={styles.subContainer}>
+                            <Text style={styles.subtitle}>
+                                닉네임 입력 <Text style={styles.star}>*</Text>
+                            </Text>
+                            <TextInput
+                                style={styles.input}
+                                placeholderTextColor={colors.gray}
+                                onChangeText={onChangeNickname}
+                                placeholder="닉네임을 입력하세요."
+                                keyboardType="ascii-capable"
+                            />
                         </View>
-                        <TextInput
-                            style={[styles.input, styles.topMargin]}
-                            onChangeText={onChangePW_Check}
-                            secureTextEntry={true}
-                            placeholder="비밀번호를 재입력하세요."
-                        />
-                        <Text style={styles.subtitle}>
-                            피지컬 정보 입력 <Text style={styles.star}>*</Text>
-                        </Text>
-                        <TextInput
-                            style={styles.input}
-                            onChangeText={onChangeHeight}
-                            placeholder="키를 입력하세요."
-                            keyboardType="number-pad"
-                        />
-                        <Text style={styles.subtitle}>
-                            주 포지션 입력 <Text style={styles.star}>*</Text>
-                        </Text>
-                        <TextInput
-                            style={styles.input}
-                            onChangeText={onChangePosition}
-                            placeholder="주 포지션을 입력하세요."
-                            keyboardType="default"
-                        />
+                        <View style={styles.subContainer}>
+                            <Text style={styles.subtitle}>
+                                이메일 / 비밀번호 입력 <Text style={styles.star}>*</Text>
+                            </Text>
+                            <TextInput
+                                style={styles.input}
+                                placeholderTextColor={colors.gray}
+                                onChangeText={onChangeEmail}
+                                placeholder="학교 이메일을 입력하세요."
+                                keyboardType="url"
+                            />
+                            <TextInput
+                                style={styles.input}
+                                placeholderTextColor={colors.gray}
+                                onChangeText={onChangePassword}
+                                secureTextEntry={true}
+                                placeholder="비밀번호를 입력하세요."
+                            />
+                            <View style={styles.validation}>
+                                <View>
+                                    <View style={styles.valiButton}>
+                                        {passowrdVerify(password, 1)?
+                                            <Iconify icon="ri:checkbox-circle-fill" size={13} color={Colors.mainRed} />
+                                            :<Iconify icon="ri:checkbox-circle-line" size={13} color={Colors.white} />
+                                        }
+                                        <Text style={styles.valiText}>총 8글자 이상</Text>
+                                    </View>
+                                    <View style={styles.valiButton}>
+                                        {passowrdVerify(password, 3)?
+                                            <Iconify icon="ri:checkbox-circle-fill" size={13} color={Colors.mainRed} />
+                                            :<Iconify icon="ri:checkbox-circle-line" size={13} color={Colors.white} />
+                                        }
+                                        <Text style={styles.valiText}>1개 이상의 대문자 포함</Text>
+                                    </View>
+                                </View>
+                                <View>
+                                    <View style={styles.valiButton}>
+                                        {passowrdVerify(password, 2)?
+                                            <Iconify icon="ri:checkbox-circle-fill" size={13} color={Colors.mainRed} />
+                                            :<Iconify icon="ri:checkbox-circle-line" size={13} color={Colors.white} />
+                                        }
+                                        <Text style={styles.valiText}>1개 이상의 소문자 포함</Text>
+                                    </View>
+                                    <View style={styles.valiButton}>
+                                        {passowrdVerify(password, 4)?
+                                            <Iconify icon="ri:checkbox-circle-fill" size={13} color={Colors.mainRed} />
+                                            :<Iconify icon="ri:checkbox-circle-line" size={13} color={Colors.white} />
+                                        }
+                                        <Text style={styles.valiText}>숫자, 특수문자 포함</Text>
+                                    </View>
+                                </View>
+                            </View>
+                            <TextInput
+                                style={styles.input}
+                                placeholderTextColor={colors.gray}
+                                onChangeText={onChangePW_Check}
+                                secureTextEntry={true}
+                                placeholder="비밀번호를 재입력하세요."
+                            />
+                        </View>
+                        <View style={styles.subContainer}>
+                            <Text style={styles.subtitle}>
+                                피지컬 정보 입력 <Text style={styles.star}>*</Text>
+                            </Text>
+                            <TextInput
+                                style={styles.input}
+                                placeholderTextColor={colors.gray}
+                                onChangeText={onChangeHeight}
+                                placeholder="키를 입력하세요."
+                                keyboardType="number-pad"
+                            />
+                        </View>
+                        <View style={styles.subContainer}>
+                            <Text style={styles.subtitle}>
+                                주 포지션 입력 <Text style={styles.star}>*</Text>
+                            </Text>
+                            <TextInput
+                                style={styles.input}
+                                placeholderTextColor={colors.gray}
+                                onChangeText={onChangePosition}
+                                placeholder="주 포지션을 입력하세요."
+                                keyboardType="default"
+                            />
+                        </View>
                         <TouchableOpacity style={styles.button} onPress = {() => {handleSignUp(nickname, email, password, height, mainPosition)}}>
                             <View>
                                 <Text style={styles.signUpText}>회원가입하기</Text>
@@ -172,10 +186,9 @@ const styles = StyleSheet.create({
     },
 
     wrapper : {
-        flexGrow : 1,
+        flex : 1,
         justifyContent : 'center',
         alignItems : 'center',
-        marginTop : 30,
     },
 
     image : {
@@ -187,15 +200,17 @@ const styles = StyleSheet.create({
     signUpInput : {
         justifyContent : 'center',
         alignItems : 'center',
-        margin : 25,
+    },
+
+    subContainer : {
+        marginBottom : '5%',
     },
 
     subtitle : {
-        width : 300,
         fontWeight : 'bold',
         fontSize : 16,
         color : colors.white,
-        justifyContent : 'flex-start',
+        marginLeft : 10,
     },
 
     star : {
@@ -205,27 +220,16 @@ const styles = StyleSheet.create({
     input: {
         width : 300,
         height : 50,
-        margin : 15,
+        margin : 10,
         borderRadius : 5,
         padding : 10,
         backgroundColor : colors.white,
     },
 
-    topMargin : {
-        marginTop : '2%',
-        marginBottom : '4%',
-    },
-
     validation : {
-      height : 85,
-      display : 'flex',
-      flexWrap : 'wrap',
       justifyContent : 'center',
       flexDirection : 'row',
-    },
-
-    valiList : {
-        display : 'flex',
+      marginBottom : 5,
     },
 
     valiButton : {
@@ -233,21 +237,21 @@ const styles = StyleSheet.create({
       height : 20,
       flexDirection : 'row',
       alignItems : 'center',
-      marginTop : 13,
-      left : 7,
+      marginTop : 5,
+      left : 10,
     },
 
     valiText : {
         color : colors.white,
-        fontSize : 11,
-        marginLeft : 8,
+        fontSize : 12,
+        marginLeft : 5,
     },
 
     button: {
-        padding : 15,
-        marginBottom : 15,
         width : 300,
-        margin : 15,
+        padding : 18,
+        marginBottom : 15,
+        margin : 10,
         borderRadius : 5,
         backgroundColor : colors.mainRed,
     },

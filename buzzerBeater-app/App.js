@@ -12,6 +12,7 @@ import Start from './src/components/screen/Start';
 import Homes from './src/components/screen/Homes';
 import { UserProvider } from './src/Common/UserContext';
 import Loading from "./src/components/screen/Loading";
+import MercsListPopup from "./src/components/UI/MercsListPopup";
 
 
 const Tab = createBottomTabNavigator();
