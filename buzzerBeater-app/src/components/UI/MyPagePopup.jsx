@@ -6,6 +6,7 @@ import Colors from '../../Common/Colors';
 import passowrdVerify from '../screen/account/passwordValidation';
 import { setNickname, getUserInfo, setHeight} from '../../APIs/userAPI';
 import { UserContext } from '../../Common/UserContext';
+import colors from "../../Common/Colors";
 
 const NicknamePopup = ({ modalVisible, setModalVisible, userName }) => {
   const [newName, setNewName] = useState("")
@@ -50,30 +51,37 @@ const NicknamePopup = ({ modalVisible, setModalVisible, userName }) => {
         <TouchableWithoutFeedback>
             <View View style={styles.overlay}>
               <View style={styles.modalView}>
-                <Text style={styles.modalTitle}>닉네임 변경</Text>
-                <Text style={styles.modalText}>현재 사용중인 닉네임</Text>
-                <View style={styles.currentText}>
-                  <Text style={{fontWeight : 'bold', fontSize : 16,}}>{userName}</Text>
+                <Text style={styles.modalTitle}>
+                  <Text style={styles.modalTitleRed}>닉네임 </Text>
+                  변경
+                </Text>
+                <View style={styles.subContainer}>
+                  <Text style={styles.modalText}>현재 사용중인 닉네임</Text>
+                  <View style={styles.currentText}>
+                    <Text style={{fontWeight : 'bold', fontSize : 16,}}>{userName}</Text>
+                  </View>
                 </View>
-                <Text style={styles.modalText}>변경할 닉네임</Text>
-                <TextInput
-                  style={styles.input}
-                  placeholder="변경하고 싶은 닉네임을 입력해주세요"
-                  placeholderTextColor='gray'
-                  placeholderText={{ fontSize: 0.3 }}
-                  onChangeText={handleName}
-                  value={newName}
-                />
-                <Text style={styles.smallText}>*공백없이 문자와 숫자로만 5자 이상 20자 이내로 입력하세요.</Text>
+                <View style={styles.subContainer}>
+                  <Text style={styles.modalText}>변경할 닉네임</Text>
+                  <TextInput
+                    style={styles.input}
+                    placeholder="변경하고 싶은 닉네임을 입력해주세요."
+                    placeholderTextColor={colors.gray}
+                    placeholderText={{ fontSize: 0.3 }}
+                    onChangeText={handleName}
+                    value={newName}
+                  />
+                  <Text style={styles.smallText}>*공백없이 문자와 숫자로만 5자 이상 20자 이내로 입력하세요.</Text>
+                </View>
                 <View style={styles.buttonList}>
                   <View style={{borderRadius: 5, backgroundColor: Colors.mainRed}}>
                     <TouchableOpacity>
-                      <Text style={styles.button} onPress={handleSubmit}>변경</Text>
+                      <Text style={styles.button} onPress={handleSubmit}>변경하기</Text>
                     </TouchableOpacity>
                   </View>
                   <View style={{borderRadius: 5, backgroundColor: Colors.black}}>
                     <TouchableOpacity>
-                      <Text style={styles.button} onPress={closeModal}>취소</Text>
+                      <Text style={styles.button} onPress={closeModal}>취소하기</Text>
                     </TouchableOpacity>
                   </View>
                 </View>
@@ -114,71 +122,78 @@ const PasswordPopup = ({ modalVisible, setModalVisible }) => {
       <TouchableWithoutFeedback>
         <View style={styles.overlay}>
           <View style={styles.modalView}>
-            <Text style={styles.modalTitle}>비밀번호 변경</Text>
-            <Text style={styles.modalText}>현재 비밀번호</Text>
-            <TextInput style={styles.input}
-              placeholder="현재 사용 중인 비밀번호를 입력해주세요"
-              placeholderTextColor="gray"
-              onChangeText={handlePW}
-              value={pw}
-            />
-            <Text style={styles.modalText}>새 비밀번호</Text>
-            <TextInput style={styles.input}
-              placeholder="새 비밀번호를 입력해주세요"
-              placeholderTextColor="gray"
-              onChangeText={handleNewPW}
-              secureTextEntry={true}
-              value={newPw}
-            ></TextInput>
-            <View style={styles.validation}>
-              <View style={styles.valiList}>
-                  <View style={styles.valiButton}>
-                      {passowrdVerify(newPw, 1)? 
-                      <Iconify icon="ri:checkbox-circle-fill" size={13} color={Colors.mainRed} />
-                      :<Iconify icon="ri:checkbox-circle-line" size={13} color={Colors.black} />
-                      }
-                      <Text style={styles.valiText}>총 8글자 이상</Text>
-                  </View>
-                  <View style={styles.valiButton}>
-                    {passowrdVerify(newPw, 3)? 
-                      <Iconify icon="ri:checkbox-circle-fill" size={13} color={Colors.mainRed} />
-                      :<Iconify icon="ri:checkbox-circle-line" size={13} color={Colors.black} />
-                      }
-                      <Text style={styles.valiText}>1개 이상의 대문자 포함</Text>
-                  </View>
-              </View>
-              <View style={styles.valiList}>
-                  <View style={styles.valiButton}>
-                      {passowrdVerify(newPw, 2)? 
-                      <Iconify icon="ri:checkbox-circle-fill" size={13} color={Colors.mainRed} />
-                      :<Iconify icon="ri:checkbox-circle-line" size={13} color={Colors.black} />
-                      }
-                      <Text style={styles.valiText}>1개 이상의 소문자 포함</Text>
-                  </View>
-                  <View style={styles.valiButton}>
-                      {passowrdVerify(newPw, 4)? 
-                      <Iconify icon="ri:checkbox-circle-fill" size={13} color={Colors.mainRed} />
-                      :<Iconify icon="ri:checkbox-circle-line" size={13} color={Colors.black} />
-                      }
-                      <Text style={styles.valiText}>숫자, 특수문자 포함</Text>
-                  </View>
-              </View>
-          </View>
-            <TextInput style={styles.input}
-              placeholder="새 비밀번호를 재입력해주세요"
-              placeholderTextColor="gray"
-              onChangeText={handleNewPWV}
-              value={newPwV}
-            />
+            <Text style={styles.modalTitle}>
+              <Text style={styles.modalTitleRed}>비밀번호 </Text>
+              변경
+            </Text>
+            <View style={styles.subContainer}>
+              <Text style={styles.modalText}>현재 비밀번호</Text>
+              <TextInput style={styles.input}
+                placeholder="현재 사용 중인 비밀번호를 입력해주세요."
+                placeholderTextColor={colors.gray}
+                onChangeText={handlePW}
+                value={pw}
+              />
+            </View>
+            <View style={styles.subContainer}>
+              <Text style={styles.modalText}>새 비밀번호</Text>
+              <TextInput style={styles.input}
+                placeholder="새 비밀번호를 입력해주세요."
+                placeholderTextColor={colors.gray}
+                onChangeText={handleNewPW}
+                secureTextEntry={true}
+                value={newPw}
+              ></TextInput>
+              <View style={styles.validation}>
+                <View>
+                    <View style={styles.valiButton}>
+                        {passowrdVerify(newPw, 1)?
+                        <Iconify icon="ri:checkbox-circle-fill" size={13} color={Colors.mainRed} />
+                        :<Iconify icon="ri:checkbox-circle-line" size={13} color={Colors.black} />
+                        }
+                        <Text style={styles.valiText}>총 8글자 이상</Text>
+                    </View>
+                    <View style={styles.valiButton}>
+                      {passowrdVerify(newPw, 3)?
+                        <Iconify icon="ri:checkbox-circle-fill" size={13} color={Colors.mainRed} />
+                        :<Iconify icon="ri:checkbox-circle-line" size={13} color={Colors.black} />
+                        }
+                        <Text style={styles.valiText}>1개 이상의 대문자 포함</Text>
+                    </View>
+                </View>
+                <View>
+                    <View style={styles.valiButton}>
+                        {passowrdVerify(newPw, 2)?
+                        <Iconify icon="ri:checkbox-circle-fill" size={13} color={Colors.mainRed} />
+                        :<Iconify icon="ri:checkbox-circle-line" size={13} color={Colors.black} />
+                        }
+                        <Text style={styles.valiText}>1개 이상의 소문자 포함</Text>
+                    </View>
+                    <View style={styles.valiButton}>
+                        {passowrdVerify(newPw, 4)?
+                        <Iconify icon="ri:checkbox-circle-fill" size={13} color={Colors.mainRed} />
+                        :<Iconify icon="ri:checkbox-circle-line" size={13} color={Colors.black} />
+                        }
+                        <Text style={styles.valiText}>숫자, 특수문자 포함</Text>
+                    </View>
+                </View>
+            </View>
+              <TextInput style={styles.input}
+                placeholder="새 비밀번호를 재입력해주세요."
+                placeholderTextColor={colors.gray}
+                onChangeText={handleNewPWV}
+                value={newPwV}
+              />
+            </View>
             <View style={styles.buttonList}>
                   <View style={{borderRadius: 5, backgroundColor: Colors.mainRed}}>
                     <TouchableOpacity>
-                      <Text style={styles.button}>변경</Text>
+                      <Text style={styles.button}>변경하기</Text>
                     </TouchableOpacity>
                   </View>
                   <View style={{borderRadius: 5, backgroundColor: Colors.black}}>
                     <TouchableOpacity>
-                      <Text style={styles.button} onPress={closeModal}>취소</Text>
+                      <Text style={styles.button} onPress={closeModal}>취소하기</Text>
                     </TouchableOpacity>
                   </View>
             </View>
@@ -236,23 +251,28 @@ const PhysicalPopup = ({ modalVisible, setModalVisible, setUserData}) => {
       <TouchableWithoutFeedback onPress={closeModal}>
         <View style={styles.overlay}>
           <View style={styles.modalView}>
-            <Text style={styles.modalTitle}>피지컬 수정</Text>
-            <Text style={styles.modalText}>피지컬 정보</Text>
-            <TextInput style={styles.input}
-              placeholder="키를 입력해주세요"
-              placeholderTextColor="gray"
-              onChangeText={handleChange}
-              value={newHeight}
-            ></TextInput>
+            <Text style={styles.modalTitle}>
+              <Text style={styles.modalTitleRed}>피지컬 </Text>
+              수정
+            </Text>
+            <View style={styles.subContainer}>
+              <Text style={styles.modalText}>피지컬 정보</Text>
+              <TextInput style={styles.input}
+                placeholder="키를 입력해주세요."
+                placeholderTextColor={colors.gray}
+                onChangeText={handleChange}
+                value={newHeight}
+              />
+            </View>
             <View style={styles.buttonList}>
                   <View style={{borderRadius: 5, backgroundColor: Colors.mainRed}}>
                     <TouchableOpacity>
-                      <Text style={styles.button} onPress={() =>{handleSubmit(newHeight)}}>변경</Text>
+                      <Text style={styles.button} onPress={() =>{handleSubmit(newHeight)}}>변경하기</Text>
                     </TouchableOpacity>
                   </View>
                   <View style={{borderRadius: 5, backgroundColor: Colors.black}}>
                     <TouchableOpacity>
-                      <Text style={styles.button} onPress={closeModal}>취소</Text>
+                      <Text style={styles.button} onPress={closeModal}>취소하기</Text>
                     </TouchableOpacity>
                   </View>
             </View>
@@ -281,14 +301,19 @@ const MecenearyPopup = ({ modalVisible, setModalVisible, mercen }) => {
       <TouchableWithoutFeedback onPress={closeModal}>
         <View style={styles.overlay}>
           <View style={styles.modalView}>
-            <Text style={styles.modalTextCenter}>용병 등록 확인</Text>
+            <Text style={[styles.modalTitle, styles.modalTextCenter]}>
+              <Text style={styles.modalTitleRed}>용병 </Text>
+              등록 확인
+            </Text>
             {mercen? 
             <Text style={styles.modalTextCenter}>
-              <Text style={{fontSize: 40, color: Colors.mainRed}}>O</Text><Text> / X</Text>
+              <Text style={{fontSize: 35, color: Colors.mainRed}}>O</Text>
+              <Text> / X</Text>
             </Text>
             :
             <Text style={styles.modalTextCenter}>
-              <Text >O / </Text><Text style={{fontSize: 40, color: Colors.mainRed}}>X</Text>
+              <Text >O / </Text>
+              <Text style={{fontSize: 35, color: Colors.mainRed}}>X</Text>
             </Text>
             }
           </View>
@@ -343,28 +368,34 @@ const PositonPopup = ({ modalVisible, setModalVisible, position, setMpos}) => {
       <TouchableWithoutFeedback onPress={closeModal}>
         <View style={styles.overlay}>
           <View style={styles.modalView}>
-            <Text style={styles.modalTitle}>주 포지션 변경</Text>
-            <Text style={styles.modalText}>현재 설정된 포지션</Text>
-            <View style={styles.currentText}>
-              <Text style={{fontWeight : 'bold', fontSize : 16,}}>{position}</Text>
+            <Text style={styles.modalTitle}>
+              <Text style={styles.modalTitleRed}>주 포지션 </Text>
+              변경
+            </Text>
+            <View style={styles.subContainer}>
+              <Text style={styles.modalText}>현재 설정된 포지션</Text>
+              <View style={styles.currentText}>
+                <Text style={{fontWeight : 'bold', fontSize : 16,}}>{position}</Text>
+              </View>
             </View>
-            <Text style={styles.modalText}>변경한 포지션</Text>
-            <TextInput style={styles.input}
-               placeholder="변경할 포지션을 입력해주세요"
-               placeholderTextColor="gray"
-               onChangeText={handleChange}
-               value={newPosition}
-            ></TextInput>
-
+            <View style={styles.subContainer}>
+              <Text style={styles.modalText}>변경할 포지션</Text>
+              <TextInput style={styles.input}
+                 placeholder="변경할 포지션을 입력해주세요."
+                 placeholderTextColor={colors.gray}
+                 onChangeText={handleChange}
+                 value={newPosition}
+              />
+            </View>
             <View style={styles.buttonList}>
                   <View style={{borderRadius: 5, backgroundColor: Colors.mainRed}}>
                     <TouchableOpacity>
-                      <Text style={styles.button} onPress={handleSumbit}>변경</Text>
+                      <Text style={styles.button} onPress={handleSumbit}>변경하기</Text>
                     </TouchableOpacity>
                   </View>
                   <View style={{borderRadius: 5, backgroundColor: Colors.black}}>
                     <TouchableOpacity>
-                      <Text style={styles.button} onPress={closeModal}>취소</Text>
+                      <Text style={styles.button} onPress={closeModal}>취소하기</Text>
                     </TouchableOpacity>
                   </View>
             </View>
@@ -382,105 +413,112 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
+
   modalView: {
-    width : 350,
+    width : 340,
     backgroundColor: Colors.white,
-    borderRadius: 10,
+    borderRadius: 8,
     padding: 20,
     alignItems: 'center',
-    shadowColor: Colors.black,
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 4,
-    elevation: 5,
   },
+
   modalTitle: {
     width: 280,
-    color: Colors.mainRed,
+    color: Colors.black,
     fontSize: 20,
     fontWeight: 'bold',
   },
+
+  modalTitleRed : {
+    color: Colors.mainRed,
+  },
+
+  subContainer : {
+    margin : 10,
+    justifyContent : 'center',
+    alignItems : 'center',
+  },
+
   modalText: {
     width: 280,
-    marginTop : 10,
-    marginBottom : 10,
+    margin : 10,
     color: Colors.black,
+    fontSize : 16,
     fontWeight: 'bold',
   },
+
+  // 용병 등록 유무 텍스트
   modalTextCenter: {
     width: 280,
-    marginTop : 10,
-    marginBottom : 10,
+    margin : 10,
     color: Colors.black,
     fontWeight: 'bold',
     textAlign: 'center',
     textAlignVertical: 'center',
   },
+
   currentText: {
     width: 280,
     borderRadius : 5,
-    padding : 15,
+    padding : 17,
     backgroundColor : 'white',
     color : Colors.black,
   },
+
   smallText: {
     width: 280,
     fontSize: 13,
-    marginTop : 5,
+    marginTop : 8,
     fontWeight : 'bold',
     color: Colors.warning,
   },
+
   input: {
     width: 280,
-    height : 45,
+    height : 50,
     borderRadius : 5,
     paddingLeft : 15,
     backgroundColor : 'white',
   },
+
   buttonList:{
     width: 280,
-    marginTop: 15,
+    marginTop: 10,
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'center',
-    gap: 20,
+    gap: 10,
   },
+
   button:{
-    paddingLeft: 30,
-    paddingRight: 30,
-    paddingTop: 10,
-    paddingBottom: 10,
+    paddingLeft: 40,
+    paddingRight: 40,
+    paddingTop: 13,
+    paddingBottom: 13,
     color: Colors.white,
     fontWeight: 'bold',
-    fontSize: 15,
+    fontSize: 16,
   },
+
   validation : {
-    width: 260,
-    height : 52,
-    margin : 5,
+    margin : 7,
     display : 'flex',
-    flexWrap : 'wrap',
-    justifyContent : 'space-between',
+    justifyContent : 'center',
     flexDirection : 'row',
-    borderColor: 'red',
-    borderwidth: 1,
   },
-  valiList : {
-      display : 'flex',
-  },
+
   valiButton : {
+    width : 140,
     height : 20,
     flexDirection : 'row',
     alignItems : 'center',
-    marginTop : 3,
-    left : 3,
+    marginTop : 5,
+    left : 7,
   },
+
   valiText : {
       color : Colors.black,
-      fontSize : 10,
+      fontSize : 11,
       marginLeft : 5,
   },
 });

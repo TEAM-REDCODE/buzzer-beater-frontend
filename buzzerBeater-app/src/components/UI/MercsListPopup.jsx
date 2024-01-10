@@ -1,16 +1,15 @@
 import React, {useContext, useEffect, useState} from 'react';
 import {
   StyleSheet,
-  Image,
   Modal,
   Text,
-  TextInput,
   TouchableOpacity,
   View
 } from 'react-native';
 import colors from '../../Common/Colors';
 import DateParse from '../../Common/DateParse';
 import { acceptMercsReq } from '../../APIs/mercs';
+import Colors from "../../Common/Colors";
 function MercsListPopup({ visible, setModalVisible, meetInfo}) {
   
   const closeModal = () => {
@@ -40,13 +39,13 @@ function MercsListPopup({ visible, setModalVisible, meetInfo}) {
             <View style={styles.modalView}>
                 <Text style={[styles.modalTitle, { marginBottom: 8 }]}>
                     <Text style={[styles.modalCreatorName, styles.modalTextRed]}>{meetInfo.createdByNick}</Text>
-                    님이 생성한 농구팟에{'\n'}참여하시겠습니까?
+                    님이 생성한{'\n'}농구팟에 참여하시겠습니까?
                 </Text>
                 <View style={styles.modalMiddle}>
-                    <Text style={[styles.modalMiddleText, { marginBottom: 10 }]}>{'✔ '}
-                        <Text style={styles.modalTextRed}>장소</Text>와 <Text style={styles.modalTextRed}>시간</Text>을 확인해주세요.
+                    <Text style={[styles.modalMiddleText, { marginBottom: 15 }]}>{'✔ '}
+                        <Text style={styles.modalTextRed}>장소, 시간, 인원</Text>을 확인해주세요.
                     </Text>
-                    <View>
+                    <View style={{marginBottom : 10,}}>
                         <Text style={styles.modalContent}>
                           <Text style={styles.modalLabel}>장소 : </Text>
                           {meetInfo.place}
@@ -55,17 +54,25 @@ function MercsListPopup({ visible, setModalVisible, meetInfo}) {
                             <Text style={styles.modalLabel}>시간 : </Text>
                             {DateParse(meetInfo.time)}
                         </Text>
+                        <Text style={styles.modalContent}>
+                            <Text style={styles.modalLabel}>인원 : </Text>
+                            {meetInfo.maxPerson}
+                        </Text>
                     </View>
-                    <View style={styles.modalButtonContainer}>
-                        <TouchableOpacity style={styles.modalYesButton} onPress={()=>{
-                          handleSubmit()
-                          closeModal()
-                          }}>
-                            <Text style={styles.modalButtonText}>YES</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity style={styles.modalNoButton} onPress={closeModal}>
-                            <Text style={styles.modalButtonText}>NO</Text>
-                        </TouchableOpacity>
+                    <View style={styles.buttonList}>
+                        <View style={{borderRadius: 5, backgroundColor: Colors.mainRed}}>
+                            <TouchableOpacity onPress={()=>{
+                                handleSubmit()
+                                closeModal()
+                            }}>
+                                <Text style={styles.button}>YES</Text>
+                            </TouchableOpacity>
+                        </View>
+                        <View style={{borderRadius: 5, backgroundColor: Colors.black}}>
+                            <TouchableOpacity onPress={closeModal}>
+                                <Text style={styles.button}>NO</Text>
+                            </TouchableOpacity>
+                        </View>
                     </View>
                 </View>
             </View>
@@ -75,98 +82,77 @@ function MercsListPopup({ visible, setModalVisible, meetInfo}) {
 }
 
 const styles = StyleSheet.create({
-  modalOverlay: {
-      flex: 1,
-      justifyContent: 'center',
-      alignItems: 'center',
-      backgroundColor: 'rgba(2, 2, 2, 0.5)',
-  },
+    modalOverlay: {
+        flex: 1,
+        backgroundColor: 'rgba(2, 2, 2, 0.5)',
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
 
-  modalView: {
-      margin: 20,
-      backgroundColor: "white",
-      borderRadius: 15,
-      padding : 30,
-      shadowColor: colors.black,
-      shadowOffset: {
-          width: 0,
-          height: 2
-      },
-      shadowOpacity: 0.25,
-      shadowRadius: 3.84,
-      elevation: 5
-  },
+    modalView: {
+        width : 340,
+        backgroundColor: Colors.white,
+        borderRadius: 8,
+        padding: 20,
+        alignItems: 'center',
+    },
 
-  modalTitle: {
-      width : 250,
-      fontSize: 15,
-      fontWeight: 'bold',
-      color: colors.black,
-      textAlign: 'center',
-  },
+    modalTitle: {
+        width: 280,
+        color: Colors.black,
+        fontSize: 20,
+        fontWeight: 'bold',
+        textAlign : 'center',
+    },
 
-  modalCreatorName: {
-      fontSize: 20,
-      fontWeight: 'bold',
-  },
+    modalCreatorName: {
+        fontSize: 25,
+        fontWeight: 'bold',
+    },
 
-  modalTextRed : {
-      color : colors.mainRed,
-      fontWeight: 'bold',
-  },
+    modalTextRed : {
+        color : colors.mainRed,
+        fontWeight: 'bold',
+    },
 
-  modalMiddle : {
-      width : 250,
-      alignItems : 'center',
-  },
+    modalMiddle : {
+        width : 260,
+        alignItems : 'center',
+    },
 
-  modalMiddleText: {
-      fontSize: 14,
-      color: colors.black,
-  },
+    modalMiddleText: {
+        fontSize: 17,
+        color: colors.black,
+    },
 
-  modalLabel: {
-      fontSize: 13,
-      color: colors.black,
-      fontWeight:'bold',
-  },
+    modalLabel: {
+        fontSize: 16,
+        color: colors.black,
+        fontWeight:'bold',
+    },
 
-  modalContent: {
-      fontSize: 12,
-      marginBottom: 5,
-  },
+    modalContent: {
+        fontSize: 15,
+        marginBottom: 5,
+    },
 
-  modalButtonContainer: {
-      width: 180,
-      flexDirection: 'row',
-      marginTop: 10,
-      gap : 20,
-  },
+    buttonList:{
+        width: 280,
+        marginTop: 10,
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'center',
+        gap: 10,
+    },
 
-  modalYesButton: {
-      backgroundColor: colors.mainRed,
-      paddingLeft: 30,
-      paddingRight: 30,
-      paddingTop: 10,
-      paddingBottom: 10,
-      borderRadius: 5,
-  },
-
-  modalNoButton: {
-      backgroundColor: colors.black,
-      paddingLeft: 30,
-      paddingRight: 30,
-      paddingTop: 10,
-      paddingBottom: 10,
-      borderRadius: 5,
-  },
-
-  modalButtonText: {
-      color : colors.white,
-      fontSize : 12,
-      fontWeight : 'bold',
-      textAlign : 'center',
-  },
-
+    button:{
+        paddingLeft: 40,
+        paddingRight: 40,
+        paddingTop: 10,
+        paddingBottom: 10,
+        color: Colors.white,
+        fontWeight: 'bold',
+        fontSize: 15,
+    },
 });
 export default MercsListPopup;

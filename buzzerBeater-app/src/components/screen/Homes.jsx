@@ -2,17 +2,15 @@ import React, { useState, useEffect, useContext } from 'react';
 import { View, Text, ScrollView, StyleSheet, TouchableOpacity, Image, SafeAreaView, Modal, TextInput } from 'react-native';
 import colors from "../../Common/Colors";
 import { Iconify } from 'react-native-iconify';
-import { Picker } from '@react-native-picker/picker';
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import DateParse from '../../Common/DateParse';
 import { getMeetinfo, createMeet, RegMeet, inviteMercs } from '../../APIs/meetAPI';
 import { UserContext } from '../../Common/UserContext';
 import Colors from "../../Common/Colors";
-import { useIsFocused } from '@react-navigation/native';
 import { createMercs, getPosMercs } from '../../APIs/mercs';
 import { getBelong } from '../../APIs/userAPI';
-let court = require('../../../assets/court.png');
 
+let court = require('../../../assets/court.png');
 const Homes = () => {
 
     const { user, setUserData } = useContext(UserContext);
@@ -41,7 +39,7 @@ const Homes = () => {
         avTime: '',
     })
     const [meetList, setMeetList] = useState([])
-    const [modalData, setModaData] = useState({ createdByNick: '', place: '', time: '' });
+    const [modalData, setModaData] = useState({ createdByNick: '', place: '', time: '', maxPerson: '1' });
 
     // 자기가 속해있는 파티 리스트
     const [myMeet, setMyMeet] = useState([])
@@ -208,7 +206,7 @@ const Homes = () => {
 
     const handlePositionPress = async (position) => {
         // 선택된 포지션에 해당 용병 Get요청 보내기
-        res = await getPosMercs(position)
+        const res = await getPosMercs(position)
         console.log('mercRes : ',res)
         setMercenaries(res.mercs);
         openMercenaryListModal();
@@ -240,19 +238,21 @@ const Homes = () => {
                                 <TouchableOpacity key={item._id} onPress={() => { handleCardPress(idx) }}>
                                     <View style={styles.card}>
                                         <View style={styles.cardContentContainer}>
-                                            <Iconify
-                                                icon="solar:basketball-bold-duotone"
-                                                size={80}
-                                                color={colors.mainRed}
-                                            />
                                             <View style={styles.cardTextContainer}>
-                                                <View style={styles.cardTitle}>
+                                                <View style={styles.cardTitleContainer}>
+                                                    <Iconify
+                                                        icon="solar:basketball-bold-duotone"
+                                                        size={40}
+                                                        color={colors.mainRed}
+                                                        style={{marginRight : 5}}
+                                                    />
                                                     <Text style={styles.cardTitleText}>{item.title}</Text>
                                                 </View>
+                                                <View style={styles.titleUnderbar}/>
                                                 <View style={styles.cardContent}>
                                                     <Text style={styles.cardContentText}>
                                                         <Text style={styles.cardContentLabel}>생성자 : </Text>
-                                                        {item.createdByNick}
+                                                        {item.nickname}
                                                     </Text>
                                                     <Text style={styles.cardContentText}>
                                                         <Text style={styles.cardContentLabel}>장소 : </Text>
@@ -266,15 +266,14 @@ const Homes = () => {
                                             </View>
                                         </View>
                                         <View style={styles.maxPerson}>
-                                            <Text style={styles.maxNum}>
-                                                {item.count} /
-                                                <Text style={styles.cardContentLabel}> {item.maxPerson}</Text>
-                                            </Text>
                                             <Iconify
                                                 icon="ion:person"
-                                                size={20}
+                                                size={25}
                                                 color={colors.mainRed}
                                             />
+                                            <Text style={styles.maxNum}>
+                                                {item.count} / {item.maxPerson}
+                                            </Text>
                                         </View>
                                     </View>
                                 </TouchableOpacity>
@@ -282,14 +281,15 @@ const Homes = () => {
                             : (
                                 <TouchableOpacity style={styles.listBox}>
                                     <View style={styles.card}>
-                                        <View style={styles.cardContentContainer}>
+                                        <View>
                                             <Iconify
                                                 icon="solar:basketball-bold-duotone"
                                                 size={80}
                                                 color={colors.mainRed}
+                                                style={styles.noDataIconStyle}
                                             />
                                             <View style={styles.cardTextContainer}>
-                                                <Text style={styles.cardTitleText}>데이터가 없습니다.</Text>
+                                                <Text style={styles.noDataText}>데이터가 없습니다.</Text>
                                             </View>
                                         </View>
                                     </View>
@@ -306,34 +306,34 @@ const Homes = () => {
                         </Text>
                     </View>
                     <View style={styles.courtContainer}>
-                        <Image source={court} style={styles.courtImage} />
+                        <Image source={court} />
                         <View style={[styles.positionButtonContainer, styles.pgButton]}>
                             <TouchableOpacity onPress={() => handlePositionPress('pg')}>
-                                <Iconify icon='ic:round-person-pin' size={40} />
+                                <Iconify icon='octicon:person-fill-24' size={40} />
                             </TouchableOpacity>
                             <Text style={styles.positionButtonText}>PG</Text>
                         </View>
                         <View style={[styles.positionButtonContainer, styles.sgButton]}>
                             <TouchableOpacity onPress={() => handlePositionPress('sg')}>
-                                <Iconify icon='ic:round-person-pin' size={40} />
+                                <Iconify icon='octicon:person-fill-24' size={40} />
                             </TouchableOpacity>
                             <Text style={styles.positionButtonText}>SG</Text>
                         </View>
                         <View style={[styles.positionButtonContainer, styles.sfButton]}>
                             <TouchableOpacity onPress={() => handlePositionPress('sf')}>
-                                <Iconify icon='ic:round-person-pin' size={40} />
+                                <Iconify icon='octicon:person-fill-24' size={40} />
                             </TouchableOpacity>
                             <Text style={styles.positionButtonText}>SF</Text>
                         </View>
                         <View style={[styles.positionButtonContainer, styles.pfButton]}>
                             <TouchableOpacity onPress={() => handlePositionPress('pf')}>
-                                <Iconify icon='ic:round-person-pin' size={40} />
+                                <Iconify icon='octicon:person-fill-24' size={40} />
                             </TouchableOpacity>
                             <Text style={styles.positionButtonText}>PF</Text>
                         </View>
                         <View style={[styles.positionButtonContainer, styles.cButton]}>
                             <TouchableOpacity onPress={() => handlePositionPress('c')}>
-                                <Iconify icon='ic:round-person-pin' size={40} />
+                                <Iconify icon='octicon:person-fill-24' size={40} />
                             </TouchableOpacity>
                             <Text style={styles.positionButtonText}>C</Text>
                         </View>
@@ -367,10 +367,10 @@ const Homes = () => {
                                 님이 생성한{'\n'}농구팟에 참여하시겠습니까?
                             </Text>
                             <View style={styles.modalMiddle}>
-                                <Text style={[styles.modalMiddleText, { marginBottom: 10 }]}>{'✔ '}
-                                    <Text style={styles.modalTextRed}>장소</Text>와 <Text style={styles.modalTextRed}>시간</Text>을 확인해주세요.
+                                <Text style={[styles.modalMiddleText, { marginBottom: 15 }]}>{'✔ '}
+                                    <Text style={styles.modalTextRed}>장소, 시간, 인원</Text>을 확인해주세요.
                                 </Text>
-                                <View>
+                                <View style={{marginBottom : 10,}}>
                                     <Text style={styles.modalContent}>
                                         <Text style={styles.modalLabel}>장소 : </Text>
                                         {modalData.place}
@@ -378,6 +378,10 @@ const Homes = () => {
                                     <Text style={styles.modalContent}>
                                         <Text style={styles.modalLabel}>시간 : </Text>
                                         {DateParse(modalData.time)}
+                                    </Text>
+                                    <Text style={styles.modalContent}>
+                                        <Text style={styles.modalLabel}>인원 : </Text>
+                                        {modalData.maxPerson}
                                     </Text>
                                 </View>
                             </View>
@@ -412,28 +416,34 @@ const Homes = () => {
                 >
                     <View style={styles.modalOverlay}>
                         <View style={styles.modalView}>
-                            <Text style={[styles.modalCreateTitle, { marginBottom: 8 }]}>농구팟 생성하기</Text>
+                            <Text style={[styles.modalCreateTitle, { marginBottom: 8 }]}>
+                                <Text style={styles.modalTextRed}>농구팟 생성</Text>하기</Text>
                             <Text style={[styles.modalCreateMiddle, { marginBottom: 10 }]}>아래의 정보를 작성해주세요.</Text>
                             <TextInput
                                 style={styles.input}
                                 placeholder="제목을 입력해주세요."
+                                placeholderTextColor={colors.gray}
                                 onChangeText={(text) => setNewTeam({ ...newTeam, title: text })}
                                 value={newTeam.title}
                             />
                             <TextInput
                                 style={styles.input}
                                 placeholder="장소를 입력해주세요."
+                                placeholderTextColor={colors.gray}
                                 onChangeText={(text) => setNewTeam({ ...newTeam, place: text })}
                                 value={newTeam.location}
                             />
 
                             <TouchableOpacity onPress={()=>{setDatePickerOn(true)}} style={styles.input}>
                                 {newTeam.time === '' ? (
-                                    <Text style={styles.selectText}>
-                                    <Text style={styles.selectTextRed}>시간</Text>을 선택해주세요.</Text>
+                                    <View style={styles.selectContainer}>
+                                        <Text style={styles.selectText}>
+                                            시간을 선택해주세요.
+                                        </Text>
+                                        <Iconify icon='codicon:triangle-down' size={15}/>
+                                    </View>
                                     ):(
                                     <Text style={styles.determineText}>{DateParse(newTeam.time)}</Text>
-
                                 )}
                             </TouchableOpacity>
                             
@@ -451,8 +461,12 @@ const Homes = () => {
 
                             <TouchableOpacity onPress={showPicker} style={styles.input}>
                                 {newTeam.maxPerson === '1' ? (
-                                    <Text style={styles.selectText}>
-                                        <Text style={styles.selectTextRed}>인원</Text>을 선택해주세요.</Text>
+                                    <View style={styles.selectContainer}>
+                                        <Text style={styles.selectText}>
+                                            인원을 선택해주세요.
+                                        </Text>
+                                        <Iconify icon='codicon:triangle-down' size={15}/>
+                                    </View>
                                 ) : (
                                     <Text style={styles.determineText}>{newTeam.maxPerson / 2} vs {newTeam.maxPerson / 2}</Text>
                                 )}
@@ -477,6 +491,7 @@ const Homes = () => {
                                                     }}
                                                 >
                                                     <Text style={styles.pickerItemText}>{`${value} vs ${value}`}</Text>
+                                                    <View style={styles.pickerUnderbar}/>
                                                 </TouchableOpacity>
                                             ))}
                                         </ScrollView>
@@ -522,13 +537,18 @@ const Homes = () => {
                 >
                     <View style={styles.modalOverlay}>
                         <View style={styles.modalView}>
-                            <Text style={[styles.modalTitle, { marginBottom: 8 }]}>용병 등록하기</Text>
-                            <Text style={[styles.modalMiddle, { marginBottom: 10 }]}>아래의 정보를 작성해주세요.</Text>
+                            <Text style={[styles.modalCreateTitle, { marginBottom: 8 }]}>
+                                <Text style={styles.modalTextRed}>용병 등록</Text>하기</Text>
+                            <Text style={[styles.modalCreateMiddle, { marginBottom: 10 }]}>아래의 정보를 작성해주세요.</Text>
                             
                             <TouchableOpacity onPress={()=>{setPositionPicker(true)}} style={styles.input}>
                                 {newMercs.position === '' ? (
-                                    <Text style={styles.selectText}>
-                                    <Text style={styles.selectTextRed}>포지션</Text>을 선택해주세요.</Text>
+                                        <View style={styles.selectContainer}>
+                                            <Text style={styles.selectText}>
+                                                포지션을 선택해주세요.
+                                            </Text>
+                                            <Iconify icon='codicon:triangle-down' size={15}/>
+                                        </View>
                                     ):(
                                     <Text style={styles.determineText}>{newMercs.position}</Text>
 
@@ -537,17 +557,21 @@ const Homes = () => {
                             
                             <TouchableOpacity onPress={()=>{setTimePickerOn(true)}} style={styles.input}>
                                 {newMercs.avTime === '' ? (
-                                    <Text style={styles.selectText}>
-                                    <Text style={styles.selectTextRed}>시간</Text>을 선택해주세요.</Text>
+                                    <View style={styles.selectContainer}>
+                                        <Text style={styles.selectText}>
+                                            시간을 선택해주세요.
+                                        </Text>
+                                        <Iconify icon='codicon:triangle-down' size={15}/>
+                                    </View>
                                     ):(
                                     <Text style={styles.determineText}>{DateParse(newMercs.avTime)}</Text>
 
                                 )}
                             </TouchableOpacity>
 
-                            <TouchableOpacity onPress={showPicker} style={styles.selectTouchable}>
-                                <Text style={styles.selectText}>
-                                    공 소유 여부: {newTeam.hasBall !== undefined ? (newTeam.hasBall ? 'O' : 'X') : ''}
+                            <TouchableOpacity onPress={showPicker} style={styles.input}>
+                                <Text style={styles.determineText}>
+                                    공 소유 여부 : {newTeam.hasBall !== undefined ? (newTeam.hasBall ? 'O' : 'X') : ''}
                                 </Text>
                             </TouchableOpacity>
                             {/* 포지션 Picker */}
@@ -570,6 +594,7 @@ const Homes = () => {
                                                     }}
                                                 >
                                                     <Text style={styles.pickerItemText}>{value}</Text>
+                                                    <View style={styles.pickerUnderbar}/>
                                                 </TouchableOpacity>
                                             ))}
                                         </ScrollView>
@@ -603,6 +628,7 @@ const Homes = () => {
                                             }}>
                                             <Text style={styles.possessionOptionText}>O</Text>
                                         </TouchableOpacity>
+                                        <View style={[styles.pickerUnderbar, {marginBottom : 10,}]}/>
                                         <TouchableOpacity
                                             style={styles.possessionOption}
                                             onPress={() => {
@@ -644,6 +670,7 @@ const Homes = () => {
                         </View>
                     </View>
                 </Modal>
+
                 {/* 랜덤 용병 선택 모달 */}
                 <Modal
                     animationType="slide"
@@ -653,9 +680,19 @@ const Homes = () => {
                 >
                     <View style={styles.modalOverlay}>
                         <View style={styles.modalView}>
-                            <Text style={styles.modalTitle}>랜덤 용병 선택하기</Text>
+                            <Text style={[styles.modalTitle, { marginBottom: 20,  }]}>
+                                <Text style={styles.modalTextRed}>랜덤 용병 </Text>선택하기
+                            </Text>
                             {mercenaries.length === 0 ? (
-                                <Text>해당 용병이 없습니다.</Text>
+                                    <View style={styles.modalMiddle}>
+                                        <Iconify
+                                            icon="ion:person"
+                                            size={45}
+                                            color={colors.mainRed}
+                                            style={{margin : 15,}}
+                                        />
+                                        <Text style={styles.noDataText}>해당 용병이 없습니다.</Text>
+                                    </View>
                                 ) : (
                                 <>
                                     {mercenaries.map((mercenary, index) => (
@@ -665,22 +702,32 @@ const Homes = () => {
                                         <View>
                                             <Iconify
                                                 icon="solar:basketball-bold-duotone"
-                                                size={80}
+                                                size={60}
                                                 color={colors.mainRed}
                                             />
                                         </View>
                                         {/* 용병 정보 영역 */}
-                                        <View>
+                                        <View style={styles.mercContainer}>
                                             <Text style={styles.mercenaryName}>{mercenary["User.nickname"]}</Text>
-                                            <Text style={styles.mercenaryDetail}>키: {mercenary["User.height"]}</Text>
-                                            <Text style={styles.mercenaryDetail}>포지션: {mercenary.position}</Text>
-                                            <Text style={styles.mercenaryDetail}>가능한 시간: {DateParse(mercenary.avTime)}</Text>
+                                            <Text style={styles.mercenaryDetail}>
+                                                <Text style={{fontWeight : 'bold'}}>키 : </Text>
+                                                {mercenary["User.height"]}
+                                            </Text>
+                                            <Text style={styles.mercenaryDetail}>
+                                                <Text style={{fontWeight : 'bold'}}>포지션 : </Text>
+                                                {mercenary.position}
+                                            </Text>
+                                            <Text style={styles.mercenaryDetail}>
+                                                <Text style={{fontWeight : 'bold'}}>가능한 시간 : </Text>
+                                                {DateParse(mercenary.avTime)}
+                                            </Text>
                                         </View>
                                         {/* 선택 영역 */}
                                         <View>
                                             <Iconify
-                                                icon="lets-icons:check-fill"
-                                                color="#94cc5c"
+                                                icon="ri:checkbox-circle-line"
+                                                size={25}
+                                                color={colors.mainRed}
                                             />
                                         </View>
                                     </TouchableOpacity>
@@ -688,13 +735,13 @@ const Homes = () => {
                                     ))}
                                 </>
                                 )}
-
-                            <TouchableOpacity
-                                style={styles.cancelButton}
-                                onPress={closeMercenaryListModal}
-                            >
-                                <Text style={styles.buttonText}>닫기</Text>
-                            </TouchableOpacity>
+                            <View style={styles.buttonList}>
+                                <View style={{borderRadius: 5, backgroundColor: Colors.black}}>
+                                    <TouchableOpacity onPress={closeMercenaryListModal}>
+                                        <Text style={styles.button}>닫기</Text>
+                                    </TouchableOpacity>
+                                </View>
+                            </View>
                         </View>
                     </View>
                 </Modal>
@@ -708,22 +755,26 @@ const Homes = () => {
                 >
                 <View style={styles.modalOverlay}>
                     <View style={styles.modalView}>
-                        <Text style={styles.modalTitle}>초대할 농구팟 선택하기</Text>
+                        <Text style={[styles.modalTitle, { marginBottom: 20,  }]}>
+                            초대할 <Text style={styles.modalTextRed}>농구팟 </Text>선택하기
+                        </Text>
                         <ScrollView >
                         {myMeet.length > 0 ? (
                             myMeet.map((item) => (
                                 <TouchableOpacity key={item._id} onPress={() => { (inviteSubmit(item._id, targetMercs)) }}>
-                                    <View style={styles.card}>
+                                    <View style={styles.mercInviteCard}>
                                         <View style={styles.cardContentContainer}>
-                                            <Iconify
-                                                icon="solar:basketball-bold-duotone"
-                                                size={80}
-                                                color={colors.mainRed}
-                                            />
                                             <View style={styles.cardTextContainer}>
-                                                <View style={styles.cardTitle}>
+                                                <View style={styles.cardTitleContainer}>
+                                                    <Iconify
+                                                        icon="solar:basketball-bold-duotone"
+                                                        size={40}
+                                                        color={colors.mainRed}
+                                                        style={{marginRight : 8}}
+                                                    />
                                                     <Text style={styles.cardTitleText}>{item.title}</Text>
                                                 </View>
+                                                <View style={styles.titleUnderbar}/>
                                                 <View style={styles.cardContent}>
                                                     <Text style={styles.cardContentText}>
                                                         <Text style={styles.cardContentLabel}>생성자 : </Text>
@@ -737,19 +788,12 @@ const Homes = () => {
                                                         <Text style={styles.cardContentLabel}>시간 : </Text>
                                                         {DateParse(item.time)}
                                                     </Text>
+                                                    <Text style={styles.cardContentText}>
+                                                        <Text style={styles.cardContentLabel}>총 인원 : </Text>
+                                                        {item.maxPerson}
+                                                    </Text>
                                                 </View>
                                             </View>
-                                        </View>
-                                        <View style={styles.maxPerson}>
-                                            <Text style={styles.maxNum}>
-                                                {item.count} /
-                                                <Text style={styles.cardContentLabel}> {item.maxPerson}</Text>
-                                            </Text>
-                                            <Iconify
-                                                icon="ion:person"
-                                                size={20}
-                                                color={colors.mainRed}
-                                            />
                                         </View>
                                     </View>
                                 </TouchableOpacity>
@@ -764,24 +808,22 @@ const Homes = () => {
                                                 color={colors.mainRed}
                                             />
                                             <View style={styles.cardTextContainer}>
-                                                <Text style={styles.cardTitleText}>데이터가 없습니다.</Text>
+                                                <Text style={styles.noDataText}>데이터가 없습니다.</Text>
                                             </View>
                                         </View>
                                     </View>
                                 </TouchableOpacity>
                             )}
                         </ScrollView>
-                        <TouchableOpacity
-                                style={styles.cancelButton}
-                                onPress={()=>{setInviteMeetVisible(false)}}
-                            >
-                                <Text style={styles.buttonText}>닫기</Text>
-                        </TouchableOpacity>
+                        <View style={styles.buttonList}>
+                            <View style={{borderRadius: 5, backgroundColor: Colors.black}}>
+                                <TouchableOpacity onPress={closeMercenaryListModal}>
+                                    <Text style={styles.button}>닫기</Text>
+                                </TouchableOpacity>
+                            </View>
+                        </View>
                     </View>
                 </View>
-
-                
-                
                 </Modal>
             </ScrollView>
         </SafeAreaView>
@@ -790,12 +832,11 @@ const Homes = () => {
 
 const styles = StyleSheet.create({
     screenContainer: {
-        flex: 1,
         backgroundColor: colors.black,
     },
     sectionContainer: {
-        marginLeft: 28,
-        marginTop: 20,
+        marginLeft: 20,
+        marginTop: 15,
     },
     listHeader: {
         flexDirection: 'row',
@@ -805,22 +846,25 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
     },
     headerTitle: {
-        fontSize: 20,
+        fontSize: 23,
         fontWeight: 'bold',
         color: colors.white,
     },
     createButton: {
         backgroundColor: colors.mainRed,
-        padding: 5,
-        marginLeft: 15,
+        marginLeft: 13,
         borderRadius: 5,
+        padding : 6,
     },
     createButtonText: {
         color: colors.white,
         fontWeight: 'bold',
-        fontSize: 12,
+        fontSize: 13,
+        marginLeft : 5,
+        marginRight : 5,
     },
     description: {
+        fontSize : 16,
         color: colors.white,
         paddingTop: 10,
         paddingBottom: 10,
@@ -828,40 +872,46 @@ const styles = StyleSheet.create({
     card: {
         backgroundColor: colors.white,
         borderRadius: 5,
-        width: 250,
-        height: 150,
-        marginRight: 15,
-        padding: 10,
-        paddingBottom: 20,
+        width: 230,
+        height: 180,
+        marginRight: 10,
+        padding: 8,
         flexDirection: 'row',
         alignItems: 'center',
     },
     cardContentContainer: {
-        flexDirection: 'row',
-        alignItems: 'center',
+        flexDirection : 'row',
+        justifyContent : 'center',
+        marginBottom : 20,
     },
     cardTextContainer: {
-        marginLeft: 12,
+        width : 195,
+        marginLeft: 10,
     },
-    cardTitle: {
-        borderBottomWidth: 1.5,
-        borderBottomColor: colors.mainRed,
-        borderStyle: 'solid',
+    cardTitleContainer : {
+      width : 160,
+      marginBottom : 5,
+      flexDirection : 'row',
+      alignItems : 'center',
     },
     cardTitleText: {
         fontSize: 18,
         fontWeight: 'bold',
         color: colors.black,
-        marginBottom: 3,
+        marginBottom: 5,
+    },
+    titleUnderbar : {
+        borderStyle : 'solid',
+        borderTopWidth : 1.5,
+        borderTopColor : colors.mainRed,
     },
     cardContent: {
-        marginTop: 7,
+        marginTop: 5,
     },
     cardContentText: {
         fontSize: 14,
         color: colors.black,
-        alignSelf: 'flex-start',
-        marginBottom: 3,
+        marginBottom : 3,
     },
     cardContentLabel : {
         fontSize : 15,
@@ -869,22 +919,18 @@ const styles = StyleSheet.create({
     },
     maxPerson: {
         position: 'absolute',
-        right: 10,
+        left : 15,
         bottom: 10,
         flexDirection: 'row',
         alignItems: 'center',
     },
     maxNum: {
-        fontSize: 15,
+        fontSize: 14,
         color: colors.black,
-        marginRight: 5,
+        marginLeft: 5,
     },
     courtContainer: {
-        width: 336,
-    },
-    courtImage: {
-        width: '95%',
-        resizeMode: 'contain',
+        width: 350,
     },
     positionButtonContainer: {
         position: 'absolute',
@@ -892,39 +938,41 @@ const styles = StyleSheet.create({
     },
     positionButtonText: {
         color: colors.black,
+        fontSize : 16,
         fontWeight: 'bold',
     },
     pgButton: {
-        top: '18%',
-        left: '41%',
+        top: 50,
+        left: 155,
     },
     sgButton: {
-        top: '33%',
-        left: '13%',
+        top: 115,
+        left: 40,
     },
     sfButton: {
-        top: '33%',
-        right: '19%',
+        top: 115,
+        right: 40,
     },
     pfButton: {
-        bottom: '25%',
-        left: '23%',
+        bottom: 80,
+        left: 80,
     },
     cButton: {
-        bottom: '25%',
-        right: '28%',
+        bottom: 80,
+        right: 80,
     },
     registerButton: {
-        backgroundColor: colors.white,
-        width: '40%',
-        borderRadius: 20,
-        padding: 10,
+        width : '95%',
+        borderRadius : 5,
+        padding : 10,
+        backgroundColor : Colors.white,
+        marginBottom : 20,
     },
     registerButtonText: {
-        color: colors.black,
-        fontSize: 12,
-        fontWeight: 'bold',
-        textAlign: 'center',
+        color : Colors.black,
+        fontWeight : 'bold',
+        fontSize : 15,
+        textAlign : 'center',
     },
 
     // 모달 스타일
@@ -935,27 +983,18 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     modalView: {
-        width : 350,
+        width : 340,
         backgroundColor: Colors.white,
-        borderRadius: 20,
-        padding: 30,
+        borderRadius: 8,
+        padding: 20,
         alignItems: 'center',
-        shadowColor: Colors.black,
-        shadowOffset: {
-            width: 0,
-            height: 2,
-        },
-        shadowOpacity: 0.25,
-        shadowRadius: 4,
-        elevation: 5,
-        margin: 20,
     },
     modalTitle: {
-        width : 280,
+        width: 280,
+        color: Colors.black,
         fontSize: 20,
         fontWeight: 'bold',
-        color: colors.black,
-        textAlign: 'center',
+        textAlign : 'center',
     },
     modalCreatorName: {
         fontSize: 25,
@@ -966,43 +1005,42 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
     },
     modalMiddle : {
-        width : 230,
+        width : 260,
         alignItems : 'center',
     },
     modalMiddleText: {
-        fontSize: 18,
+        fontSize: 17,
         color: colors.black,
     },
     modalLabel: {
-        fontSize: 17,
+        fontSize: 16,
         color: colors.black,
         fontWeight:'bold',
     },
     modalContent: {
-        fontSize: 16,
+        fontSize: 15,
         marginBottom: 5,
     },
     buttonList:{
         width: 280,
-        marginTop: 15,
+        marginTop: 10,
         display: 'flex',
         flexDirection: 'row',
         justifyContent: 'center',
-        gap: 20,
+        gap: 10,
     },
     button:{
-        paddingLeft: 30,
-        paddingRight: 30,
+        paddingLeft: 40,
+        paddingRight: 40,
         paddingTop: 10,
         paddingBottom: 10,
         color: Colors.white,
         fontWeight: 'bold',
         fontSize: 15,
     },
-
     modalCreateTitle: {
         width: 280,
-        color: Colors.mainRed,
+        color: Colors.black,
         fontSize: 20,
         fontWeight: 'bold',
     },
@@ -1011,7 +1049,7 @@ const styles = StyleSheet.create({
         marginBottom : 10,
         color: Colors.black,
         fontWeight: 'bold',
-        fontSize : 15,
+        fontSize : 16,
     },
     input: {
         width: 280,
@@ -1020,12 +1058,12 @@ const styles = StyleSheet.create({
         backgroundColor : 'white',
         marginBottom : 8,
     },
-    selectText: {
-        color: '#CCCCCC',
-        fontSize : 14,
+    selectContainer : {
+      flexDirection : 'row',
+      justifyContent : 'space-between',
     },
-    selectTextRed : {
-        color : colors.warning,
+    selectText: {
+        color: Colors.gray,
     },
     determineText: {
         fontWeight: 'bold',
@@ -1033,77 +1071,83 @@ const styles = StyleSheet.create({
         marginLeft: 3,
     },
     pickerContainer: {
-        backgroundColor: 'white',
+        backgroundColor: Colors.white,
         borderRadius: 5,
         padding: 20,
-        maxHeight: 250,
-        width: '60%',
+        maxHeight: 300,
+        width: 200,
     },
     pickerItem: {
-        paddingVertical: 10,
-        paddingHorizontal: 15,
-        borderBottomWidth: 1,
-        borderBottomColor: '#ccc',
+        marginBottom : 10,
+    },
+    pickerUnderbar : {
+      marginTop : 10,
+      borderStyle : 'solid',
+      borderWidth : 0.5,
+      borderColor : Colors.gray
     },
     pickerItemText: {
         textAlign: 'center',
-        fontSize: 18,
+        fontSize: 20,
     },
     possessionPickerContainer: {
-        backgroundColor: 'white',
+        backgroundColor: Colors.white,
         borderRadius: 5,
         padding: 20,
-        width: '50%',
+        maxHeight: 300,
+        width: 150,
     },
     possessionOption: {
         padding: 10,
         justifyContent: 'center',
         alignItems: 'center',
-        borderBottomWidth: 1,
-        borderBottomColor: '#ccc',
     },
     possessionOptionText: {
         fontSize: 18,
+        fontWeight : 'bold',
     },
-
     noDataIconStyle: {
-        marginTop: 50,
-        marginLeft: 45,
-        marginBottom: 20,
+        marginLeft : 65,
+        marginRight : 65,
+        marginTop : 5,
+        marginBottom : 10,
         color: colors.mainRed,
     },
-
     noDataText: {
         textAlign: 'center',
-        fontSize: 13,
+        fontSize: 16,
         fontWeight: 'bold',
-    },
-    mercenariesListContainer: {
-        width: '100%',
-        padding: 10,
     },
     mercenaryCard: {
         backgroundColor: 'white',
-        borderRadius: 8,
-        padding: 16,
+        borderRadius: 5,
+        padding: 20,
         marginBottom: 10,
         flexDirection: 'row',
         alignItems: 'center',
     },
-    mercenaryImage: {
-        width: 50,
-        height: 50,
-        borderRadius: 25,
-        marginRight: 16,
+    mercContainer : {
+      marginLeft : 10,
     },
     mercenaryName: {
-        fontSize: 18,
+        fontSize: 20,
         fontWeight: 'bold',
-        color: 'black',
+        color: Colors.mainRed,
+        marginBottom : 5,
     },
     mercenaryDetail: {
-        fontSize: 14,
-        color: 'grey',
+        fontSize: 15,
+        color: Colors.black,
+        marginBottom : 3,
+    },
+    mercInviteCard : {
+        backgroundColor: 'white',
+        borderRadius: 5,
+        paddingLeft: 30,
+        paddingRight: 30,
+        paddingTop: 15,
+        marginBottom: 10,
+        flexDirection: 'row',
     },
 });
 
