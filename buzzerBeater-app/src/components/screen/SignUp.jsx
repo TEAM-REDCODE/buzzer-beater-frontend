@@ -8,6 +8,7 @@ import {
     TouchableOpacity,
     View,
     Image,
+    Modal,
 } from 'react-native';
 import colors from "../../Common/Colors";
 import { Iconify } from 'react-native-iconify';
@@ -25,10 +26,12 @@ const SignUp = ({navigation}) => {
     const [password, onChangePassword] = React.useState('');
     const [password_Check, onChangePW_Check] = React.useState('');
     const [height, onChangeHeight] = React.useState('');
-    const [mainPosition, onChangePosition] = React.useState('');
-
+    const [mainPosition, SetMainPosition] = React.useState('');
+    
     // 로딩화면
     const [loading, setLoading] = React.useState(true);
+    // 포지션 셀렉터
+    const [positionPicker, setPositionPicker] = React.useState(false)
 
     const handleSignUp = async (nickname, email, password, height, mainPosition) => {
         height = parseFloat(height);
@@ -150,17 +153,50 @@ const SignUp = ({navigation}) => {
                             />
                         </View>
                         <View style={styles.subContainer}>
+                            
                             <Text style={styles.subtitle}>
                                 주 포지션 입력 <Text style={styles.star}>*</Text>
                             </Text>
-                            <TextInput
-                                style={styles.input}
-                                placeholderTextColor={colors.gray}
-                                onChangeText={onChangePosition}
-                                placeholder="주 포지션을 입력하세요."
-                                keyboardType="default"
-                            />
+                            <TouchableOpacity onPress={()=>{setPositionPicker(true)}} style={styles.SelectBox}>
+                            {mainPosition === '' ? (
+                                        <View style={styles.selectContainer}>
+                                            <Text style={styles.selectText}>
+                                                포지션을 선택해주세요.
+                                            </Text>
+                                            <Iconify icon='codicon:triangle-down' size={15}/>
+                                        </View>
+                                    ):(
+                                    <Text style={styles.determineText}>{mainPosition}</Text>)}
+                            </TouchableOpacity>
+                            {/* 포지션 Picker */}
+                            <Modal
+                                visible={positionPicker}
+                                transparent={true}
+                                animationType="slide"
+                                onRequestClose={()=>{setPositionPicker(false)}}
+                            >
+                                <TouchableOpacity style={styles.modalOverlay} onPress={()=>{setPositionPicker(false)}} activeOpacity={1}>
+                                    <View style={styles.pickerContainer} showsVerticalScrollIndicator={false}>
+                                        <ScrollView>
+                                            {['c', 'pf', 'sf', 'sg', 'pg'].map((value,index) => (
+                                                <TouchableOpacity
+                                                    key={index}
+                                                    style={styles.pickerItem}
+                                                    onPress={() => {
+                                                        SetMainPosition(value);
+                                                        setPositionPicker(false)
+                                                    }}
+                                                >
+                                                    <Text style={styles.pickerItemText}>{value}</Text>
+                                                    <View style={styles.pickerUnderbar}/>
+                                                </TouchableOpacity>
+                                            ))}
+                                        </ScrollView>
+                                    </View>
+                                </TouchableOpacity>
+                            </Modal>
                         </View>
+
                         <TouchableOpacity style={styles.button} onPress = {() => {handleSignUp(nickname, email, password, height, mainPosition)}}>
                             <View>
                                 <Text style={styles.signUpText}>회원가입하기</Text>
@@ -261,6 +297,55 @@ const styles = StyleSheet.create({
         color : colors.white,
         textAlign : 'center',
         fontWeight : 'bold',
+    },
+
+    // Picker
+    SelectBox:{
+        width: 300,
+        padding : 15,
+        borderRadius : 5,
+        backgroundColor : 'white',
+        marginBottom : 8,
+    },
+    selectContainer : {
+        flexDirection : 'row',
+        justifyContent : 'space-between',
+      },
+    selectText: {
+        color: Colors.gray,
+    },
+    determineText: {
+        fontWeight: 'bold',
+        color: colors.black,
+        marginLeft: 3,
+    },
+    pickerContainer: {
+    backgroundColor: Colors.white,
+    borderRadius: 5,
+    padding: 20,
+    maxHeight: 300,
+    width: 200,
+    },
+    pickerItem: {
+        marginBottom : 10,
+    },
+    pickerUnderbar : {
+      marginTop : 10,
+      borderStyle : 'solid',
+      borderWidth : 0.5,
+      borderColor : Colors.gray
+    },
+    pickerItemText: {
+        textAlign: 'center',
+        fontSize: 20,
+    },
+    
+    // 모달!!
+    modalOverlay: {
+        flex: 1,
+        backgroundColor: 'rgba(2, 2, 2, 0.5)',
+        justifyContent: 'center',
+        alignItems: 'center',
     },
 
 });

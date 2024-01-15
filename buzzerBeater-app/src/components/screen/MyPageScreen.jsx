@@ -108,7 +108,10 @@ export default function MyPageScreen({navigation}) {
                 {/* Set Positon */}
                 <PositonPopup modalVisible={positonPopup} setModalVisible={setPositonPopup} position={user.mainPosition} setMpos={setMpos}/>
                 <View style={styles.iconBtn}>
-                  <TouchableOpacity onPress={()=>{handlePopup(4)}}>
+                  <TouchableOpacity onPress={(e)=>{
+                    e.stopPropagation();
+                    handlePopup(4)
+                    }}>
                     <Iconify icon="icon-park-outline:basketball-clothes" size={60} style={styles.iconStyle} />
                   </TouchableOpacity>
                   <Text style={styles.iconText}>주 포지션 변경</Text>
@@ -117,7 +120,7 @@ export default function MyPageScreen({navigation}) {
             </View>
 
             <View style={styles.leave}>
-              <TouchableOpacity onPress={()=>{inviteMercs(3, 'd286cbe7-6587-416e-8746-a86c3a1f6488')}}>
+              <TouchableOpacity onPress={()=>{}}>
                 <View style={styles.leavebtn}>
                   <Text style={styles.leavetext}>회원 탈퇴하기</Text>
                 </View>
@@ -235,5 +238,6 @@ const styles = StyleSheet.create({
     marginLeft : 15,
     marginRight : 15,
   }
+  
   
 });
