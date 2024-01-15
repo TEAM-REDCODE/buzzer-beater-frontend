@@ -1,6 +1,6 @@
 import React, {useContext, useState} from 'react';
 import { StyleSheet, Text, TouchableWithoutFeedback, Modal, 
-  View, Alert, TextInput, Button, TouchableOpacity  } from 'react-native';
+  View, Alert, TextInput, ScrollView, TouchableOpacity  } from 'react-native';
 import { Iconify } from 'react-native-iconify';
 import Colors from '../../Common/Colors';
 import passowrdVerify from '../screen/account/passwordValidation';
@@ -325,14 +325,12 @@ const MecenearyPopup = ({ modalVisible, setModalVisible, mercen }) => {
 
 const PositonPopup = ({ modalVisible, setModalVisible, position, setMpos}) => {
   const { user, setUserData } = useContext(UserContext);
-
+  const [positionPicker, setPositionPicker] = useState(false)
   const closeModal = () => {
     setModalVisible(false);
   };
-  const [newPosition, setNewPosition] = useState("")
-  const handleChange = (text) =>{
-    setNewPosition(text)
-  }
+  const [newPosition, setNewPosition] = useState('')
+  
   const handleSumbit = async () =>{
     try{
       const success = await setMpos(newPosition)
@@ -380,12 +378,45 @@ const PositonPopup = ({ modalVisible, setModalVisible, position, setMpos}) => {
             </View>
             <View style={styles.subContainer}>
               <Text style={styles.modalText}>변경할 포지션</Text>
-              <TextInput style={styles.input}
-                 placeholder="변경할 포지션을 입력해주세요."
-                 placeholderTextColor={colors.gray}
-                 onChangeText={handleChange}
-                 value={newPosition}
-              />
+              <TouchableOpacity onPress={()=>{setPositionPicker(true)}} style={styles.SelectBox}>
+                {newPosition === '' ? (
+                            <View style={styles.selectContainer}>
+                                <Text style={styles.selectText}>
+                                    포지션을 선택해주세요.
+                                </Text>
+                                <Iconify icon='codicon:triangle-down' size={15}/>
+                            </View>
+                        ):(
+                        <Text style={styles.determineText}>{newPosition}</Text>)}
+                </TouchableOpacity>
+                {/* 포지션 Picker */}
+                <Modal
+                    visible={positionPicker}
+                    transparent={true}
+                    animationType="slide"
+                    onRequestClose={()=>{setPositionPicker(false)}}
+                >
+                    <TouchableOpacity style={styles.modalOverlay} onPress={()=>{setPositionPicker(false)}} activeOpacity={1}>
+                        <View style={styles.pickerContainer} showsVerticalScrollIndicator={false}>
+                            <ScrollView>
+                                {['c', 'pf', 'sf', 'sg', 'pg'].map((value,index) => (
+                                    <TouchableOpacity
+                                        key={index}
+                                        style={styles.pickerItem}
+                                        onPress={(e) => {
+                                          e.stopPropagation();
+                                          setNewPosition(value);
+                                          setPositionPicker(false)
+                                        }}
+                                    >
+                                        <Text style={styles.pickerItemText}>{value}</Text>
+                                        <View style={styles.pickerUnderbar}/>
+                                    </TouchableOpacity>
+                                ))}
+                            </ScrollView>
+                        </View>
+                    </TouchableOpacity>
+                </Modal>
             </View>
             <View style={styles.buttonList}>
                   <View style={{borderRadius: 5, backgroundColor: Colors.mainRed}}>
@@ -520,6 +551,55 @@ const styles = StyleSheet.create({
       color : Colors.black,
       fontSize : 11,
       marginLeft : 5,
+  },
+
+  // Picker
+  SelectBox:{
+    width: 300,
+    padding : 15,
+    borderRadius : 5,
+    backgroundColor : 'white',
+    marginBottom : 8,
+  },
+  selectContainer : {
+      flexDirection : 'row',
+      justifyContent : 'space-between',
+    },
+  selectText: {
+      color: Colors.gray,
+  },
+  determineText: {
+      fontWeight: 'bold',
+      color: colors.black,
+      marginLeft: 3,
+  },
+  pickerContainer: {
+      backgroundColor: Colors.white,
+      borderRadius: 5,
+      padding: 20,
+      maxHeight: 300,
+      width: 200,
+  },
+  pickerItem: {
+     marginBottom : 10,
+  },
+  pickerUnderbar : {
+    marginTop : 10,
+    borderStyle : 'solid',
+    borderWidth : 0.5,
+    borderColor : Colors.gray
+  },
+  pickerItemText: {
+      textAlign: 'center',
+      fontSize: 20,
+  },
+  
+  // 모달!!
+  modalOverlay: {
+      flex: 1,
+      backgroundColor: 'rgba(2, 2, 2, 0.5)',
+      justifyContent: 'center',
+      alignItems: 'center',
   },
 });
 
