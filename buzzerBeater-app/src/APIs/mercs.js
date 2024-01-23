@@ -78,11 +78,12 @@ const getMercs = async () =>{
 }
 /**
  * 회원 쿠키를 통해 회원 용병을 삭제하는 API
+ * @reuturn 삭제 성공/실패 true/false 반환
  */
 const deleteMercs = async () =>{
   const endpoint = 'v1/mercs/'
   const apiURL = baseURL + endpoint
-  instance.delete(apiURL)
+  return await instance.delete(apiURL)
   .then((res)=>{
     console.log(res)
     if(res.status === 200){
