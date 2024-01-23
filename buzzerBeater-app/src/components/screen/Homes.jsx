@@ -8,8 +8,8 @@ import DateParse from '../../Common/DateParse';
 import { getMeetinfo, createMeet, RegMeet, inviteMercs } from '../../APIs/meetAPI';
 import { UserContext } from '../../Common/UserContext';
 import Colors from "../../Common/Colors";
-import { createMercs, getPosMercs } from '../../APIs/mercs';
-import { getBelong } from '../../APIs/userAPI';
+import { createMercs, deleteMercs, getPosMercs } from '../../APIs/mercs';
+import { getBelong, getUserInfo } from '../../APIs/userAPI';
 import RotatingElement from '../UI/RotatingElement';
 import { PosSelector } from '../UI/Selector';
 let court = require('../../../assets/court.png');
@@ -105,6 +105,15 @@ const Homes = () => {
         try{
             const res = await createMercs(pos, avTime)
             if(res === true){
+                const userResponse =  await getUserInfo()
+                setUserData({
+                    email: userResponse.email,
+                    height: userResponse.height,
+                    isMercenary: userResponse.isMercenary,
+                    mainPosition: userResponse.mainPosition,
+                    nickname: userResponse.nickname
+                })
+                    
                 alert("용병 등록 성공")
             }else{
                 alert("용병 등록 실패")
@@ -175,11 +184,38 @@ const Homes = () => {
         console.log(modalData)
         openModal();
     };
-
+    /**
+     * 본인의 등록되어있는 용병을 삭제하는 함수
+     */
+    const hanldeMercDelete = async() =>{
+        const res = await deleteMercs()
+        if(res === true){
+            alert("용병 삭제 성공")
+            const userResponse =  await getUserInfo()
+                setUserData({
+                    email: userResponse.email,
+                    height: userResponse.height,
+                    isMercenary: userResponse.isMercenary,
+                    mainPosition: userResponse.mainPosition,
+                    nickname: userResponse.nickname
+                })
+            setIsMercenaryDeleteModalVisible(false)
+        }else{
+            alert("용병 삭제 실패")
+        }
+    } 
     const [isMercenaryModalVisible, setIsMercenaryModalVisible] = useState(false);
-
-    const openMercenaryModal = () => {
-        setIsMercenaryModalVisible(true);
+    const [isMercenaryDeleteModalVisible, setIsMercenaryDeleteModalVisible] = useState(false)
+    /**
+     * 용병 등록 안 돼있으면 등록모달 열기
+     * 용병 등록 돼있으면 삭제 모달 열기 
+     */
+    const openMercenaryModal = (teste) => {
+        //용병이 등록되어있다면 용병 등록 모달 열기 
+        user.isMercenary ? 
+            (setIsMercenaryDeleteModalVisible(true))
+            :(setIsMercenaryModalVisible(true))
+        
     };
 
     const closeMercenaryModal = () => {
@@ -651,7 +687,42 @@ const Homes = () => {
                         </View>
                     </View>
                 </Modal>
-
+                {/* 용병 삭제하기 모달 */}{
+                    <Modal
+                        animationType="none"
+                        transparent={true}
+                        visible={isMercenaryDeleteModalVisible}
+                        onRequestClose={()=>{setIsMercenaryDeleteModalVisible(false)}}
+                    >
+                        <View style={styles.modalOverlay}>
+                        <View style={styles.modalView}>
+                            <Text style={[styles.modalCreateTitle, { marginBottom: 8 }]}>
+                            <Text style={styles.modalTextRed}>용병 등록 삭제하기</Text>하기</Text>
+                            <TouchableOpacity>
+                                <Text style={styles.cardContentText}>등록되어있는 용병을 삭제할 수 있습니다.</Text>
+                            </TouchableOpacity>
+                            
+                            
+                            {/* 버튼 리스트 */}
+                            <View style={styles.buttonList}>
+                                <View style={{borderRadius: 5, backgroundColor: Colors.mainRed}}>
+                                    <TouchableOpacity onPress={()=>{
+                                        hanldeMercDelete()
+                                    }}>
+                                        <Text style={styles.button}>삭제하기</Text>
+                                    </TouchableOpacity>
+                                </View>
+                                <View style={{borderRadius: 5, backgroundColor: Colors.black}}>
+                                    <TouchableOpacity onPress={()=>{setIsMercenaryDeleteModalVisible(false)}}>
+                                        <Text style={styles.button}>취소하기</Text>
+                                    </TouchableOpacity>
+                                </View>
+                            </View>
+                        </View>
+                    </View>
+                    
+                    </Modal>
+                }
                 {/* 랜덤 용병 선택 모달 */}
                 <Modal
                     animationType="slide"
