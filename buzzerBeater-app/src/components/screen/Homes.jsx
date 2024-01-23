@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { View, Text, ScrollView, StyleSheet, TouchableOpacity, Image, SafeAreaView, Modal, TextInput } from 'react-native';
+import { View, Text, ScrollView, StyleSheet, 
+    TouchableOpacity, Image, SafeAreaView, Modal, TextInput } from 'react-native';
 import colors from "../../Common/Colors";
 import { Iconify } from 'react-native-iconify';
 import DateTimePickerModal from "react-native-modal-datetime-picker";
@@ -9,10 +10,11 @@ import { UserContext } from '../../Common/UserContext';
 import Colors from "../../Common/Colors";
 import { createMercs, getPosMercs } from '../../APIs/mercs';
 import { getBelong } from '../../APIs/userAPI';
-
+import RotatingElement from '../UI/RotatingElement';
+import { PosSelector } from '../UI/Selector';
 let court = require('../../../assets/court.png');
-const Homes = () => {
 
+const Homes = () => {
     const { user, setUserData } = useContext(UserContext);
 
     const [ModalVisible, setModalVisible] = useState(false);
@@ -116,6 +118,7 @@ const Homes = () => {
         try {
             // getBelong 함수 호출
             const basketResponse = await getMeetinfo();
+            console.log(basketData)
             if (basketResponse.data && basketResponse.data.meets) {
                 // basketResponse가 object 타입인지 확인
                 if (basketResponse.data.meets && Object.keys(basketResponse.data.meets).length > 0) {
@@ -192,10 +195,6 @@ const Homes = () => {
         
     ]);
     
-   
-    
-    const [isMercenariesModalVisible, setIsMercenariesModalVisible] = useState(false);
-
     const openMercenaryListModal = (position) => {
         setSelectedPosition(position);
         setIsMercenaryListModalVisible(true);
@@ -227,6 +226,7 @@ const Homes = () => {
                             <TouchableOpacity onPress={openCreateModal} style={styles.createButton}>
                                 <Text style={styles.createButtonText}>농구팟 생성하기</Text>
                             </TouchableOpacity>
+                            <RotatingElement handleFunc={basketData}></RotatingElement>
                         </View>
                         <Text style={styles.description}>
                             참여하고 싶은 농구팟을 확인하고 참여해보세요 !!!
@@ -252,7 +252,7 @@ const Homes = () => {
                                                 <View style={styles.cardContent}>
                                                     <Text style={styles.cardContentText}>
                                                         <Text style={styles.cardContentLabel}>생성자 : </Text>
-                                                        {item.nickname}
+                                                        {item.createdByNick}
                                                     </Text>
                                                     <Text style={styles.cardContentText}>
                                                         <Text style={styles.cardContentLabel}>장소 : </Text>
@@ -575,32 +575,13 @@ const Homes = () => {
                                 </Text>
                             </TouchableOpacity>
                             {/* 포지션 Picker */}
-                            <Modal
-                                visible={positionPicker}
-                                transparent={true}
-                                animationType="slide"
-                                onRequestClose={()=>{setPositionPicker(false)}}
-                            >
-                                <TouchableOpacity style={styles.modalOverlay} onPress={()=>{setPositionPicker(false)}} activeOpacity={1}>
-                                    <View style={styles.pickerContainer} showsVerticalScrollIndicator={false}>
-                                        <ScrollView>
-                                            {['c', 'pf', 'sf', 'sg', 'pg'].map((value,index) => (
-                                                <TouchableOpacity
-                                                    key={index}
-                                                    style={styles.pickerItem}
-                                                    onPress={() => {
-                                                        setNewMercs({...newMercs, position: value});
-                                                        setPositionPicker(false)
-                                                    }}
-                                                >
-                                                    <Text style={styles.pickerItemText}>{value}</Text>
-                                                    <View style={styles.pickerUnderbar}/>
-                                                </TouchableOpacity>
-                                            ))}
-                                        </ScrollView>
-                                    </View>
-                                </TouchableOpacity>
-                            </Modal>
+                            <PosSelector 
+                                newMercs={newMercs}
+                                setNewMercs={setNewMercs}
+                                positionPicker={positionPicker}
+                                setPositionPicker={setPositionPicker}
+                            ></PosSelector>
+                            
                             {/* TimePicker */}
                             <DateTimePickerModal
                                 isVisible={timePickerOn}
@@ -863,6 +844,7 @@ const styles = StyleSheet.create({
         marginLeft : 5,
         marginRight : 5,
     },
+    
     description: {
         fontSize : 16,
         color: colors.white,
