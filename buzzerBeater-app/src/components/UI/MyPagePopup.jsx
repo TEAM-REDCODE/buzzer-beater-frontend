@@ -7,7 +7,7 @@ import passowrdVerify from '../screen/account/passwordValidation';
 import { setNickname, getUserInfo, setHeight} from '../../APIs/userAPI';
 import { UserContext } from '../../Common/UserContext';
 import colors from "../../Common/Colors";
-
+import { PosSelector } from './Selector';
 const NicknamePopup = ({ modalVisible, setModalVisible, userName }) => {
   const [newName, setNewName] = useState("")
   const { user, setUserData } = useContext(UserContext);
@@ -329,11 +329,11 @@ const PositonPopup = ({ modalVisible, setModalVisible, position, setMpos}) => {
   const closeModal = () => {
     setModalVisible(false);
   };
-  const [newPosition, setNewPosition] = useState('')
+  const [newPosition, setNewPosition] = useState({position: ''})
   
   const handleSumbit = async () =>{
     try{
-      const success = await setMpos(newPosition)
+      const success = await setMpos(newPosition.position)
 
       if(success){
         const userResponse =  await getUserInfo()
@@ -344,7 +344,7 @@ const PositonPopup = ({ modalVisible, setModalVisible, position, setMpos}) => {
               mainPosition: userResponse.mainPosition,
               nickname: userResponse.nickname
         })
-        setNewPosition("")
+        setNewPosition({...newPosition, position: ''})
         alert("포지션 변경 성공")
       }
       else{
@@ -379,7 +379,7 @@ const PositonPopup = ({ modalVisible, setModalVisible, position, setMpos}) => {
             <View style={styles.subContainer}>
               <Text style={styles.modalText}>변경할 포지션</Text>
               <TouchableOpacity onPress={()=>{setPositionPicker(true)}} style={styles.SelectBox}>
-                {newPosition === '' ? (
+                {newPosition.position === '' ? (
                             <View style={styles.selectContainer}>
                                 <Text style={styles.selectText}>
                                     포지션을 선택해주세요.
@@ -387,10 +387,16 @@ const PositonPopup = ({ modalVisible, setModalVisible, position, setMpos}) => {
                                 <Iconify icon='codicon:triangle-down' size={15}/>
                             </View>
                         ):(
-                        <Text style={styles.determineText}>{newPosition}</Text>)}
+                        <Text style={styles.determineText}>{newPosition.position}</Text>)}
                 </TouchableOpacity>
                 {/* 포지션 Picker */}
-                <Modal
+                <PosSelector
+                  newMercs={newPosition}
+                  setNewMercs={setNewPosition}
+                  positionPicker={positionPicker}
+                  setPositionPicker={setPositionPicker}
+                ></PosSelector>
+                {/* <Modal
                     visible={positionPicker}
                     transparent={true}
                     animationType="slide"
@@ -416,7 +422,7 @@ const PositonPopup = ({ modalVisible, setModalVisible, position, setMpos}) => {
                             </ScrollView>
                         </View>
                     </TouchableOpacity>
-                </Modal>
+                </Modal> */}
             </View>
             <View style={styles.buttonList}>
                   <View style={{borderRadius: 5, backgroundColor: Colors.mainRed}}>
