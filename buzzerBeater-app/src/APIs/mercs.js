@@ -1,5 +1,5 @@
 import baseURL from "../Common/baseURL";
-import instance from "./instance";
+import {instance} from "./instance";
 
 /**
  * 

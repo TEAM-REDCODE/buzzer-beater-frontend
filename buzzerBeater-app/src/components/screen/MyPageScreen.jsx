@@ -9,13 +9,12 @@ import {
 import Colors from '../../Common/Colors'
 import { Iconify } from 'react-native-iconify';
 import { UserContext } from '../../Common/UserContext';
-import { logout } from '../../APIs/signAPI';
-import { createMeet, RegMeet, getMeetinfo, getMeetMercs, inviteMercs } from '../../APIs/meetAPI';
-import { getMercsReq, deleteMercs, acceptMercsReq, createMercs} from '../../APIs/mercs';
+import { logout } from '../../APIs/instance';
 import {NicknamePopup, PasswordPopup, PhysicalPopup, MecenearyPopup, PositonPopup} from '../UI/MyPagePopup';
 import { setMpos } from '../../APIs/userAPI';
 import Loading from "./Loading";
 import colors from "../../Common/Colors";
+import { refresh } from '../../APIs/instance';
 export default function MyPageScreen({navigation}) {
   const { user, setUserData } = useContext(UserContext);
   const [nicknamePopup, setNicknamePopup] = useState(false)
@@ -50,7 +49,6 @@ export default function MyPageScreen({navigation}) {
   
   const handleLogout = () =>{
     logout()
-    navigation.navigate('Start')
   }
   return (
       <SafeAreaView style={styles.safeArea}>
@@ -120,7 +118,7 @@ export default function MyPageScreen({navigation}) {
             </View>
 
             <View style={styles.leave}>
-              <TouchableOpacity onPress={()=>{}}>
+              <TouchableOpacity onPress={()=>{refresh()}}>
                 <View style={styles.leavebtn}>
                   <Text style={styles.leavetext}>회원 탈퇴하기</Text>
                 </View>
