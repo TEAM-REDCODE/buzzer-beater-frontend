@@ -1,6 +1,7 @@
 import axios from "axios";
-import instance from "./instance";
+import {instance} from "./instance";
 import baseURL from "../Common/baseURL";
+
 const signIn = async (email, password) => {
     const endPoint = 'v1/users/login'
     const apiURL = baseURL + endPoint
@@ -62,18 +63,8 @@ const signUp = async (nickname, email, password, height, mainPosition) => {
 
 };
 
-const logout = async()=>{
-    const endPoint = 'v1/users/logout'
-    const apiURL = baseURL+endPoint
-    instance.get(apiURL)
-    .then((res)=>{
-        console.log(res)
-    })
-    .catch((error)=>{
-        console.log(error)
-    })
-}
-export {signIn, signUp, logout};
+
+export {signIn, signUp};
 
 
 

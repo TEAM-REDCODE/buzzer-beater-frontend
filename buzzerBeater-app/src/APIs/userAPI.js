@@ -1,28 +1,8 @@
 import axios from "axios";
-import instance from "./instance";
+import {instance} from "./instance";
 import baseURL from "../Common/baseURL";
 
-/**
- * 리프레시 토큰을 통한 acc토큰 체인지
- */
-const refresh = async()=>{
-  const endPoint = 'v1/users/refresh'
-  const apiURL = baseURL + endPoint
 
-  instance.get(apiURL)
-  .then((res)=>{
-    if(res.status === 200){
-      return true
-    }
-    else{
-      return false
-    }
-  })
-  .catch((error)=>{
-    return false
-  })
-
-}
 /**
  * 현재 쿠키에 담겨있는 유저 정보를 GET
  * @returns 
@@ -154,4 +134,4 @@ const setMpos = async (newPosition) => {
 }
 
 
-export {setNickname, setHeight, getUserInfo, getBelong, refresh, setMpos}
+export {setNickname, setHeight, getUserInfo, getBelong, setMpos}

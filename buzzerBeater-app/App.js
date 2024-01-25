@@ -1,7 +1,5 @@
 import React from 'react';
-import { Button, Text, View} from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import {commonHeaderOptions, myPageHeaderOptions,loginHeaderOptions, signUpHeaderOptions} from './src/components/UI/Header';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import SignIn from "./src/components/screen/SignIn";
@@ -11,18 +9,16 @@ import MyPageScreen from './src/components/screen/MyPageScreen';
 import Start from './src/components/screen/Start';
 import Homes from './src/components/screen/Homes';
 import { UserProvider } from './src/Common/UserContext';
-import Loading from "./src/components/screen/Loading";
-import MercsListPopup from "./src/components/UI/MercsListPopup";
+import { navigationRef } from './src/Common/NavigationContainer';
 
 
-const Tab = createBottomTabNavigator();
 
 const Stack = createNativeStackNavigator();
 export default function App() {
 
   return (
       <UserProvider>
-          <NavigationContainer>
+          <NavigationContainer ref={navigationRef}>
               <Stack.Navigator initialRouteName='Start'>
                   <Stack.Screen name='Start' component={Start} options={{headerShown: false}}/>
                   <Stack.Screen name='SignIn' component={SignIn} options={loginHeaderOptions}/>

@@ -1,5 +1,4 @@
-import axios from "axios";
-import instance from "./instance";
+import {instance} from "./instance";
 import baseURL from "../Common/baseURL";
 
 /**

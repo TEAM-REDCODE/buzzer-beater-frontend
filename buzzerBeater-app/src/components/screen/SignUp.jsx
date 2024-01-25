@@ -177,7 +177,7 @@ const SignUp = ({navigation}) => {
                             
                         </View>
 
-                        <TouchableOpacity style={styles.button} onPress = {() => {handleSignUp(nickname, email, password, height, mainPosition)}}>
+                        <TouchableOpacity style={styles.button} onPress = {() => {handleSignUp(nickname, email, password, height, mainPosition['position'])}}>
                             <View>
                                 <Text style={styles.signUpText}>회원가입하기</Text>
                             </View>
