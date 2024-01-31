@@ -2,6 +2,7 @@ import Colors from "../../Common/Colors";
 import {TouchableOpacity, Text, View, Image, StyleSheet} from 'react-native';
 import { Iconify } from "react-native-iconify";
 let logoImg = require('../../../assets/Buzzer-Beater_small_logo.png')
+let backIcon = require( '../../../assets/modal-back.png');
 
 const commonHeaderOptions = ({ navigation }) => ({
   title: '',
@@ -83,9 +84,36 @@ const signUpHeaderOptions = ({ navigation }) => ({
     </View>
   ),
 });
+/**
+ * 
+ * @param {funch} closeModal함수 
+ * @returns 
+ */
+const ModalHeader = ({closeModal}) => {
 
+  return(
+    <View style={styles.modalHeader}>
+      <TouchableOpacity onPress={closeModal}>
+        <Image source={backIcon}></Image>
+      </TouchableOpacity>
+      <Text style={styles.modalHeaderText}>Back</Text>
+    </View>
+  )
+}
 const styles = StyleSheet.create({
-
+    modalHeader: {
+      display: 'flex',
+      flexDirection: 'row',
+      alignItems: 'center',
+      textAlign: 'left',
+      color: Colors.black,
+      width: '100%',
+      marginBottom: '9%',
+    },
+    modalHeaderText:{
+      fontSize: 18,
+      fontWeight: 'bold',
+    },
     logo : {
         width : 50,
         height : 45,
@@ -108,7 +136,7 @@ const styles = StyleSheet.create({
 });
 
 
-export {commonHeaderOptions, myPageHeaderOptions, loginHeaderOptions, signUpHeaderOptions};
+export {ModalHeader, commonHeaderOptions, myPageHeaderOptions, loginHeaderOptions, signUpHeaderOptions};
 
 // 바텀탭 다시 도입할까봐 냄겨둡니다 ㅠ
 // function MyTabs() {

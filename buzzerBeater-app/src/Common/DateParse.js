@@ -15,4 +15,23 @@ function DateParse(target) {
   return koreanTimeString;
 }
 
-export default DateParse
+/**
+ * 
+ * @param {Date} target 
+ * @returns 
+ */
+function TimeParse(target) {
+  const targetDate = new Date(target);
+
+  const twoHoursLater = new Date(targetDate.getTime() + 2 * 60 * 60 * 1000); // 2시간 후의 시간
+
+  
+
+  const startTime = targetDate.toLocaleString('ko-KR', { hour: 'numeric', minute: 'numeric', hour12: false });
+  const endTime = twoHoursLater.toLocaleString('ko-KR', { hour: 'numeric', minute: 'numeric', hour12: false });
+
+  const koreanTimeString = `${startTime}~${endTime}`;
+  return koreanTimeString;
+}
+
+export {DateParse, TimeParse}

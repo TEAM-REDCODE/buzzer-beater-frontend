@@ -13,7 +13,7 @@ import { getBelong } from '../../APIs/userAPI';
 import { getMercsReq } from '../../APIs/mercs';
 import {UserContext} from "../../Common/UserContext";
 import Colors from "../../Common/Colors";
-import DateParse from '../../Common/DateParse';
+import {DateParse} from '../../Common/DateParse';
 import MercsListPopup from '../UI/MercsListPopup';
 import Loading from "./Loading";
 

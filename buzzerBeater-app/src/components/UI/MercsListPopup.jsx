@@ -7,7 +7,7 @@ import {
   View
 } from 'react-native';
 import colors from '../../Common/Colors';
-import DateParse from '../../Common/DateParse';
+import {DateParse} from '../../Common/DateParse';
 import { acceptMercsReq } from '../../APIs/mercs';
 import Colors from "../../Common/Colors";
 function MercsListPopup({ visible, setModalVisible, meetInfo}) {
