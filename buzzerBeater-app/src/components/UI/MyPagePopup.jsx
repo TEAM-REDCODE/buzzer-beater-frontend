@@ -1,6 +1,6 @@
 import React, {useContext, useState} from 'react';
 import { StyleSheet, Text, TouchableWithoutFeedback, Modal, 
-  View, Alert, TextInput, ScrollView, TouchableOpacity  } from 'react-native';
+  View, Alert, TextInput, Image, TouchableOpacity  } from 'react-native';
 import { Iconify } from 'react-native-iconify';
 import Colors from '../../Common/Colors';
 import passowrdVerify from '../screen/account/passwordValidation';
@@ -8,6 +8,11 @@ import { setNickname, getUserInfo, setHeight} from '../../APIs/userAPI';
 import { UserContext } from '../../Common/UserContext';
 import colors from "../../Common/Colors";
 import { PosSelector } from './Selector';
+import { ModalHeader } from './Header';
+let backIcon = require( '../../../assets/modal-back.png');
+/**
+ * 닉네임 변경 팝업
+ */
 const NicknamePopup = ({ modalVisible, setModalVisible, userName }) => {
   const [newName, setNewName] = useState("")
   const { user, setUserData } = useContext(UserContext);
@@ -43,17 +48,22 @@ const NicknamePopup = ({ modalVisible, setModalVisible, userName }) => {
   
   return (
     <Modal
-      animationType="fade"
+      animationType="slide"
       transparent={true}
       visible={modalVisible}
       onBackdropPress={() => {closeModal()}}
       >
         <TouchableWithoutFeedback>
-            <View View style={styles.overlay}>
+            <View style={styles.overlay}>
               <View style={styles.modalView}>
+                
+                <ModalHeader closeModal={closeModal}></ModalHeader>
                 <Text style={styles.modalTitle}>
-                  <Text style={styles.modalTitleRed}>닉네임 </Text>
+                  닉네임
                   변경
+                </Text>
+                <Text style={styles.modalManualText}>
+                  아래의 정보를 작성해주세요.
                 </Text>
                 <View style={styles.subContainer}>
                   <Text style={styles.modalText}>현재 사용중인 닉네임</Text>
@@ -76,14 +86,14 @@ const NicknamePopup = ({ modalVisible, setModalVisible, userName }) => {
                 <View style={styles.buttonList}>
                   <View style={{borderRadius: 5, backgroundColor: Colors.mainRed}}>
                     <TouchableOpacity>
-                      <Text style={styles.button} onPress={handleSubmit}>변경하기</Text>
+                      <Text style={styles.button} onPress={handleSubmit}>변경</Text>
                     </TouchableOpacity>
                   </View>
-                  <View style={{borderRadius: 5, backgroundColor: Colors.black}}>
+                  {/* <View style={{borderRadius: 5, backgroundColor: Colors.black}}>
                     <TouchableOpacity>
                       <Text style={styles.button} onPress={closeModal}>취소하기</Text>
                     </TouchableOpacity>
-                  </View>
+                  </View> */}
                 </View>
               </View>
             </View>
@@ -112,7 +122,7 @@ const PasswordPopup = ({ modalVisible, setModalVisible }) => {
   
   return (
     <Modal
-      animationType="fade"
+      animationType="slide"
       transparent={true}
       visible={modalVisible}
       onRequestClose={() => {
@@ -122,10 +132,16 @@ const PasswordPopup = ({ modalVisible, setModalVisible }) => {
       <TouchableWithoutFeedback>
         <View style={styles.overlay}>
           <View style={styles.modalView}>
+            
+            <ModalHeader closeModal={closeModal}></ModalHeader>
+
             <Text style={styles.modalTitle}>
-              <Text style={styles.modalTitleRed}>비밀번호 </Text>
+              비밀번호
               변경
             </Text>
+            <Text style={styles.modalManualText}>
+                  아래의 정보를 작성해주세요.
+                </Text>
             <View style={styles.subContainer}>
               <Text style={styles.modalText}>현재 비밀번호</Text>
               <TextInput style={styles.input}
@@ -188,14 +204,14 @@ const PasswordPopup = ({ modalVisible, setModalVisible }) => {
             <View style={styles.buttonList}>
                   <View style={{borderRadius: 5, backgroundColor: Colors.mainRed}}>
                     <TouchableOpacity>
-                      <Text style={styles.button}>변경하기</Text>
+                      <Text style={styles.button}>변경</Text>
                     </TouchableOpacity>
                   </View>
-                  <View style={{borderRadius: 5, backgroundColor: Colors.black}}>
+                  {/* <View style={{borderRadius: 5, backgroundColor: Colors.black}}>
                     <TouchableOpacity>
                       <Text style={styles.button} onPress={closeModal}>취소하기</Text>
                     </TouchableOpacity>
-                  </View>
+                  </View> */}
             </View>
           </View>
         </View>
@@ -241,7 +257,7 @@ const PhysicalPopup = ({ modalVisible, setModalVisible, setUserData}) => {
   }
   return (
     <Modal
-      animationType="fade"
+      animationType="slide"
       transparent={true}
       visible={modalVisible}
       onRequestClose={() => {
@@ -251,9 +267,13 @@ const PhysicalPopup = ({ modalVisible, setModalVisible, setUserData}) => {
       <TouchableWithoutFeedback onPress={closeModal}>
         <View style={styles.overlay}>
           <View style={styles.modalView}>
+          <ModalHeader closeModal={closeModal}></ModalHeader>
             <Text style={styles.modalTitle}>
-              <Text style={styles.modalTitleRed}>피지컬 </Text>
+              피지컬
               수정
+            </Text>
+            <Text style={styles.modalManualText}>
+                  아래의 정보를 작성해주세요.
             </Text>
             <View style={styles.subContainer}>
               <Text style={styles.modalText}>피지컬 정보</Text>
@@ -291,7 +311,7 @@ const MecenearyPopup = ({ modalVisible, setModalVisible, mercen }) => {
   };
   return (
     <Modal
-      animationType="fade"
+      animationType="slide"
       transparent={true}
       visible={modalVisible}
       onRequestClose={() => {
@@ -301,8 +321,9 @@ const MecenearyPopup = ({ modalVisible, setModalVisible, mercen }) => {
       <TouchableWithoutFeedback onPress={closeModal}>
         <View style={styles.overlay}>
           <View style={styles.modalView}>
-            <Text style={[styles.modalTitle, styles.modalTextCenter]}>
-              <Text style={styles.modalTitleRed}>용병 </Text>
+          <ModalHeader closeModal={closeModal}></ModalHeader>
+            <Text style={[styles.modalText, styles.modalTitle]}>
+              용병
               등록 확인
             </Text>
             {mercen? 
@@ -316,6 +337,12 @@ const MecenearyPopup = ({ modalVisible, setModalVisible, mercen }) => {
               <Text style={{fontSize: 35, color: Colors.mainRed}}>X</Text>
             </Text>
             }
+            <Text style={styles.modalText}>용병으로 등록하시겠습니까?{' '}
+            <TouchableOpacity>
+             <Text style={styles.mercsLinkText}>용병등록하기</Text>
+            </TouchableOpacity>
+            </Text>
+            
           </View>
         </View>
       </TouchableWithoutFeedback>
@@ -356,7 +383,7 @@ const PositonPopup = ({ modalVisible, setModalVisible, position, setMpos}) => {
   }
   return (
     <Modal
-      animationType="fade"
+      animationType="slide"
       transparent={true}
       visible={modalVisible}
       onRequestClose={() => {
@@ -366,6 +393,7 @@ const PositonPopup = ({ modalVisible, setModalVisible, position, setMpos}) => {
       <TouchableWithoutFeedback onPress={closeModal}>
         <View style={styles.overlay}>
           <View style={styles.modalView}>
+          <ModalHeader closeModal={closeModal}></ModalHeader>
             <Text style={styles.modalTitle}>
               <Text style={styles.modalTitleRed}>주 포지션 </Text>
               변경
@@ -430,11 +458,11 @@ const PositonPopup = ({ modalVisible, setModalVisible, position, setMpos}) => {
                       <Text style={styles.button} onPress={handleSumbit}>변경하기</Text>
                     </TouchableOpacity>
                   </View>
-                  <View style={{borderRadius: 5, backgroundColor: Colors.black}}>
+                  {/* <View style={{borderRadius: 5, backgroundColor: Colors.black}}>
                     <TouchableOpacity>
                       <Text style={styles.button} onPress={closeModal}>취소하기</Text>
                     </TouchableOpacity>
-                  </View>
+                  </View> */}
             </View>
           </View>
         </View>
@@ -447,22 +475,36 @@ const styles = StyleSheet.create({
   overlay: {
     flex: 1,
     backgroundColor: 'rgba(2, 2, 2, 0.5)',
-    justifyContent: 'center',
+    justifyContent: 'flex-end',
     alignItems: 'center',
   },
 
   modalView: {
-    width : 340,
-    backgroundColor: Colors.white,
-    borderRadius: 8,
-    padding: 20,
+    width: '100%',
+    height: 'auto',
+    backgroundColor: '#fff',
+    borderRadius: 18,
+    padding: 25,
+    paddingBottom: 60,
     alignItems: 'center',
   },
-
+  modalHeader: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    textAlign: 'left',
+    color: colors.black,
+    width: '100%',
+    marginBottom: '9%',
+  },
+  modalHeaderText:{
+    fontSize: 18,
+    fontWeight: 'bold',
+  },
   modalTitle: {
     width: 280,
     color: Colors.black,
-    fontSize: 20,
+    fontSize: 30,
     fontWeight: 'bold',
   },
 
@@ -475,15 +517,27 @@ const styles = StyleSheet.create({
     justifyContent : 'center',
     alignItems : 'center',
   },
-
+  modalManualText :{
+    width: 280,
+    margin : 10,
+    color: Colors.black,
+    fontSize : 18,
+  },
   modalText: {
     width: 280,
     margin : 10,
     color: Colors.black,
+    textAlign: 'left',
     fontSize : 16,
     fontWeight: 'bold',
   },
 
+  // 용병 등록 링킹
+  mercsLinkText : {
+    color: colors.mainRed,
+    textDecorationLine: 'underline',
+    fontSize: 16,
+  },
   // 용병 등록 유무 텍스트
   modalTextCenter: {
     width: 280,
@@ -498,7 +552,7 @@ const styles = StyleSheet.create({
     width: 280,
     borderRadius : 5,
     padding : 17,
-    backgroundColor : 'white',
+    backgroundColor : colors.white,
     color : Colors.black,
   },
 
@@ -515,7 +569,7 @@ const styles = StyleSheet.create({
     height : 50,
     borderRadius : 5,
     paddingLeft : 15,
-    backgroundColor : 'white',
+    backgroundColor : colors.white,
   },
 
   buttonList:{
@@ -564,7 +618,7 @@ const styles = StyleSheet.create({
     width: 300,
     padding : 15,
     borderRadius : 5,
-    backgroundColor : 'white',
+    backgroundColor : colors.white,
     marginBottom : 8,
   },
   selectContainer : {

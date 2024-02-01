@@ -35,7 +35,6 @@ const getBelong = async ()=>{
   return await instance.get(apiURL)
   .then((res)=>{
     if(res.status === 200){
-      console.log(res)
       return res.data
     }
     else{
