@@ -1,17 +1,15 @@
 import React from 'react';
 import {View, Text, TouchableOpacity, Image, StyleSheet } from 'react-native';
 import colors from '../../Common/Colors';
-
-let bigLogoImg = require('../../../assets/Buzzer-Beater_big_logo.png')
-let start = require('../../../assets/start.png')
+import Imagesets from "../../Common/Imagesets";
 
 export default function Start({ navigation }) {
 
     return (
         <View style={styles.container}>
-          <Image source={start} resizeMode='cover' style={styles.backgroundImg}/>
+          <Image source={Imagesets.Start} resizeMode='cover' style={styles.backgroundImg}/>
           <View style={styles.bottomContainer}>
-            <Image source={bigLogoImg} style={styles.logo} />
+            <Image source={Imagesets.Logo} style={styles.logo} />
             <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('SignIn')}>
               <Text style={styles.buttonText}>로그인</Text>
             </TouchableOpacity>

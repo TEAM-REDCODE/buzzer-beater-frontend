@@ -6,8 +6,7 @@ import { getUserInfo } from '../../APIs/userAPI';
 import { UserContext } from '../../Common/UserContext';
 import Loading from "./Loading";
 import Spinner from "react-native-loading-spinner-overlay";
-
-let bigLogoImg = require('../../../assets/Buzzer-Beater_big_logo.png')
+import Imagesets from "../../Common/Imagesets";
 
 const SignIn = ({navigation}) => {
     const { user, setUserData } = useContext(UserContext);
@@ -56,7 +55,7 @@ const SignIn = ({navigation}) => {
             <View style={styles.container}>
                 {loading ? <Loading /> : null}
                 <View style={styles.wrapper}>
-                    <Image style={styles.image} source={bigLogoImg} />
+                    <Image style={styles.image} source={Imagesets.Logo} />
                     <View style={styles.signInInput}>
                         <TextInput
                             style={styles.input}
