@@ -11,7 +11,7 @@ import { PosSelector } from './Selector';
 
 import { deleteMercs } from '../../APIs/mercs';
 import { getBelong, getUserInfo } from '../../APIs/userAPI';
-import { RegMeet, inviteMercs} from '../../APIs/meetAPI';
+import { RegMeet, inviteMercs, deleteMeet} from '../../APIs/meetAPI';
 
 import choice from '../../../assets/image/iosImagesets/Choice.png';
 import person from '../../../assets/image/iosImagesets/Person50.png'
@@ -70,7 +70,7 @@ const CreatePartyModal = ({meetSubmit, basketData, modalVisible, setModalVisible
     onRequestClose={()=>{closeModal}}
     >
       <View style={styles.overlay}>
-          <View style={styles.modalView}>
+          <View style={[styles.modalView, {height: '100%'}]}>
           <ModalHeader closeModal={closeModal}></ModalHeader>
               <Text style={styles.modalCreateTitle}>
                   농구팟 생성</Text>
@@ -109,6 +109,8 @@ const CreatePartyModal = ({meetSubmit, basketData, modalVisible, setModalVisible
               
               {/* DatePicker */}
               <DateTimePickerModal
+                  locale='ko'
+                  textColor='#000'
                   isVisible={datePickerOn}
                   mode="datetime"
                   onConfirm={(date)=>{
@@ -175,6 +177,7 @@ const CreatePartyModal = ({meetSubmit, basketData, modalVisible, setModalVisible
                               height: '',
                               hasBall: undefined,
                           })
+                          closeModal()
                       }}>
                           <Text style={styles.button}>생성</Text>
                       </TouchableOpacity>
@@ -538,10 +541,26 @@ const InviteListModal = ({modalvisibile, setModalVisible, myMeet, targetMercs}) 
  */
 const RegisterCard = ({modalVisible, setModalVisible, modalData, basketData}) =>{
   const { user, setUserData } = useContext(UserContext);
+  const [deleteConfirmVisible, setDeleteConfirmVisible] = useState(false)
   const closeModal = ()=>{
     setModalVisible(false)
   }
-  console.log(modalData)
+  const handleDelete = async ()=>{
+    try{
+      const res = await deleteMeet(modalData._id)
+
+      if (res === true){
+        alert("파티 삭제 성공")
+        closeModal()
+      }
+      else{
+        console.log('res', res)
+        alert("파티 삭제 실패!!")
+      }
+    }catch{
+      alert("error발생!!")
+    }
+  }
   const regisSubmit = async(id) =>{
     const res = await RegMeet(id)
     if (res === 1){
@@ -553,66 +572,79 @@ const RegisterCard = ({modalVisible, setModalVisible, modalData, basketData}) =>
     }
   }
   return(
-    <Modal
-        animationType="none"
-        transparent={true}
-        visible={modalVisible}
-        onRequestClose={closeModal}
-    >
-        <View style={styles.modalCardOverlay}>
-            <View style={styles.modalCardView}>
-                {modalData.createdByNick === user.nickname && (
-                  <View style={{alignItems: 'center', flexDirection: 'row', transform: [{ translateY: -12 }]}}>
-                    <Text style={{fontSize: 10, fontWeight: '500'}}>
-                      약속 시간 24시간 후 농구팟은 자동 삭제됩니다.
-                    </Text>
-                    <Image source={deleteIcon} style={{width: 18, height: 18}}></Image>
-                  </View>
-                )}
-                <Text style={[{fontSize: 16, textAlign: 'center'}]}>
-                    <Text style={styles.modalTextRed}>{modalData.createdByNick}</Text>
-                    님이 생성한{'\n'}농구팟에 참여하시겠습니까?
-                </Text>
-                <View style={styles.modalMiddle}>
-                    <Text style={[styles.modalMiddleText, { marginBottom: 15 }]}>{'✔ '}
-                        <Text style={styles.modalTextRed}>장소, 시간, 인원</Text>을 확인해주세요.
-                    </Text>
-                    <View style={{marginBottom : 10, width: 180}}>
-                        <Text style={styles.modalContent}>
-                            <Text style={styles.modalLabel}>장소 : </Text>
-                            {modalData.place}
-                        </Text>
-                        <Text style={styles.modalContent}>
-                            <Text style={styles.modalLabel}>시간 : </Text>
-                            {DateParse(modalData.time)}
-                        </Text>
-                        <Text style={styles.modalContent}>
-                            <Text style={styles.modalLabel}>인원 : </Text>
-                            {modalData.maxPerson}
-                        </Text>
-                    </View>
-                </View>
-
-                <View style={styles.buttonList}>
-                    <View style={{borderRadius: 5, backgroundColor: Colors.mainRed}}>
-                        <TouchableOpacity onPress={async ()=>{
-                            //파티 참가 api
-                            await regisSubmit(modalData._id)
-                            closeModal()
-                            basketData()
+      <Modal
+          animationType="none"
+          transparent={true}
+          visible={modalVisible}
+          onRequestClose={closeModal}
+      >
+          <View style={styles.modalCardOverlay}>
+              <View style={styles.modalCardView}>
+                  {modalData.createdByNick === user.nickname && (
+                    <View style={{alignItems: 'center', flexDirection: 'row', transform: [{ translateY: -12 }]}}>
+                      <Text style={{fontSize: 10, fontWeight: '500'}}>
+                        약속 시간 24시간 후 농구팟은 자동 삭제됩니다.
+                      </Text>
+                      <TouchableOpacity onPress={async ()=>{
+                        setDeleteConfirmVisible(!deleteConfirmVisible)
                         }}>
-                            <Text style={styles.cardButton}>YES</Text>
-                        </TouchableOpacity>
+                        <Image source={deleteIcon} style={{width: 18, height: 18}}></Image>
+                      </TouchableOpacity>
                     </View>
-                    <View style={{borderRadius: 5, backgroundColor: Colors.black}}>
-                        <TouchableOpacity onPress={closeModal}>
-                            <Text style={styles.cardButton}>NO</Text>
-                        </TouchableOpacity>
-                    </View>
-                </View>
-            </View>
-        </View>
-    </Modal>
+                  )}
+                  <Text style={[{fontSize: 16, textAlign: 'center'}]}>
+                      <Text style={styles.modalTextRed}>{modalData.createdByNick}</Text>
+                      님이 생성한{'\n'}농구팟에 참여하시겠습니까?
+                  </Text>
+                  <View style={styles.modalMiddle}>
+                      <Text style={[styles.modalMiddleText, { marginBottom: 15 }]}>{'✔ '}
+                          <Text style={styles.modalTextRed}>장소, 시간, 인원</Text>을 확인해주세요.
+                      </Text>
+                      <View style={{marginBottom : 10, width: 180}}>
+                          <Text style={styles.modalContent}>
+                              <Text style={styles.modalLabel}>장소 : </Text>
+                              {modalData.place}
+                          </Text>
+                          <Text style={styles.modalContent}>
+                              <Text style={styles.modalLabel}>시간 : </Text>
+                              {DateParse(modalData.time)}
+                          </Text>
+                          <Text style={styles.modalContent}>
+                              <Text style={styles.modalLabel}>인원 : </Text>
+                              {modalData.maxPerson}
+                          </Text>
+                      </View>
+                  </View>
+
+                  <View style={styles.buttonList}>
+                      <View style={{borderRadius: 5, backgroundColor: Colors.mainRed}}>
+                          <TouchableOpacity onPress={async ()=>{
+                              //파티 참가 api
+                              await regisSubmit(modalData._id)
+                              closeModal()
+                              basketData()
+                          }}>
+                              <Text style={styles.cardButton}>YES</Text>
+                          </TouchableOpacity>
+                      </View>
+                      <View style={{borderRadius: 5, backgroundColor: Colors.black}}>
+                          <TouchableOpacity onPress={closeModal}>
+                              <Text style={styles.cardButton}>NO</Text>
+                          </TouchableOpacity>
+                      </View>
+                  </View>
+                  
+                  {/* 파티 삭제 카드 */}
+                  <PartyDeleteConfirmCard
+                    modalVisible={deleteConfirmVisible}
+                    setModalVisible={setDeleteConfirmVisible}
+                    deleteHandle={handleDelete}
+                  ></PartyDeleteConfirmCard>
+                  
+              </View>
+              
+          </View>
+      </Modal>
   )
 }
 /**
@@ -696,9 +728,10 @@ const InviteConfirmCard = ({modalVisible, setModalVisible, modalData, targetMerc
   )
 }
 /**
- * 
+ * 용병 삭제 ConfirmCard
  * @param {props} modalVisible 
  * @param {props} setModalVisible 
+ * @param {props} deleteHandle 파티삭제 함수 
  * @returns 
  */
 const MercsDeleteConfirmModal = ({modalVisible, setModalVisible})=>{
@@ -729,23 +762,19 @@ const MercsDeleteConfirmModal = ({modalVisible, setModalVisible})=>{
   } 
   return(
     <Modal
-        animationType="none"
-        transparent={true}
-        visible={modalVisible}
-        onRequestClose={closeModal}
+      animationType="none"
+      transparent={true}
+      visible={modalVisible} // 확인 모달의 visible 상태
+      onRequestClose={()=> setModalVisible(false)}
     >
-        <View style={styles.modalCardOverlay}>
-        <View style={styles.modalCardView}>
-            <Text style={{ marginBottom: 8, fontSize: 18, fontWeight: '700', color: Colors.mainRed}}>
-            용병 등록 삭제하기</Text>
-            <TouchableOpacity>
-                <Text style={styles.cardContentText}>등록되어있는 용병을 삭제할 수 있습니다.</Text>
-            </TouchableOpacity>
-            
-            
-            {/* 버튼 리스트 */}
-            <View style={styles.buttonList}>
-                <View style={{borderRadius: 5, backgroundColor: Colors.mainRed}}>
+      <View style={styles.modalCardOverlay}>
+          <View style={styles.modalCardView}>
+              <Text style={{fontSize: 20, textAlign: 'center', marginBottom: 12}}>
+                  등록된 용병을 삭제하시겠습니까??
+              </Text>
+              {/* 추가적인 확인 모달의 내용 및 버튼 등을 여기에 추가 */}
+              <View style={styles.buttonList}>
+                    <View style={{borderRadius: 5, backgroundColor: Colors.mainRed}}>
                     <TouchableOpacity onPress={()=>{
                         hanldeMercDelete()
                     }}>
@@ -760,10 +789,53 @@ const MercsDeleteConfirmModal = ({modalVisible, setModalVisible})=>{
             </View>
         </View>
     </View>
-    
     </Modal>
   )
-} 
+}
+/**
+ * 
+ * @param {*} modalVisible 
+ * @param {*} setModalVisible 
+ * @param {*} deleteHandle 해당 파티를 삭제하는 함수
+ * @returns 
+ */
+const PartyDeleteConfirmCard = ({modalVisible, setModalVisible, deleteHandle})=>{
+  const closeModal = ()=>{
+    setModalVisible(false)
+  }
+
+  return(
+    <Modal
+      animationType="none"
+      transparent={true}
+      visible={modalVisible} // 확인 모달의 visible 상태
+      onRequestClose={()=> setModalVisible(false)}
+    >
+      <View style={styles.modalCardOverlay}>
+          <View style={styles.modalCardView}>
+              <Text style={{fontSize: 20, textAlign: 'center', marginBottom: 12}}>
+                  등록된 파티를 삭제하시겠습니까??
+              </Text>
+              {/* 추가적인 확인 모달의 내용 및 버튼 등을 여기에 추가 */}
+              <View style={styles.buttonList}>
+                    <View style={{borderRadius: 5, backgroundColor: Colors.mainRed}}>
+                    <TouchableOpacity onPress={async ()=>{
+                        await deleteHandle()
+                    }}>
+                        <Text style={styles.button}>삭제하기</Text>
+                    </TouchableOpacity>
+                </View>
+                <View style={{borderRadius: 5, backgroundColor: Colors.black}}>
+                    <TouchableOpacity onPress={closeModal}>
+                        <Text style={styles.button}>취소하기</Text>
+                    </TouchableOpacity>
+                </View>
+            </View>
+        </View>
+    </View>
+    </Modal>
+  )
+}
 const styles = StyleSheet.create({
   overlay: {
     flex: 1,
@@ -1051,4 +1123,4 @@ const styles = StyleSheet.create({
 })
 
 export {CreatePartyModal, MercRegModal, MercListModal, InviteListModal,
-   RegisterCard, InviteConfirmCard, MercsDeleteConfirmModal}
+   RegisterCard, InviteConfirmCard, MercsDeleteConfirmModal, PartyDeleteConfirmCard}

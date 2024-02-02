@@ -124,21 +124,21 @@ const RegMeet = async (ID) =>{
  * 삭제 성공시 True return
  * @param {string} ID 
  */
-const deleteMeet = (ID) =>{
+const deleteMeet = async (ID) =>{
   const endpoint = 'v1/meets/'
   const apiURL = baseURL+endpoint+ID
-  instance.delete(apiURL,{
-  })
+  return await instance.delete(apiURL)
   .then((res)=>{
-    if (res.status === 200){
+    console.log(res)
+    if(res.status === 200){
       return true
     }
     else{
       return false
     }
   })
-  .catch((error)=>{
-    console.log(error)
+  .catch((err)=>{
+    console.log(err)
     return false
   })
 }

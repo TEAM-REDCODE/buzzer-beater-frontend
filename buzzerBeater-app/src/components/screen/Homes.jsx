@@ -273,7 +273,12 @@ const Homes = () => {
                         </Text>
                     </View>
                     <TouchableOpacity style={styles.registerButton} onPress={openMercenaryModal}>
-                        <Text style={styles.registerButtonText}>용병 등록하러 가기{' →'} </Text>
+                        {user.isMercenary ?
+                        (
+                        <Text style={styles.registerButtonText}>등록된 용병 삭제하러가기{' →'} </Text>
+                        )
+                        :(<Text style={styles.registerButtonText}>용병 등록하러 가기{' →'} </Text>
+                        )}
                     </TouchableOpacity>
                 </View>
 
