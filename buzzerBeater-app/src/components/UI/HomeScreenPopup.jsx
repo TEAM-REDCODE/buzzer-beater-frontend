@@ -13,12 +13,12 @@ import { deleteMercs } from '../../APIs/mercs';
 import { getBelong, getUserInfo } from '../../APIs/userAPI';
 import { RegMeet, inviteMercs} from '../../APIs/meetAPI';
 
-import choice from '../../../assets/iOSImageSets/Others/Choice3x.png';
-import person from '../../../assets/iOSImageSets/Mypage/FixProfile.png'
-import ball from '../../../assets/iOSImageSets/SelectMerc/Profile3x.png'
-import check_no from '../../../assets/iOSImageSets/SelectList/Check3x.png'
-import check_yes from '../../../assets/iOSImageSets/SelectList/CheckSelect3x.png'
-import deleteIcon from '../../../assets/iOSImageSets/Others/Delete.png'
+import choice from '../../../assets/image/iosImagesets/Choice.png';
+import person from '../../../assets/image/iosImagesets/Person50.png'
+import ball from '../../../assets/image/iosImagesets/WhiteProfile.png'
+import check_no from '../../../assets/image/iosImagesets/BlackCheck.png'
+import check_yes from '../../../assets/image/iosImagesets/RedCheck.png'
+import deleteIcon from '../../../assets/image/iosImagesets/Delete.png'
 
 import { formToJSON } from 'axios';
 /**

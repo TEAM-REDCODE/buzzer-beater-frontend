@@ -16,8 +16,8 @@ import passowrdVerify from "./account/passwordValidation";
 import Colors from "../../Common/Colors";
 import Loading from "./Loading";
 import { PosSelector } from '../UI/Selector';
+import Imagesets from "../../Common/Imagesets";
 
-let bigLogoImg = require('../../../assets/Buzzer-Beater_big_logo.png')
 
 const SignUp = ({navigation}) => {
     const [nickname, onChangeNickname] = React.useState('');
@@ -65,7 +65,7 @@ const SignUp = ({navigation}) => {
             <ScrollView style={styles.container} contentContainerStyle={{flexGrow : 1}}>
                 {loading ? <Loading /> : null}
                 <View style={styles.wrapper}>
-                    <Image style={styles.image} source={bigLogoImg} />
+                    <Image style={styles.image} source={Imagesets.Logo} />
                     <View style={styles.signUpInput}>
                         <View style={styles.subContainer}>
                             <Text style={styles.subtitle}>
