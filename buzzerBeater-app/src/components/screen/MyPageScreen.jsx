@@ -1,20 +1,15 @@
 import React, {useContext, useEffect, useState} from 'react'
-import {
-  SafeAreaView,
-  View, 
-  Text, 
-  TouchableOpacity,
-  StyleSheet,
-} from 'react-native'
-import Colors from '../../Common/Colors'
-import { Iconify } from 'react-native-iconify';
+import { SafeAreaView, View, Text, TouchableOpacity, StyleSheet } from 'react-native'
 import { UserContext } from '../../Common/UserContext';
 import { logout } from '../../APIs/instance';
-import {NicknamePopup, PasswordPopup, PhysicalPopup, MecenearyPopup, PositonPopup} from '../UI/MyPagePopup';
+import { NicknamePopup, PasswordPopup, PhysicalPopup, MecenearyPopup, PositonPopup, } from '../UI/MyPagePopup';
 import { setMpos } from '../../APIs/userAPI';
-import Loading from "./Loading";
-import colors from "../../Common/Colors";
 import { refresh } from '../../APIs/instance';
+import Loading from "./Loading";
+
+import { Iconify } from 'react-native-iconify';
+import Colors from '../../Common/Colors'
+
 export default function MyPageScreen({navigation}) {
   const { user, setUserData } = useContext(UserContext);
   const [nicknamePopup, setNicknamePopup] = useState(false)
@@ -22,13 +17,14 @@ export default function MyPageScreen({navigation}) {
   const [physicalPopup, setPhysicalPopup] = useState(false)
   const [mecenearyPopup, setMecenearyPopup] = useState(false)
   const [positonPopup, setPositonPopup] = useState(false)
+
   // 로딩화면
   const [loading, setLoading] = React.useState(true);
 
   useEffect(() => {
     console.log(user);
   }, [user]);
-  
+
   const handlePopup = (num) =>{
     if(num===0){
       setNicknamePopup(!nicknamePopup)
@@ -46,7 +42,7 @@ export default function MyPageScreen({navigation}) {
       setPositonPopup(!positonPopup)
     }
   }
-  
+
   const handleLogout = () =>{
     logout()
   }
@@ -109,11 +105,12 @@ export default function MyPageScreen({navigation}) {
                   <TouchableOpacity onPress={(e)=>{
                     e.stopPropagation();
                     handlePopup(4)
-                    }}>
+                  }}>
                     <Iconify icon="icon-park-outline:basketball-clothes" size={60} style={styles.iconStyle} />
                   </TouchableOpacity>
                   <Text style={styles.iconText}>주 포지션 변경</Text>
                 </View>
+
               </View>
             </View>
 
@@ -132,7 +129,7 @@ export default function MyPageScreen({navigation}) {
 
 const styles = StyleSheet.create({
   safeArea : {
-    backgroundColor : colors.black,
+    backgroundColor : Colors.black,
   },
 
   container : {
@@ -236,6 +233,6 @@ const styles = StyleSheet.create({
     marginLeft : 15,
     marginRight : 15,
   }
-  
-  
+
+
 });

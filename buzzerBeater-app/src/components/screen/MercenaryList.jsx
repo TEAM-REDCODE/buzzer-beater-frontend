@@ -1,21 +1,14 @@
-import React, {useContext, useEffect, useState} from 'react';
-import {
-    SafeAreaView,
-    ScrollView,
-    StyleSheet,
-    Text,
-    TouchableOpacity,
-    View
-} from 'react-native';
-import colors from "../../Common/Colors";
-import { Iconify } from 'react-native-iconify';
+import React, { useContext, useEffect, useState } from 'react';
+import { Image, SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { getBelong } from '../../APIs/userAPI';
 import { getMercsReq } from '../../APIs/mercs';
-import {UserContext} from "../../Common/UserContext";
-import Colors from "../../Common/Colors";
-import {DateParse} from '../../Common/DateParse';
+import { UserContext } from "../../Common/UserContext";
+import { DateParse } from '../../Common/DateParse';
 import MercsListPopup from '../UI/MercsListPopup';
 import Loading from "./Loading";
+
+import Colors from "../../Common/Colors";
+import {Iconify} from "react-native-iconify";
 
 const MercenaryList = ({navigation}) => {
     const { user, setUserData } = useContext(UserContext);
@@ -27,7 +20,7 @@ const MercenaryList = ({navigation}) => {
 
     const basketData = async () => {
         try {
-            
+
             // getBelong 함수 호출
             const basketResponse = await getBelong();
             console.log('Response from getBelong:', basketResponse);
@@ -103,121 +96,86 @@ const MercenaryList = ({navigation}) => {
                     { loading ? (<Loading/>) : null }
                     <ScrollView>
                         <View style={styles.listCol}>
-                            <Text style={styles.bigText}>신청한 농구팟</Text>
-                            <Text style={styles.smallText}>
-                                <Text style={styles.smallTextRed}>{user.nickname}님</Text>
-                                이 신청한 농구팟을 확인해보세요.
+                            <Text style={styles.headerTitle}>농구팟 참가 목록</Text>
+                            <Text style={styles.description}>
+                                <Text style={styles.smallTextRed}>{user.nickname}</Text>님이 참가한 농구팟 목록입니다.
                             </Text>
                             <ScrollView horizontal={true}>
                                 {belongList1.length > 0 ? (
-                                    belongList1.map((item) => (
-                                        <TouchableOpacity key={item._id} style={styles.listBox}>
-                                            {(item.maxNum !== item.count) &&
-                                              <Iconify
-                                              icon="lets-icons:check-fill"
-                                              style={styles.checkIcon}
-                                              color={colors.check}
-                                              />
-                                            }
-                                            <Iconify
-                                                icon="solar:basketball-bold-duotone"
-                                                size={60}
-                                                style={styles.iconStyle}
-                                            />
-                                            <View style={styles.subContainer}>
-                                                <Text style={styles.title}>{item.title}</Text>
-                                                <View style={styles.titleUnderbar}></View>
-                                                <Text style={styles.content}>
-                                                    <Text style={styles.contentTextBold}>생성자 : </Text>{item.createdByNick}</Text>
-                                                <Text style={styles.content}>
-                                                    <Text style={styles.contentTextBold}>장소 : </Text>{item.place}</Text>
-                                                <Text style={styles.content}>
-                                                    <Text style={styles.contentTextBold}>시간 : </Text>{DateParse(item.time)}</Text>
-                                            </View>
-                                            <View style={styles.maxPerson}>
-                                                <View style={styles.person}>
-                                                    <Text style={styles.maxNum}>{item.count} / {item.maxPerson}</Text>
-                                                    <Iconify icon="ion:person" size={25} color={colors.mainRed} />
+                                    belongList1.map((item) => {
+                                        // 제목이 긴 경우
+                                        const processTitle = item.title.length > 15 ? `${item.title.slice(0, 15)}...` : item.title;
+
+                                        return (
+                                            <TouchableOpacity key={item._id} style={styles.listBox}>
+                                                {(item.maxNum === item.count) &&
+                                                    <Iconify icon='icon-park-solid:check-one' size={20} color={Colors.check} style={styles.checkIcon} />
+                                                }
+                                                <View style={styles.subContainer}>
+                                                    <Text style={styles.title}>{processTitle}</Text>
+                                                    <Text style={[styles.content, {color : Colors.mainRed}]}>{item.createdByNick}</Text>
+                                                    <Text style={styles.content}>{item.place}</Text>
+                                                    <Text style={styles.content}>{DateParse(item.time)}</Text>
+                                                    <View style={styles.person}>
+                                                        <Iconify icon='ion:person' size={20} color={Colors.mainRed} />
+                                                        <Text style={styles.maxNum}>{item.count} / {item.maxPerson}</Text>
+                                                    </View>
                                                 </View>
-                                            </View>
-                                        </TouchableOpacity>
-                                    ))
+                                            </TouchableOpacity>
+                                        )
+                                    })
                                 ) : (
                                     <TouchableOpacity style={styles.listBox}>
-                                        <Iconify
-                                            icon="solar:basketball-bold-duotone"
-                                            size={80}
-                                            style={styles.noDataIconStyle}
-                                        />
-                                        <Text style={styles.noDataText}>데이터가 없습니다.</Text>
-                                    </TouchableOpacity>
-                                    )
-                                }
-                            </ScrollView>
-                        </View>
-                        <View style={styles.topLine} />
-                        <View style={styles.listCol}>
-                            <Text style={styles.bigText}>보류 중인 용병 신청</Text>
-                            <Text style={styles.smallText}>
-                                <Text style={styles.smallTextRed}>{user.nickname}님</Text>
-                                을 용병으로 신청한 농구팟을 확인해보세요.
-                            </Text>
-                            <ScrollView horizontal={true}>
-                                {belongList2.length > 0 ? (
-                                    belongList2.map((item, idx) => (
-                                        <TouchableOpacity key={item._id} style={styles.listBox} onPress={()=>{handleCardPress(belongList2[idx])}}>
-                                            {(item.maxNum !== item.count) &&
-                                              <Iconify
-                                              icon="lets-icons:check-fill"
-                                              style={styles.checkIcon}
-                                              color={colors.check}
-                                              />
-                                            }
-                                            <Iconify
-                                                icon="solar:basketball-bold-duotone"
-                                                size={60}
-                                                style={styles.iconStyle}
-                                            />
-                                            <ScrollView horizontal>
-                                              <Text style={styles.title}>{item.title}</Text>
-                                            </ScrollView>
-                                            <View style={styles.titleUnderbar}></View>
-                                            <Text style={styles.content}>
-                                                <Text style={styles.contentTextBold}>생성자 : </Text>{item.createdByNick}</Text>
-                                            <Text style={styles.content}>
-                                                <Text style={styles.contentTextBold}>장소 : </Text>{item.place}</Text>
-                                            <Text style={styles.content}>
-                                                <Text style={styles.contentTextBold}>시간 : </Text>{DateParse(item.time)}</Text>
-                                            <View style={styles.maxPerson}>
-                                                <View style={styles.person}>
-                                                    <Text style={styles.maxNum}>{item.count} / {item.maxPerson}</Text>
-                                                    <Iconify icon="ion:person" size={25} color={colors.mainRed} />
-                                                </View>
-                                            </View>
-                                        </TouchableOpacity>
-                                    ))
-                                ) : (
-                                    <TouchableOpacity style={styles.listBox}>
-                                        <Iconify
-                                            icon="solar:basketball-bold-duotone"
-                                            size={80}
-                                            style={styles.noDataIconStyle}
-                                        />
                                         <Text style={styles.noDataText}>데이터가 없습니다.</Text>
                                     </TouchableOpacity>
                                 )
                                 }
                             </ScrollView>
                         </View>
-                        <View style={styles.buttonTab}>
-                            <TouchableOpacity style={styles.homeButton} onPress={() => navigation.navigate('Homes')}>
-                                <Text style={styles.homeText}>{'← '}홈으로 돌아가기</Text>
-                            </TouchableOpacity>
+                        <View style={styles.listCol}>
+                            <Text style={styles.headerTitle}>용병 보류 목록</Text>
+                            <Text style={styles.description}>
+                                <Text style={styles.smallTextRed}>{user.nickname}</Text>님을 용병으로 원하는 농구팟 목록입니다.
+                            </Text>
+                            <ScrollView horizontal={true}>
+                                {belongList2.length > 0 ? (
+                                    belongList2.map((item, idx) => {
+                                        // 제목이 긴 경우
+                                        const processTitle = item.title.length > 15 ? `${item.title.slice(0, 15)}...` : item.title;
+
+                                        return (
+                                            <TouchableOpacity key={item._id} style={styles.listBox} onPress={()=>{handleCardPress(belongList2[idx])}}>
+                                                {(item.maxNum === item.count) &&
+                                                    <Iconify icon='icon-park-solid:check-one' size={20} color={Colors.check} style={styles.checkIcon} />
+                                                }
+                                                <View style={styles.subContainer}>
+                                                    <Text style={styles.title}>{processTitle}</Text>
+                                                    <Text style={[styles.content, {color : Colors.mainRed}]}>{item.createdByNick}</Text>
+                                                    <Text style={styles.content}>{item.place}</Text>
+                                                    <Text style={styles.content}>{DateParse(item.time)}</Text>
+                                                    <View style={styles.person}>
+                                                        <Iconify icon='ion:person' size={20} color={Colors.mainRed} />
+                                                        <Text style={styles.maxNum}>{item.count} / {item.maxPerson}</Text>
+                                                    </View>
+                                                </View>
+                                            </TouchableOpacity>
+                                        )
+                                    })
+                                ) : (
+                                    <TouchableOpacity style={styles.listBox}>
+                                        <Text style={styles.noDataText}>데이터가 없습니다.</Text>
+                                    </TouchableOpacity>
+                                )
+                                }
+                            </ScrollView>
                         </View>
                     </ScrollView>
                 </View>
-            <MercsListPopup visible={modalVisible} setModalVisible={setModalVisible} meetInfo={modalData}>
-            </MercsListPopup>
+                <MercsListPopup
+                    visible={modalVisible}
+                    setModalVisible={setModalVisible}
+                    meetInfo={modalData}
+                />
             </View>
         </SafeAreaView>
     );
@@ -225,14 +183,13 @@ const MercenaryList = ({navigation}) => {
 
 const styles = StyleSheet.create({
     safeArea : {
-        backgroundColor : colors.black,
+        backgroundColor : Colors.black,
     },
 
     container : {
         width : '100%',
-        height : '100%',
         display : 'flex',
-        backgroundColor : colors.black,
+        backgroundColor : Colors.black,
     },
 
     wrapper : {
@@ -240,44 +197,37 @@ const styles = StyleSheet.create({
         justifyContent : 'center',
     },
 
-    topLine : {
-      borderTopWidth : 1.3,
-      borderTopColor : colors.white,
-      borderStyle : 'solid',
-    },
-
     listCol : {
-      width : '90%',
-      marginLeft : 20,
-      marginBottom : 30,
+        width : '95%',
+        height : '50%',
+        marginLeft : 20,
     },
 
-    bigText : {
-      marginTop : 20,
-      fontSize : 20,
-      fontWeight : 'bold',
-      color : colors.white,
+    headerTitle : {
+        marginTop : 20,
+        fontSize : 28,
+        fontWeight : 'bold',
+        color : Colors.white,
     },
 
-    smallText : {
+    description : {
         marginTop : 10,
-        fontSize : 16,
-        color : colors.white,
+        fontSize : 17,
+        color : Colors.white,
     },
 
     smallTextRed : {
-      fontWeight : 'bold',
-      fontSize : 18,
-      color : colors.warning,
+        fontWeight : 'bold',
+        color : Colors.warning,
     },
 
     listBox : {
         width : 180,
-        height : 260,
+        height : 250,
         borderRadius : 5,
-        marginTop : 20,
-        marginRight : 13,
-        backgroundColor : colors.white,
+        marginTop : 25,
+        marginRight : 10,
+        backgroundColor : Colors.white,
     },
 
     checkIcon : {
@@ -285,92 +235,44 @@ const styles = StyleSheet.create({
         top : 10,
     },
 
-    iconStyle : {
-        marginLeft : 15,
-        marginBottom : 5,
-        color : colors.mainRed,
-    },
-
     subContainer : {
-      width : 145,
-      marginLeft : 20,
+        width : 150,
+        marginLeft : 15,
+        marginTop : 40,
     },
 
     title : {
-      color : colors.black,
-      fontSize : 18,
-      fontWeight : 'bold',
-      marginBottom : 5,
-    },
-
-    titleUnderbar : {
-        borderStyle : 'solid',
-        borderTopWidth : 1.5,
-        borderTopColor : colors.mainRed,
+        color : Colors.black,
+        fontSize : 17,
+        fontWeight : 'bold',
+        marginBottom : 5,
     },
 
     content : {
-      color : colors.black,
-      fontSize : 13,
-      marginTop : 5,
-    },
-
-    contentTextBold : {
-        fontWeight: 'bold',
+        color : Colors.black,
         fontSize : 15,
-    },
-
-    maxPerson : {
-      display : 'flex',
-      marginTop : 15,
-      left : 100,
+        marginTop : 5,
     },
 
     person : {
         flexDirection : 'row',
         alignItems : 'center',
+        marginTop : 30,
     },
 
     maxNum : {
-      width : 45,
-      fontSize : 14,
-      color : colors.black,
-      textAlign : 'center',
-    },
-
-    noDataIconStyle : {
-        margin : 50,
-        marginBottom : 10,
-        color : colors.mainRed,
+        width : 45,
+        fontSize : 15,
+        color : Colors.black,
+        textAlign : 'center',
     },
 
     noDataText : {
-      textAlign : 'center',
-      fontSize : 18,
-      fontWeight : 'bold',
-      color : colors.black,
-    },
-
-    buttonTab : {
-        width : '95%',
-        justifyContent : 'flex-end',
-        alignItems : 'flex-end',
-        marginBottom : 15,
-    },
-
-    homeButton : {
-        borderRadius : 5,
-        padding : 10,
-        backgroundColor : Colors.white,
-    },
-
-    homeText : {
-        color : Colors.black,
-        fontWeight : 'bold',
-        fontSize : 13,
+        marginTop : 103,
         textAlign : 'center',
-        marginLeft : 15,
-        marginRight : 15,
+        fontSize : 17,
+        fontWeight : 'bold',
+        color : Colors.black,
     },
 
 });

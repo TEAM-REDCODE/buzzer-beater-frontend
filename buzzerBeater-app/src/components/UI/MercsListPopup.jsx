@@ -1,17 +1,10 @@
-import React, {useContext, useEffect, useState} from 'react';
-import {
-  StyleSheet,
-  Modal,
-  Text,
-  TouchableOpacity,
-  View
-} from 'react-native';
-import colors from '../../Common/Colors';
-import {DateParse} from '../../Common/DateParse';
+import React from 'react';
+import { StyleSheet, Modal, Text, TouchableOpacity, View } from 'react-native';
+import { DateParse } from '../../Common/DateParse';
 import { acceptMercsReq } from '../../APIs/mercs';
 import Colors from "../../Common/Colors";
+
 function MercsListPopup({ visible, setModalVisible, meetInfo}) {
-  
   const closeModal = () => {
     setModalVisible(false);
   };
@@ -35,29 +28,19 @@ function MercsListPopup({ visible, setModalVisible, meetInfo}) {
       onRequestClose={() => {
           setModalVisible(!visible);
       }}>
-        <View style={styles.modalOverlay}>
-            <View style={styles.modalView}>
-                <Text style={[styles.modalTitle, { marginBottom: 8 }]}>
-                    <Text style={[styles.modalCreatorName, styles.modalTextRed]}>{meetInfo.createdByNick}</Text>
-                    님이 생성한{'\n'}농구팟에 참여하시겠습니까?
+        <View style={styles.modalCardOverlay}>
+            <View style={styles.modalCardView}>
+                <Text style={styles.modalText}>
+                    <Text style={{color : Colors.mainRed, fontSize : 20}}>{meetInfo.createdByNick}</Text>님이 생성한{'\n'}농구팟에 참여하시겠습니까?
                 </Text>
                 <View style={styles.modalMiddle}>
-                    <Text style={[styles.modalMiddleText, { marginBottom: 15 }]}>{'✔ '}
-                        <Text style={styles.modalTextRed}>장소, 시간, 인원</Text>을 확인해주세요.
+                    <Text style={styles.modalMiddleText}>{'✔ '}
+                        <Text style={{color : Colors.mainRed}}>장소, 시간, 인원</Text>을 확인해주세요.
                     </Text>
-                    <View style={{marginBottom : 10,}}>
-                        <Text style={styles.modalContent}>
-                          <Text style={styles.modalLabel}>장소 : </Text>
-                          {meetInfo.place}
-                        </Text>
-                        <Text style={styles.modalContent}>
-                            <Text style={styles.modalLabel}>시간 : </Text>
-                            {DateParse(meetInfo.time)}
-                        </Text>
-                        <Text style={styles.modalContent}>
-                            <Text style={styles.modalLabel}>인원 : </Text>
-                            {meetInfo.maxPerson}
-                        </Text>
+                    <View style={{width: '70%'}}>
+                        <Text style={styles.modalContent}>장소 : {meetInfo.place}</Text>
+                        <Text style={styles.modalContent}>시간 : {DateParse(meetInfo.time)}</Text>
+                        <Text style={styles.modalContent}>인원 : {meetInfo.maxPerson}</Text>
                     </View>
                     <View style={styles.buttonList}>
                         <View style={{borderRadius: 5, backgroundColor: Colors.mainRed}}>
@@ -65,12 +48,12 @@ function MercsListPopup({ visible, setModalVisible, meetInfo}) {
                                 handleSubmit()
                                 closeModal()
                             }}>
-                                <Text style={styles.button}>YES</Text>
+                                <Text style={styles.cardButton}>YES</Text>
                             </TouchableOpacity>
                         </View>
                         <View style={{borderRadius: 5, backgroundColor: Colors.black}}>
                             <TouchableOpacity onPress={closeModal}>
-                                <Text style={styles.button}>NO</Text>
+                                <Text style={styles.cardButton}>NO</Text>
                             </TouchableOpacity>
                         </View>
                     </View>
@@ -82,53 +65,40 @@ function MercsListPopup({ visible, setModalVisible, meetInfo}) {
 }
 
 const styles = StyleSheet.create({
-    modalOverlay: {
-        flex: 1,
-        backgroundColor: 'rgba(2, 2, 2, 0.5)',
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-
-    modalView: {
-        width : 340,
-        backgroundColor: Colors.white,
-        borderRadius: 8,
-        padding: 20,
-        alignItems: 'center',
-    },
-
-    modalTitle: {
-        width: 280,
-        color: Colors.black,
-        fontSize: 20,
-        fontWeight: 'bold',
-        textAlign : 'center',
-    },
-
-    modalCreatorName: {
-        fontSize: 25,
-        fontWeight: 'bold',
-    },
-
-    modalTextRed : {
-        color : colors.mainRed,
-        fontWeight: 'bold',
-    },
-
-    modalMiddle : {
-        width : 260,
+    modalCardOverlay : {
+        flex : 1,
+        backgroundColor : 'rgba(2, 2, 2, 0.5)',
+        justifyContent : 'center',
         alignItems : 'center',
     },
 
-    modalMiddleText: {
-        fontSize: 17,
-        color: colors.black,
+    modalCardView : {
+        width : '80%',
+        backgroundColor : Colors.white,
+        borderRadius : 8,
+        padding : 20,
+        alignItems : 'center',
     },
 
-    modalLabel: {
-        fontSize: 16,
-        color: colors.black,
-        fontWeight:'bold',
+    modalText: {
+        color : Colors.black,
+        fontSize : 17,
+        textAlign : 'center',
+        fontWeight : 'bold',
+    },
+
+    modalMiddle : {
+        width : '90%',
+        alignItems : 'center',
+    },
+
+    modalMiddleText : {
+        width : '90%',
+        marginTop : 10,
+        marginBottom : 7,
+        fontSize : 15,
+        color : Colors.black,
+        textAlign : 'left',
     },
 
     modalContent: {
@@ -137,12 +107,12 @@ const styles = StyleSheet.create({
     },
 
     buttonList:{
-        width: 280,
-        marginTop: 10,
-        display: 'flex',
-        flexDirection: 'row',
-        justifyContent: 'center',
-        gap: 10,
+        width : '90%',
+        marginTop : 10,
+        display : 'flex',
+        flexDirection : 'row',
+        justifyContent : 'center',
+        gap : 10,
     },
 
     button:{
@@ -153,6 +123,16 @@ const styles = StyleSheet.create({
         color: Colors.white,
         fontWeight: 'bold',
         fontSize: 15,
+    },
+
+    cardButton:{
+        paddingLeft: 23,
+        paddingRight: 23,
+        paddingTop: 10,
+        paddingBottom: 10,
+        color: Colors.white,
+        fontWeight: 'bold',
+        fontSize: 12,
     },
 });
 export default MercsListPopup;

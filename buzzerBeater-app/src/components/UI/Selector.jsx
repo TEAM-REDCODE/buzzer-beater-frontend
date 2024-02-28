@@ -1,6 +1,7 @@
 import { View, Text, Modal, TouchableOpacity, ScrollView, StyleSheet } from 'react-native'
-import React from 'react'
-import Colors from '../../Common/Colors'
+import React from 'react';
+import Colors from '../../Common/Colors';
+
 /**
  * 
  * @param {*} param0 
@@ -45,34 +46,35 @@ const PosSelector = ({newMercs, setNewMercs,  setPositionPicker, positionPicker}
 }
 
 const styles = StyleSheet.create({
-  modalOverlay: {
-    flex: 1,
-    backgroundColor: 'rgba(2, 2, 2, 0.5)',
-    justifyContent: 'center',
-    alignItems: 'center',
+  modalOverlay : {
+    flex : 1,
+    backgroundColor : 'rgba(2, 2, 2, 0.5)',
+    justifyContent : 'center',
+    alignItems : 'center',
   },
-  pickerContainer: {
-    backgroundColor: Colors.white,
-    borderRadius: 5,
-    padding: 20,
-    maxHeight: 300,
-    width: 200,
+
+  pickerContainer : {
+      width : '80%',
+      backgroundColor : Colors.white,
+      borderRadius : 8,
+      padding : 20,
+      alignItems : 'center',
   },
-  pickerItem: {
-      marginBottom : 10,
-  },
+
   pickerUnderbar : {
-    marginTop : 10,
+    width : 230,
     borderStyle : 'solid',
-    borderWidth : 0.5,
-    borderColor : Colors.gray
+    borderWidth : 0.3,
+    borderColor : Colors.gray,
   },
+
   pickerItemText: {
+      margin : 20,
       textAlign: 'center',
-      fontSize: 20,
+      fontSize: 18,
   },
 })
-export {PosSelector}
+export { PosSelector }
 
 
 

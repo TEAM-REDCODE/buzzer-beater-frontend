@@ -8,6 +8,7 @@ import Start from './src/components/screen/Start';
 import { UserProvider } from './src/Common/UserContext';
 import { navigationRef } from './src/Common/NavigationContainer';
 import TabBar from "./src/components/UI/TabBar";
+import {CreatePartyModal, MercRegModal} from "./src/components/UI/HomeScreenPopup";
 
 const Stack = createNativeStackNavigator();
 
@@ -21,6 +22,8 @@ export default function App() {
                   <Stack.Screen name='SignIn' component={SignIn} options={signHeaderOptions}/>
                   <Stack.Screen name='SignUp' component={SignUp} options={signHeaderOptions}/>
                   <Stack.Screen name='Homes' component={TabBar} options={commonHeaderOptions}/>
+                  <Stack.Screen name='CreatePartyModal' component={CreatePartyModal} options={{headerShown : false, presentation : 'transparentModal'}} />
+                  <Stack.Screen name='MercRegModal' component={MercRegModal} options={{headerShown : false, presentation : 'transparentModal'}} />
               </Stack.Navigator>
           </NavigationContainer>
       </UserProvider>

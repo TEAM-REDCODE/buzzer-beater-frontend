@@ -1,11 +1,10 @@
-import React ,{useContext}from 'react';
+import React ,{ useContext }from 'react';
 import {Image, SafeAreaView, StyleSheet, Text, TextInput, TouchableOpacity, View} from 'react-native';
-import colors from "../../Common/Colors";
 import { signIn } from "../../APIs/signAPI"
 import { getUserInfo } from '../../APIs/userAPI';
 import { UserContext } from '../../Common/UserContext';
 import Loading from "./Loading";
-import Spinner from "react-native-loading-spinner-overlay";
+import colors from "../../Common/Colors";
 import Imagesets from "../../Common/Imagesets";
 
 const SignIn = ({navigation}) => {
@@ -43,10 +42,10 @@ const SignIn = ({navigation}) => {
                 alert('로그인 실패');
             }
         } catch (error) {
-                // Handle other errors
-                console.error('Login error:', error);
-                alert('이메일과 비밀번호를 확인해주세요.');
-            }
+            // Handle other errors
+            console.error('Login error:', error);
+            alert('이메일과 비밀번호를 확인해주세요.');
+        }
     };
 
 
@@ -55,7 +54,7 @@ const SignIn = ({navigation}) => {
             <View style={styles.container}>
                 {loading ? <Loading /> : null}
                 <View style={styles.wrapper}>
-                    <Image style={styles.image} source={Imagesets.Logo} />
+                    <Image style={styles.logo} source={Imagesets.Logo} />
                     <View style={styles.signInInput}>
                         <TextInput
                             style={styles.input}
@@ -75,7 +74,7 @@ const SignIn = ({navigation}) => {
                             keyboardType="visible-password"
                         />
                         <TouchableOpacity style={styles.button} onPress = {() => {handleSignIn(email, password)}}>
-                            <Text style={styles.loginText}>로그인하기</Text>
+                            <Text style={styles.loginText}>로그인</Text>
                         </TouchableOpacity>
                     </View>
                 </View>
@@ -102,7 +101,7 @@ const styles = StyleSheet.create({
         alignItems : 'center',
     },
 
-    image : {
+    logo : {
         width: '90%',
         height : 100,
         resizeMode: 'contain',
@@ -113,7 +112,7 @@ const styles = StyleSheet.create({
         alignItems : 'center',
     },
 
-    input: {
+    input : {
         width : 300,
         height : 50,
         margin : 10,
@@ -122,16 +121,17 @@ const styles = StyleSheet.create({
         backgroundColor : colors.white,
     },
 
-    button: {
+    button : {
         width : 300,
         padding : 18,
         marginBottom : 15,
-        margin : 20,
+        marginTop : 20,
         borderRadius : 5,
         backgroundColor : colors.mainRed,
+        alignItems : 'center',
     },
 
-    loginText: {
+    loginText : {
         fontSize : 16,
         color : colors.white,
         textAlign : 'center',
