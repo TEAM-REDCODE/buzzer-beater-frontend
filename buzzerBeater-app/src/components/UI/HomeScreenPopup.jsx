@@ -13,8 +13,10 @@ import Colors from '../../Common/Colors'
 import { deleteMercs } from '../../APIs/mercs';
 import { getBelong, getUserInfo } from '../../APIs/userAPI';
 import { RegMeet, inviteMercs, deleteMeet} from '../../APIs/meetAPI';
-import { formToJSON } from 'axios';
 
+// APIs
+import { createMeet } from '../../APIs/meetAPI';
+import { createMercs } from '../../APIs/mercs';
 /**
  * 
  * @param {func} meetSubmit 새로운 농구팟 신청 API
@@ -23,18 +25,14 @@ import { formToJSON } from 'axios';
  */
 
 
-const CreatePartyModal = ({meetSubmit, basketData, modalVisible, setModalVisible, navigation}) =>{
+const CreatePartyModal = ({goBack, modalVisible, setModalVisible}) =>{
+  const closeModal = () =>{
+    setModalVisible()
+  }
+  
   // user Context
   const { user, setUserData } = useContext(UserContext);
 
-  /**
-   * 모달 나가기 함수
-   */
-  const closeModal = () => {
-    setModalVisible(false);
-    console.log(modalVisible)
-    console.log('closeModal!!')
-  };
   const [newTeam, setNewTeam] = useState({
     title: '',
     place: '',
@@ -44,7 +42,7 @@ const CreatePartyModal = ({meetSubmit, basketData, modalVisible, setModalVisible
     mainPosition: '',
     height: '',
     hasBall: undefined,
-});
+  });
   // DatePicker
   const [datePickerOn, setDatePickerOn] = useState(false)
   
@@ -62,11 +60,10 @@ const CreatePartyModal = ({meetSubmit, basketData, modalVisible, setModalVisible
     transparent={true}
     visible={modalVisible}
     // onRequestClose={()=>{closeModal}}
-        onPress={() => {navigation.goBack()}}
     >
       <View style={styles.overlay}>
           <View style={[styles.modalView, {height: '100%'}]}>
-            <ModalHeader closeModal={closeModal} />
+            <ModalHeader goBack={goBack} setModalVisible={setModalVisible}/>
               <Text style={styles.modalTitle}>농구팟 생성</Text>
               <Text style={styles.modalManualText}>아래의 정보를 작성해주세요.</Text>
               <Text style={[styles.modalMiddleText, {fontWeight: 'bold'}]}>제목<Text style={{color: Colors.warning}}>*</Text></Text>
@@ -151,8 +148,10 @@ const CreatePartyModal = ({meetSubmit, basketData, modalVisible, setModalVisible
               <View style={styles.buttonList}>
                   <View style={{borderRadius: 5, backgroundColor: Colors.mainRed, }}>
                       <TouchableOpacity onPress={async () => {
-                          await meetSubmit(newTeam.title, newTeam.maxPerson, newTeam.place, newTeam.time, user.userId)
-                          await basketData()
+                          const res = await createMeet(newTeam.title, newTeam.maxPerson, newTeam.place, newTeam.time, user.userId)
+                          if(res===true){
+                            alert("파티 생성 성공")
+                          }
                           setNewTeam({
                               title: '',
                               place: '',
@@ -164,6 +163,8 @@ const CreatePartyModal = ({meetSubmit, basketData, modalVisible, setModalVisible
                               hasBall: undefined,
                           })
                           closeModal()
+                          goBack();
+
                       }}>
                           <Text style={styles.button}>생성</Text>
                       </TouchableOpacity>
@@ -183,8 +184,10 @@ const CreatePartyModal = ({meetSubmit, basketData, modalVisible, setModalVisible
  * @param {props} regMercsSubmit 용병 제출 API
  * @returns 
  */
-const MercRegModal = ({modalVisible, setModalVisible, regMercsSubmit}) =>{
+const MercRegModal = ({modalVisible, setModalVisible, goBack, isMercenary}) =>{
   
+  const { user, setUserData } = useContext(UserContext);
+
   // Pickers
   const [timePickerOn, setTimePickerOn] = useState(false)
   const [positionPicker, setPositionPicker] = useState(false)
@@ -208,114 +211,204 @@ const MercRegModal = ({modalVisible, setModalVisible, regMercsSubmit}) =>{
    * 모달 나가기 함수
    */
   const closeModal = () => {
-    setModalVisible(false);
+    setModalVisible();
   };
-
+  console.log('여기서', isMercenary)
   return(
-    <Modal
-        animationType="slide"
-        transparent={true}
-        visible={modalVisible}
-        onRequestClose={closeModal}
-    >
-      <View style={styles.overlay}>
-          <View style={[styles.modalView, {height: '70%'}]}>
-              <ModalHeader closeModal={closeModal} />
-              <Text style={styles.modalTitle}>용병 등록</Text>
-                  <Text style={styles.modalManualText}>아래의 정보를 작성해주세요.</Text>
-              <Text style={[styles.modalMiddleText, {fontWeight: 'bold'}]}>포지션<Text style={{color: Colors.warning}}>*</Text></Text>
-              <TouchableOpacity onPress={()=>{setPositionPicker(true)}} style={styles.input}>
-                  {newMercs.position === '' ? (
-                          <View style={styles.selectContainer}>
-                              <Text style={{color: Colors.gray}}>포지션을 선택해주세요.</Text>
-                              <Iconify icon='eva:arrow-down-fill' size={20}/>
-                          </View>
-                      ):(
-                      <Text style={styles.determineText}>{newMercs.position}</Text>
-                  )}
-              </TouchableOpacity>
-              <Text style={[styles.modalMiddleText, {fontWeight: 'bold'}]}>가능한 시간대<Text style={{color: Colors.warning}}>*</Text></Text>
-              <TouchableOpacity onPress={()=>{setTimePickerOn(true)}} style={styles.input}>
-                  {newMercs.avTime === '' ? (
-                      <View style={styles.selectContainer}>
-                          <Text style={{color: Colors.gray}}>시간을 선택해주세요.</Text>
-                          <Iconify icon='eva:arrow-down-fill' size={20}/>
-                      </View>
-                      ):(
-                      <Text style={styles.determineText}>{DateParse(newMercs.avTime)}</Text>
+    <>
+    {isMercenary === true ? (
+      <MercsDeleteConfirmModal 
+        modalVisible={modalVisible}
+        setModalVisible={setModalVisible}
+        goBack={goBack}
+      />
+    ):(
+      <Modal
+          animationType="slide"
+          transparent={true}
+          visible={modalVisible}
+          onRequestClose={closeModal}
+      >
+        <View style={styles.overlay}>
+            <View style={[styles.modalView, {height: '70%'}]}>
+                <ModalHeader setModalVisible={setModalVisible} goBack={goBack}/>
+                <Text style={styles.modalTitle}>용병 등록</Text>
+                    <Text style={styles.modalManualText}>아래의 정보를 작성해주세요.</Text>
+                <Text style={[styles.modalMiddleText, {fontWeight: 'bold'}]}>포지션<Text style={{color: Colors.warning}}>*</Text></Text>
+                <TouchableOpacity onPress={()=>{setPositionPicker(true)}} style={styles.input}>
+                    {newMercs.position === '' ? (
+                            <View style={styles.selectContainer}>
+                                <Text style={{color: Colors.gray}}>포지션을 선택해주세요.</Text>
+                                <Iconify icon='eva:arrow-down-fill' size={20}/>
+                            </View>
+                        ):(
+                        <Text style={styles.determineText}>{newMercs.position}</Text>
+                    )}
+                </TouchableOpacity>
+                <Text style={[styles.modalMiddleText, {fontWeight: 'bold'}]}>가능한 시간대<Text style={{color: Colors.warning}}>*</Text></Text>
+                <TouchableOpacity onPress={()=>{setTimePickerOn(true)}} style={styles.input}>
+                    {newMercs.avTime === '' ? (
+                        <View style={styles.selectContainer}>
+                            <Text style={{color: Colors.gray}}>시간을 선택해주세요.</Text>
+                            <Iconify icon='eva:arrow-down-fill' size={20}/>
+                        </View>
+                        ):(
+                        <Text style={styles.determineText}>{DateParse(newMercs.avTime)}</Text>
+  
+                    )}
+                </TouchableOpacity>
+                <Text style={[styles.modalMiddleText, {fontWeight: 'bold'}]}>공 소유 여부<Text style={{color: Colors.warning}}>*</Text></Text>
+                <TouchableOpacity onPress={showPicker} style={styles.input}>
+                    <View style={styles.selectContainer}>
+                      <Text style={styles.determineText}>공 소유 여부 : {newMercs.hasBall !== undefined ? (newMercs.hasBall ? 'O' : 'X') : ''}</Text>
+                      <Iconify icon='eva:arrow-down-fill' size={20} />
+                    </View>
+                </TouchableOpacity>
+                {/* 포지션 Picker */}
+                <PosSelector 
+                    newMercs={newMercs}
+                    setNewMercs={setNewMercs}
+                    positionPicker={positionPicker}
+                    setPositionPicker={setPositionPicker}
+                />
+                
+                {/* TimePicker */}
+                <DateTimePickerModal
+                    textColor={Colors.black}
+                    isVisible={timePickerOn}
+                    mode="time"
+                    onConfirm={(date)=>{
+                        setNewMercs({...newMercs, avTime:date})
+                        setTimePickerOn(false)
+                        }
+                    }
+                    onCancel={()=>{setDatePickerOn(false)}}
+                />
+                {/* 공 소유 여부 모달 */}
+                <Modal
+                    visible={pickerVisible}
+                    transparent={true}
+                    onRequestClose={hidePicker}
+                >
+                    <TouchableOpacity style={styles.overlay} onPress={hidePicker} activeOpacity={1}>
+                        <View style={styles.pickerContainer} onStartShouldSetResponder={() => true}>
+                            <TouchableOpacity
+                                onPress={() => {
+                                    setHasBall('O');
+                                    hidePicker();
+                                }}>
+                                <Text style={styles.pickerItemText}>O</Text>
+                            </TouchableOpacity>
+                            <View style={styles.pickerUnderbar}/>
+                            <TouchableOpacity
+                                style={{marginBottom : 30,}}
+                                onPress={() => {
+                                    setHasBall('X');
+                                    hidePicker();
+                                }}>
+                                <Text style={styles.pickerItemText}>X</Text>
+                            </TouchableOpacity>
+                        </View>
+                    </TouchableOpacity>
+                </Modal>
+  
+                <View style={styles.buttonList}>
+                    <View style={{borderRadius: 5, backgroundColor: Colors.mainRed, marginBottom : 17, }}>
+                        <TouchableOpacity onPress={async() => {
+                            const res = await createMercs(newMercs.position, newMercs.avTime)
+                            if(res === true){
+                              const userResponse =  await getUserInfo()
+                              setUserData({
+                                  email: userResponse.email,
+                                  height: userResponse.height,
+                                  isMercenary: userResponse.isMercenary,
+                                  mainPosition: userResponse.mainPosition,
+                                  nickname: userResponse.nickname
+                              })
+                              closeModal();
+                              goBack();
+                              alert("용병등록 성공")
+                            }else{
+                              alert("용병등록 실패")
+                            }
+                            }}>
+                            <Text style={styles.button}>등록</Text>
+                        </TouchableOpacity>
+                    </View>
+                </View>
+            </View>
+        </View>
+      </Modal>
 
-                  )}
-              </TouchableOpacity>
-              <Text style={[styles.modalMiddleText, {fontWeight: 'bold'}]}>공 소유 여부<Text style={{color: Colors.warning}}>*</Text></Text>
-              <TouchableOpacity onPress={showPicker} style={styles.input}>
-                  <View style={styles.selectContainer}>
-                    <Text style={styles.determineText}>공 소유 여부 : {newMercs.hasBall !== undefined ? (newMercs.hasBall ? 'O' : 'X') : ''}</Text>
-                    <Iconify icon='eva:arrow-down-fill' size={20} />
-                  </View>
-              </TouchableOpacity>
-              {/* 포지션 Picker */}
-              <PosSelector 
-                  newMercs={newMercs}
-                  setNewMercs={setNewMercs}
-                  positionPicker={positionPicker}
-                  setPositionPicker={setPositionPicker}
-              />
-              
-              {/* TimePicker */}
-              <DateTimePickerModal
-                  textColor={Colors.black}
-                  isVisible={timePickerOn}
-                  mode="time"
-                  onConfirm={(date)=>{
-                      setNewMercs({...newMercs, avTime:date})
-                      setTimePickerOn(false)
-                      }
-                  }
-                  onCancel={()=>{setDatePickerOn(false)}}
-              />
-              {/* 공 소유 여부 모달 */}
-              <Modal
-                  visible={pickerVisible}
-                  transparent={true}
-                  onRequestClose={hidePicker}
-              >
-                  <TouchableOpacity style={styles.overlay} onPress={hidePicker} activeOpacity={1}>
-                      <View style={styles.pickerContainer} onStartShouldSetResponder={() => true}>
-                          <TouchableOpacity
-                              onPress={() => {
-                                  setHasBall('O');
-                                  hidePicker();
-                              }}>
-                              <Text style={styles.pickerItemText}>O</Text>
-                          </TouchableOpacity>
-                          <View style={styles.pickerUnderbar}/>
-                          <TouchableOpacity
-                              style={{marginBottom : 30,}}
-                              onPress={() => {
-                                  setHasBall('X');
-                                  hidePicker();
-                              }}>
-                              <Text style={styles.pickerItemText}>X</Text>
-                          </TouchableOpacity>
-                      </View>
-                  </TouchableOpacity>
-              </Modal>
-
-              <View style={styles.buttonList}>
-                  <View style={{borderRadius: 5, backgroundColor: Colors.mainRed, marginBottom : 17, }}>
-                      <TouchableOpacity onPress={() => {
-                          regMercsSubmit(newMercs.position, newMercs.avTime)
-                          closeModal();}}>
-                          <Text style={styles.button}>등록</Text>
-                      </TouchableOpacity>
-                  </View>
-              </View>
-          </View>
-      </View>
-    </Modal>
+    )}
+    
+    </>
   )
 }
 
+/**
+ * 용병 삭제 ConfirmCard
+ * @param {props} modalVisible 
+ * @param {props} setModalVisible 
+ * @param {props} deleteHandle 파티삭제 함수 
+ * @returns 
+ */
+const MercsDeleteConfirmModal = ({modalVisible, setModalVisible, goBack})=>{
+  const { user, setUserData } = useContext(UserContext);
+  
+  const closeModal = ()=>{
+    setModalVisible()
+  }
+  /**
+   * 본인의 등록되어있는 용병을 삭제하는 함수
+   */
+  const hanldeMercDelete = async() =>{
+    const res = await deleteMercs()
+    if(res === true){
+        alert("용병 삭제 성공")
+        const userResponse =  await getUserInfo()
+            setUserData({
+                email: userResponse.email,
+                height: userResponse.height,
+                isMercenary: userResponse.isMercenary,
+                mainPosition: userResponse.mainPosition,
+                nickname: userResponse.nickname
+            })
+        closeModal()
+        goBack()
+    }else{
+        alert("용병 삭제 실패")
+    }
+  } 
+  return(
+    <Modal
+      animationType="slide"
+      transparent={true}
+      visible={modalVisible} // 확인 모달의 visible 상태
+      onRequestClose={()=> setModalVisible()}
+    >
+      <View style={styles.overlay}>
+          <View style={[styles.modalView,{height: 200}]}>
+          <ModalHeader setModalVisible={setModalVisible} goBack={goBack}/>
+            <Text style={{fontSize: 18, textAlign: 'center', marginBottom: 10}}>등록된 용병을 삭제하시겠습니까??</Text>
+              {/* 추가적인 확인 모달의 내용 및 버튼 등을 여기에 추가 */}
+              <View style={{flexDirection: 'row', width: '100%', justifyContent:'center', gap: 10} }>
+                <View style={{borderRadius: 5, backgroundColor: Colors.mainRed}}>
+                    <TouchableOpacity onPress={()=>{hanldeMercDelete()}}>
+                        <Text style={styles.cardButton}>YES</Text>
+                    </TouchableOpacity>
+                </View>
+                <View style={{borderRadius: 5, backgroundColor: Colors.black}}>
+                    <TouchableOpacity onPress={closeModal}>
+                        <Text style={styles.cardButton}>NO</Text>
+                    </TouchableOpacity>
+                </View>
+            </View>
+        </View>
+    </View>
+    </Modal>
+  )
+}
 /**
  * 
  * @param {props} modalVisible 모달 가시성 State
@@ -652,67 +745,7 @@ const InviteConfirmCard = ({modalVisible, setModalVisible, modalData, targetMerc
     </Modal>
   )
 }
-/**
- * 용병 삭제 ConfirmCard
- * @param {props} modalVisible 
- * @param {props} setModalVisible 
- * @param {props} deleteHandle 파티삭제 함수 
- * @returns 
- */
-const MercsDeleteConfirmModal = ({modalVisible, setModalVisible})=>{
-  const { user, setUserData } = useContext(UserContext);
-  
-  const closeModal = ()=>{
-    setModalVisible(false)
-  }
-  /**
-   * 본인의 등록되어있는 용병을 삭제하는 함수
-   */
-  const hanldeMercDelete = async() =>{
-    const res = await deleteMercs()
-    if(res === true){
-        alert("용병 삭제 성공")
-        const userResponse =  await getUserInfo()
-            setUserData({
-                email: userResponse.email,
-                height: userResponse.height,
-                isMercenary: userResponse.isMercenary,
-                mainPosition: userResponse.mainPosition,
-                nickname: userResponse.nickname
-            })
-        closeModal()
-    }else{
-        alert("용병 삭제 실패")
-    }
-  } 
-  return(
-    <Modal
-      animationType="none"
-      transparent={true}
-      visible={modalVisible} // 확인 모달의 visible 상태
-      onRequestClose={()=> setModalVisible(false)}
-    >
-      <View style={styles.modalCardOverlay}>
-          <View style={styles.modalCardView}>
-              <Text style={{fontSize: 18, textAlign: 'center', marginBottom: 10}}>등록된 용병을 삭제하시겠습니까??</Text>
-              {/* 추가적인 확인 모달의 내용 및 버튼 등을 여기에 추가 */}
-              <View style={styles.buttonList}>
-                <View style={{borderRadius: 5, backgroundColor: Colors.mainRed}}>
-                    <TouchableOpacity onPress={()=>{hanldeMercDelete()}}>
-                        <Text style={styles.cardButton}>YES</Text>
-                    </TouchableOpacity>
-                </View>
-                <View style={{borderRadius: 5, backgroundColor: Colors.black}}>
-                    <TouchableOpacity onPress={closeModal}>
-                        <Text style={styles.cardButton}>NO</Text>
-                    </TouchableOpacity>
-                </View>
-            </View>
-        </View>
-    </View>
-    </Modal>
-  )
-}
+
 /**
  * 
  * @param {*} modalVisible 
@@ -738,7 +771,7 @@ const PartyDeleteConfirmCard = ({modalVisible, setModalVisible, deleteHandle})=>
               {/* 추가적인 확인 모달의 내용 및 버튼 등을 여기에 추가 */}
               <View style={styles.buttonList}>
                     <View style={{borderRadius: 5, backgroundColor: Colors.mainRed}}>
-                    <TouchableOpacity onPress={async ()=>{await deleteHandle()}}>
+                    <TouchableOpacity onPress={async() =>{ await deleteHandle}}>
                         <Text style={styles.cardButton}>YES</Text>
                     </TouchableOpacity>
                 </View>
@@ -838,7 +871,6 @@ const styles = StyleSheet.create({
 
   buttonList : {
       width : '90%',
-      marginTop : 10,
       display : 'flex',
       flexDirection : 'row',
       justifyContent : 'center',
@@ -849,7 +881,7 @@ const styles = StyleSheet.create({
       paddingLeft : 30,
       paddingRight : 30,
       paddingBottom : 15,
-      paddingTop : 15,
+      paddingTop : 15,  
       color : Colors.white,
       fontWeight : 'bold',
       fontSize : 16,

@@ -91,6 +91,7 @@ const Homes = () => {
         // 언마운트 시에
         return () => {
             // None
+            console.log('???')
         }
     }, [])
 
@@ -250,11 +251,7 @@ const Homes = () => {
                     regMercsSubmit={regMercsSubmit}
                 />
 
-                {/*용병 삭제하기 모달 */}
-                <MercsDeleteConfirmModal
-                    modalVisible={isMercenaryDeleteModalVisible}
-                    setModalVisible={setIsMercenaryDeleteModalVisible}
-                />
+                
 
                 {/* 랜덤 용병 선택 모달 */}
                 <MercListModal

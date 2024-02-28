@@ -277,7 +277,7 @@ const PhysicalPopup = ({ modalVisible, setModalVisible, setUserData}) => {
   );
 };
 
-const MecenearyPopup = ({ modalVisible, setModalVisible, mercen }) => {
+const MecenearyPopup = ({ modalVisible, setModalVisible, mercen, navigation, handleModal}) => {
   const [yn, setYn] = useState(true)
 
   const closeModal = () => {
@@ -308,7 +308,12 @@ const MecenearyPopup = ({ modalVisible, setModalVisible, mercen }) => {
               </Text>
             }
             <Text style={styles.modalText}>용병으로 등록하시겠습니까?{' '}
-              <TouchableOpacity><Text style={styles.mercsLinkText}>용병등록하기</Text></TouchableOpacity>
+              <TouchableOpacity onPress={()=>{
+                console.log('눌리긴눌림')
+                closeModal()
+                navigation.navigate('Merc')
+                handleModal()
+                }}><Text style={styles.mercsLinkText}>용병등록하기</Text></TouchableOpacity>
             </Text>
           </View>
         </View>

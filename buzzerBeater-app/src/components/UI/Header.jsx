@@ -33,10 +33,18 @@ const signHeaderOptions = ({ navigation }) => ({
  * @param {funch} closeModal함수
  * @returns
  */
-const ModalHeader = ({ closeModal }) => {
+const ModalHeader = ({ goBack, setModalVisible}) => {
 
     return(
-        <TouchableOpacity onPress={() => closeModal()} style={styles.header}>
+        <TouchableOpacity onPress={() => {
+            console.log(setModalVisible)
+            if(setModalVisible){
+              setModalVisible(); 
+            }
+            if(goBack){
+              goBack()
+            }
+            }} style={styles.header}>
             <Iconify icon='iconamoon:arrow-left-2-duotone' size={30} color={Colors.black}/>
             <Text style={styles.modalHeaderText}>Back</Text>
         </TouchableOpacity>

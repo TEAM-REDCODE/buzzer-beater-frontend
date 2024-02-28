@@ -21,7 +21,15 @@ export default function App() {
                   <Stack.Screen name='Start' component={Start} options={{headerShown: false}}/>
                   <Stack.Screen name='SignIn' component={SignIn} options={signHeaderOptions}/>
                   <Stack.Screen name='SignUp' component={SignUp} options={signHeaderOptions}/>
-                  <Stack.Screen name='Homes' component={TabBar} options={commonHeaderOptions}/>
+                  {/* 바텀탭 Screens */}
+                  <Stack.Screen 
+                    name='Homes' 
+                    component={TabBar} 
+                    options={(props) => ({
+                        ...commonHeaderOptions(props),
+                        // props로 navigation 객체 넘겨주기
+                        navigation: props.navigation, 
+                      })}/>
                   <Stack.Screen name='CreatePartyModal' component={CreatePartyModal} options={{headerShown : false, presentation : 'transparentModal'}} />
                   <Stack.Screen name='MercRegModal' component={MercRegModal} options={{headerShown : false, presentation : 'transparentModal'}} />
               </Stack.Navigator>

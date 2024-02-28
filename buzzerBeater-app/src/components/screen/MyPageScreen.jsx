@@ -10,7 +10,7 @@ import Loading from "./Loading";
 import { Iconify } from 'react-native-iconify';
 import Colors from '../../Common/Colors'
 
-export default function MyPageScreen({navigation}) {
+export default function MyPageScreen({navigation, handleModal}) {
   const { user, setUserData } = useContext(UserContext);
   const [nicknamePopup, setNicknamePopup] = useState(false)
   const [passwordPopup, setPasswordPopup] = useState(false)
@@ -91,7 +91,7 @@ export default function MyPageScreen({navigation}) {
               <Text style={styles.subtitle}>용병 등록 / 주 포지션</Text>
               <View style={styles.iconList}>
                 {/* Get Mercenary */}
-                <MecenearyPopup modalVisible={mecenearyPopup} setModalVisible={setMecenearyPopup} mercen={user.isMercenary}/>
+                <MecenearyPopup navigation={navigation} handleModal={handleModal} modalVisible={mecenearyPopup} setModalVisible={setMecenearyPopup} mercen={user.isMercenary}/>
                 <View style={styles.iconBtn}>
                   <TouchableOpacity onPress={()=>{handlePopup(3)}}>
                     <Iconify icon="mdi:register" size={60} style={styles.iconStyle} />
