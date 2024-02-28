@@ -5,21 +5,21 @@ import Imagesets from "../../Common/Imagesets";
 
 export default function Start({ navigation }) {
 
-    return (
-        <View style={styles.container}>
-          <Image source={Imagesets.Start} resizeMode='cover' style={styles.backgroundImg}/>
-          <View style={styles.bottomContainer}>
-            <Image source={Imagesets.Logo} style={styles.logo} />
-            <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('SignIn')}>
-              <Text style={styles.buttonText}>로그인</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('SignUp')}>
-              <Text style={styles.buttonText}>회원가입</Text>
-            </TouchableOpacity>
-          </View>
+  return (
+      <View style={styles.container}>
+        <Image source={Imagesets.Start} resizeMode='cover' style={styles.backgroundImg}/>
+        <View style={styles.bottomContainer}>
+          <Image source={Imagesets.Logo} style={styles.logo} />
+          <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('SignIn')}>
+            <Text style={styles.buttonText}>로그인</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('SignUp')}>
+            <Text style={styles.buttonText}>회원가입</Text>
+          </TouchableOpacity>
         </View>
-    );
-  }
+      </View>
+  );
+}
 
 const styles = StyleSheet.create({
   container: {
@@ -47,7 +47,7 @@ const styles = StyleSheet.create({
   },
 
   button: {
-    width : 300,
+    width : '80%',
     padding : 18,
     marginBottom : 15,
     borderRadius : 5,
@@ -56,7 +56,7 @@ const styles = StyleSheet.create({
   },
 
   buttonText: {
-    fontSize : 18,
+    fontSize : 19,
     color : colors.black,
     textAlign : 'center',
     fontWeight : 'bold',

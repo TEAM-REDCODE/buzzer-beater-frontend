@@ -1,8 +1,7 @@
 import React, { useRef, useState } from 'react';
-import { Image, TouchableOpacity, Animated } from 'react-native';
-
-// reload 버튼 세팅
-let reload = require('../../../assets/reload.png');
+import { TouchableOpacity, Animated } from 'react-native';
+import Colors from "../../Common/Colors";
+import { Iconify } from "react-native-iconify";
 
 const RotatingElement = ({ handleFunc }) => {
   const rotationValue = useRef(new Animated.Value(0)).current;
@@ -36,11 +35,11 @@ const RotatingElement = ({ handleFunc }) => {
   };
 
   return (
-    <TouchableOpacity onPress={handlePress}>
-      <Animated.View style={[{ marginLeft: 22, width: 24, height: 24 }, rotateStyle]}>
-        <Image source={reload} />
-      </Animated.View>
-    </TouchableOpacity>
+      <TouchableOpacity onPress={handlePress}>
+        <Animated.View style={[{ width: 30, height: 30 }, rotateStyle]}>
+          <Iconify icon='iconamoon:restart-bold' size={30} color={Colors.white}/>
+        </Animated.View>
+      </TouchableOpacity>
   );
 };
 

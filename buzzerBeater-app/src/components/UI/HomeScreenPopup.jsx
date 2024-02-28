@@ -1,26 +1,20 @@
-import { View, Text, StyleSheet, ScrollView, 
-  TouchableOpacity, Modal, TextInput, Image } from 'react-native'
-import { ModalHeader } from './Header'
 import React, {useState, useContext} from 'react'
-import Colors from '../../Common/Colors'
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Modal, TextInput } from 'react-native'
+import { ModalHeader } from './Header'
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import {DateParse, TimeParse} from '../../Common/DateParse'
 import { posToKor } from '../../Common/possionMapping';
 import { UserContext } from '../../Common/UserContext';
 import { PosSelector } from './Selector';
 
+import { Iconify } from "react-native-iconify";
+import Colors from '../../Common/Colors'
+
 import { deleteMercs } from '../../APIs/mercs';
 import { getBelong, getUserInfo } from '../../APIs/userAPI';
 import { RegMeet, inviteMercs, deleteMeet} from '../../APIs/meetAPI';
-
-import choice from '../../../assets/image/iosImagesets/Choice.png';
-import person from '../../../assets/image/iosImagesets/Person50.png'
-import ball from '../../../assets/image/iosImagesets/WhiteProfile.png'
-import check_no from '../../../assets/image/iosImagesets/BlackCheck.png'
-import check_yes from '../../../assets/image/iosImagesets/RedCheck.png'
-import deleteIcon from '../../../assets/image/iosImagesets/Delete.png'
-
 import { formToJSON } from 'axios';
+
 /**
  * 
  * @param {func} meetSubmit 새로운 농구팟 신청 API
@@ -29,7 +23,7 @@ import { formToJSON } from 'axios';
  */
 
 
-const CreatePartyModal = ({meetSubmit, basketData, modalVisible, setModalVisible}) =>{
+const CreatePartyModal = ({meetSubmit, basketData, modalVisible, setModalVisible, navigation}) =>{
   // user Context
   const { user, setUserData } = useContext(UserContext);
 
@@ -67,17 +61,15 @@ const CreatePartyModal = ({meetSubmit, basketData, modalVisible, setModalVisible
     animationType="slide"
     transparent={true}
     visible={modalVisible}
-    onRequestClose={()=>{closeModal}}
+    // onRequestClose={()=>{closeModal}}
+        onPress={() => {navigation.goBack()}}
     >
       <View style={styles.overlay}>
           <View style={[styles.modalView, {height: '100%'}]}>
-          <ModalHeader closeModal={closeModal}></ModalHeader>
-              <Text style={styles.modalCreateTitle}>
-                  농구팟 생성</Text>
-              <Text style={styles.modalManualText}>
-                  아래의 정보를 작성해주세요.
-              </Text>
-              <Text style={[styles.modalMiddleText, {fontWeight: 'bold'}]}>제목 <Text style={{color: Colors.mainRed}}>*</Text></Text>
+            <ModalHeader closeModal={closeModal} />
+              <Text style={styles.modalTitle}>농구팟 생성</Text>
+              <Text style={styles.modalManualText}>아래의 정보를 작성해주세요.</Text>
+              <Text style={[styles.modalMiddleText, {fontWeight: 'bold'}]}>제목<Text style={{color: Colors.warning}}>*</Text></Text>
               <TextInput
                   style={styles.input}
                   placeholder="제목을 입력해주세요."
@@ -85,7 +77,7 @@ const CreatePartyModal = ({meetSubmit, basketData, modalVisible, setModalVisible
                   onChangeText={(text) => setNewTeam({ ...newTeam, title: text })}
                   value={newTeam.title}
               />
-              <Text style={[styles.modalMiddleText, {fontWeight: 'bold'}]}>장소 <Text style={{color: Colors.mainRed}}>*</Text></Text>
+              <Text style={[styles.modalMiddleText, {fontWeight: 'bold'}]}>장소<Text style={{color: Colors.warning}}>*</Text></Text>
               <TextInput
                   style={styles.input}
                   placeholder="장소를 입력해주세요."
@@ -93,14 +85,12 @@ const CreatePartyModal = ({meetSubmit, basketData, modalVisible, setModalVisible
                   onChangeText={(text) => setNewTeam({ ...newTeam, place: text })}
                   value={newTeam.location}
               />
-              <Text style={[styles.modalMiddleText, {fontWeight: 'bold'}]}>시간 <Text style={{color: Colors.mainRed}}>*</Text></Text>
+              <Text style={[styles.modalMiddleText, {fontWeight: 'bold'}]}>시간<Text style={{color: Colors.warning}}>*</Text></Text>
               <TouchableOpacity onPress={()=>{setDatePickerOn(true)}} style={styles.input}>
                   {newTeam.time === '' ? (
                       <View style={styles.selectContainer}>
-                          <Text style={styles.selectText}>
-                              시간을 선택해주세요.
-                          </Text>
-                          <Image source={choice}></Image>
+                          <Text style={{color : Colors.gray}}>시간을 선택해주세요.</Text>
+                          <Iconify icon='eva:arrow-down-fill' size={20}/>
                       </View>
                       ):(
                       <Text style={styles.determineText}>{DateParse(newTeam.time)}</Text>
@@ -110,7 +100,7 @@ const CreatePartyModal = ({meetSubmit, basketData, modalVisible, setModalVisible
               {/* DatePicker */}
               <DateTimePickerModal
                   locale='ko'
-                  textColor='#000'
+                  textColor={Colors.black}
                   isVisible={datePickerOn}
                   mode="datetime"
                   onConfirm={(date)=>{
@@ -120,15 +110,12 @@ const CreatePartyModal = ({meetSubmit, basketData, modalVisible, setModalVisible
                   }
                   onCancel={()=>{setDatePickerOn(false)}}
               />      
-              <Text style={[styles.modalMiddleText, {fontWeight: 'bold'}]}>인원 <Text style={{color: Colors.mainRed}}>*</Text></Text>
+              <Text style={[styles.modalMiddleText, {fontWeight: 'bold'}]}>인원<Text style={{color: Colors.warning}}>*</Text></Text>
               <TouchableOpacity onPress={showPicker} style={styles.input}>
                   {newTeam.maxPerson === '1' ? (
                       <View style={styles.selectContainer}>
-                          <Text style={styles.selectText}>
-                              인원을 선택해주세요.
-                          </Text>
-                          <Image source={choice}></Image>
-
+                          <Text style={{color : Colors.gray}}>인원을 선택해주세요.</Text>
+                          <Iconify icon='eva:arrow-down-fill' size={20}/>
                       </View>
                   ) : (
                       <Text style={styles.determineText}>{newTeam.maxPerson / 2} vs {newTeam.maxPerson / 2}</Text>
@@ -147,7 +134,6 @@ const CreatePartyModal = ({meetSubmit, basketData, modalVisible, setModalVisible
                               {['1', '2', '3', '4', '5'].map((value) => (
                                   <TouchableOpacity
                                       key={value}
-                                      style={styles.pickerItem}
                                       onPress={() => {
                                           onValueChange(value * 2);
                                           hidePicker();
@@ -163,7 +149,7 @@ const CreatePartyModal = ({meetSubmit, basketData, modalVisible, setModalVisible
               </Modal>
               
               <View style={styles.buttonList}>
-                  <View style={{borderRadius: 5, backgroundColor: Colors.mainRed}}>
+                  <View style={{borderRadius: 5, backgroundColor: Colors.mainRed, }}>
                       <TouchableOpacity onPress={async () => {
                           await meetSubmit(newTeam.title, newTeam.maxPerson, newTeam.place, newTeam.time, user.userId)
                           await basketData()
@@ -182,7 +168,6 @@ const CreatePartyModal = ({meetSubmit, basketData, modalVisible, setModalVisible
                           <Text style={styles.button}>생성</Text>
                       </TouchableOpacity>
                   </View>
-                  
               </View>
           </View>
       </View>
@@ -190,6 +175,7 @@ const CreatePartyModal = ({meetSubmit, basketData, modalVisible, setModalVisible
   )
  
 }
+
 /**
  * 
  * @param {props} modalVisible  모달 상태 함수
@@ -224,6 +210,7 @@ const MercRegModal = ({modalVisible, setModalVisible, regMercsSubmit}) =>{
   const closeModal = () => {
     setModalVisible(false);
   };
+
   return(
     <Modal
         animationType="slide"
@@ -232,45 +219,38 @@ const MercRegModal = ({modalVisible, setModalVisible, regMercsSubmit}) =>{
         onRequestClose={closeModal}
     >
       <View style={styles.overlay}>
-          <View style={styles.modalView}>
-              <ModalHeader closeModal={closeModal}></ModalHeader>
-              <Text style={[styles.modalCreateTitle, { marginBottom: 8 }]}>용병 등록</Text>
+          <View style={[styles.modalView, {height: '70%'}]}>
+              <ModalHeader closeModal={closeModal} />
+              <Text style={styles.modalTitle}>용병 등록</Text>
                   <Text style={styles.modalManualText}>아래의 정보를 작성해주세요.</Text>
-              <Text style={[styles.modalMiddleText, {fontWeight: 'bold'}]}>포지션 <Text style={{color: Colors.mainRed}}>*</Text></Text>
+              <Text style={[styles.modalMiddleText, {fontWeight: 'bold'}]}>포지션<Text style={{color: Colors.warning}}>*</Text></Text>
               <TouchableOpacity onPress={()=>{setPositionPicker(true)}} style={styles.input}>
                   {newMercs.position === '' ? (
                           <View style={styles.selectContainer}>
-                              <Text style={{color: Colors.gray}}>
-                                  포지션을 선택해주세요.
-                              </Text>
-                              <Image source={choice}></Image>
+                              <Text style={{color: Colors.gray}}>포지션을 선택해주세요.</Text>
+                              <Iconify icon='eva:arrow-down-fill' size={20}/>
                           </View>
                       ):(
                       <Text style={styles.determineText}>{newMercs.position}</Text>
-
                   )}
               </TouchableOpacity>
-              <Text style={[styles.modalMiddleText, {fontWeight: 'bold'}]}>가능한 시간대 <Text style={{color: Colors.mainRed}}>*</Text></Text>
+              <Text style={[styles.modalMiddleText, {fontWeight: 'bold'}]}>가능한 시간대<Text style={{color: Colors.warning}}>*</Text></Text>
               <TouchableOpacity onPress={()=>{setTimePickerOn(true)}} style={styles.input}>
                   {newMercs.avTime === '' ? (
                       <View style={styles.selectContainer}>
-                          <Text style={{color: Colors.gray}}>
-                              시간을 선택해주세요.
-                          </Text>
-                          <Image source={choice}></Image>
+                          <Text style={{color: Colors.gray}}>시간을 선택해주세요.</Text>
+                          <Iconify icon='eva:arrow-down-fill' size={20}/>
                       </View>
                       ):(
                       <Text style={styles.determineText}>{DateParse(newMercs.avTime)}</Text>
 
                   )}
               </TouchableOpacity>
-              <Text style={[styles.modalMiddleText, {fontWeight: 'bold'}]}>공 소유 여부<Text style={{color: Colors.mainRed}}>*</Text></Text>
+              <Text style={[styles.modalMiddleText, {fontWeight: 'bold'}]}>공 소유 여부<Text style={{color: Colors.warning}}>*</Text></Text>
               <TouchableOpacity onPress={showPicker} style={styles.input}>
                   <View style={styles.selectContainer}>
-                    <Text style={styles.determineText}>
-                        공 소유 여부 : {newMercs.hasBall !== undefined ? (newMercs.hasBall ? 'O' : 'X') : ''}
-                    </Text>
-                    <Image source={choice}></Image>
+                    <Text style={styles.determineText}>공 소유 여부 : {newMercs.hasBall !== undefined ? (newMercs.hasBall ? 'O' : 'X') : ''}</Text>
+                    <Iconify icon='eva:arrow-down-fill' size={20} />
                   </View>
               </TouchableOpacity>
               {/* 포지션 Picker */}
@@ -279,11 +259,11 @@ const MercRegModal = ({modalVisible, setModalVisible, regMercsSubmit}) =>{
                   setNewMercs={setNewMercs}
                   positionPicker={positionPicker}
                   setPositionPicker={setPositionPicker}
-              ></PosSelector>
+              />
               
               {/* TimePicker */}
               <DateTimePickerModal
-                  textColor='#000'
+                  textColor={Colors.black}
                   isVisible={timePickerOn}
                   mode="time"
                   onConfirm={(date)=>{
@@ -300,44 +280,42 @@ const MercRegModal = ({modalVisible, setModalVisible, regMercsSubmit}) =>{
                   onRequestClose={hidePicker}
               >
                   <TouchableOpacity style={styles.overlay} onPress={hidePicker} activeOpacity={1}>
-                      <View style={styles.possessionPickerContainer} onStartShouldSetResponder={() => true}>
+                      <View style={styles.pickerContainer} onStartShouldSetResponder={() => true}>
                           <TouchableOpacity
-                              style={styles.possessionOption}
                               onPress={() => {
                                   setHasBall('O');
                                   hidePicker();
                               }}>
-                              <Text style={styles.possessionOptionText}>O</Text>
+                              <Text style={styles.pickerItemText}>O</Text>
                           </TouchableOpacity>
-                          <View style={[styles.pickerUnderbar, {marginBottom : 10,}]}/>
+                          <View style={styles.pickerUnderbar}/>
                           <TouchableOpacity
-                              style={styles.possessionOption}
+                              style={{marginBottom : 30,}}
                               onPress={() => {
                                   setHasBall('X');
                                   hidePicker();
                               }}>
-                              <Text style={styles.possessionOptionText}>X</Text>
+                              <Text style={styles.pickerItemText}>X</Text>
                           </TouchableOpacity>
                       </View>
                   </TouchableOpacity>
               </Modal>
 
               <View style={styles.buttonList}>
-                  <View style={{borderRadius: 5, backgroundColor: Colors.mainRed, 
-                    marginTop: 24, marginBottom: 24}}>
+                  <View style={{borderRadius: 5, backgroundColor: Colors.mainRed, marginBottom : 17, }}>
                       <TouchableOpacity onPress={() => {
                           regMercsSubmit(newMercs.position, newMercs.avTime)
                           closeModal();}}>
                           <Text style={styles.button}>등록</Text>
                       </TouchableOpacity>
                   </View>
-                  
               </View>
           </View>
       </View>
     </Modal>
   )
 }
+
 /**
  * 
  * @param {props} modalVisible 모달 가시성 State
@@ -373,67 +351,53 @@ const MercListModal = ({modalVisible, setModalVisible, mercenaries})=>{
         onRequestClose={closeModal}
     >
       <View style={styles.overlay}>
-          <View style={[styles.modalView, {paddingBottom: 0}]}>
-              <ModalHeader closeModal={closeModal}></ModalHeader>
-              <Text style={[styles.modalTitle, { marginBottom: 20}]}>
-                  랜덤 용병 선택
-              </Text>
+          <View style={styles.modalView}>
+              <ModalHeader closeModal={closeModal} />
+              <Text style={styles.modalTitle}>랜덤 용병 선택</Text>
               <Text style={styles.modalManualText}>용병 정보 확인 후 선택해주세요</Text>
 
               {mercenaries.length === 0 ? (
-                  <View style={styles.modalMiddle}>
-                      <Image source={person}></Image>
-                      <Text>해당 용병이 없습니다.</Text>
+                  <View style={styles.noDataCard}>
+                      <Iconify icon='ion:person' size={60} color={Colors.black}/>
+                      <Text style={styles.noDataText}>해당 용병이 없습니다.</Text>
                   </View>
-                  ):(
-                    <ScrollView>
-                  <View style={styles.mercsCardContainer}>
-                      {mercenaries.map((mercenary, index) => (
-                          <TouchableOpacity key={index} style={styles.mercenaryCard}
-                           onPress={async ()=>{handleMercsCard(mercenary._id)}}>
-
-                          {/* 아이콘 영역 */}
-                          <View style={{marginBottom: 10}}>
-                              <Image source={ball}></Image>
-                          </View>
-                          {/* 용병 정보 영역 */}
-                          <View style={styles.mercContainer}>
-                              <Text style={styles.mercenaryName}>{mercenary["User.nickname"]}</Text>
-                              <Text style={styles.mercenaryDetail}>
-                                  {mercenary["User.height"]}cm
-                              </Text>
-                              <Text style={styles.mercenaryDetail}>
-                                  {mercenary.position}{'('}{posToKor(mercenary.position)}{')'}
-                              </Text>
-                              <Text style={styles.mercenaryDetail}>
-                                  {TimeParse(mercenary.avTime)}
-                              </Text>
-                          </View>
-                          {/* 선택 영역 */}
-                          <View>
-                              {/* 임시로 비우기 */}
-                          </View>
-                      </TouchableOpacity>
-
-                      ))}
-                  </View>
+              ):(
+                  <ScrollView>
+                      <View style={styles.mercsCardContainer}>
+                          {mercenaries.map((mercenary, index) => (
+                              <TouchableOpacity key={index} style={styles.mercenaryCard} onPress={async ()=>{handleMercsCard(mercenary._id)}}>
+                                  {/* 아이콘 영역 */}
+                                  <Iconify icon='solar:basketball-bold-duotone' size={50} style={{margin : 10}} />
+                                  {/* 용병 정보 영역 */}
+                                  <View>
+                                      <Text style={[styles.mercenaryText, {color : Colors.mainRed, fontWeight : 'bold'}]}>{mercenary["User.nickname"]}</Text>
+                                      <Text style={styles.mercenaryText}>{mercenary["User.height"]}cm</Text>
+                                      <Text style={styles.mercenaryText}>{mercenary.position}{'('}{posToKor(mercenary.position)}{')'}</Text>
+                                      <Text style={styles.mercenaryText}>{TimeParse(mercenary.avTime)}</Text>
+                                  </View>
+                                  {/* 선택 영역 */}
+                                  <View>
+                                      {/* 임시로 비우기 */}
+                                  </View>
+                          </TouchableOpacity>
+                          ))}
+                      </View>
                   </ScrollView>
-                  )}
+              )}
               
-                {/* 초대할 파티 리스트 모달 */}
-                <InviteListModal
-                    modalvisibile={inviteMeetVisible}
-                    setModalVisible={setInviteMeetVisible}
-                    myMeet={myMeet}
-                    targetMercs={targetMercs}
-                >
-                </InviteListModal>
-                
+              {/* 초대할 파티 리스트 모달 */}
+              <InviteListModal
+                  modalvisibile={inviteMeetVisible}
+                  setModalVisible={setInviteMeetVisible}
+                  myMeet={myMeet}
+                  targetMercs={targetMercs}
+              />
           </View>
       </View>
     </Modal>
   )
 }
+
 /**
  * 
  * @param {props} modalvisibile 모달 가시성 State
@@ -462,57 +426,42 @@ const InviteListModal = ({modalvisibile, setModalVisible, myMeet, targetMercs}) 
         onRequestClose={()=>{setModalVisible(false)}}
     >
         <View style={styles.overlay}>
-            <View style={[styles.modalView, {paddingBottom: 0}]}>
-              <ModalHeader closeModal={closeModal}></ModalHeader>
+            <View style={styles.modalView}>
+              <ModalHeader closeModal={closeModal} />
+                <Text style={styles.modalTitle}>농구팟 선택</Text>
+                <Text style={styles.modalManualText}>용병을 초대할 농구팟을 선택해주세요.</Text>
+                <ScrollView>
+                    <View style={styles.mercsCardContainer}>
+                        {myMeet.length >= 0 ? (
+                            myMeet.map((item, idx) => {
+                                // 제목이 긴 경우
+                                const processTitle = item.title.length > 10 ? `${item.title.slice(0, 10)}...` : item.title;
 
-                <Text style={[styles.modalTitle]}>농구팟 선택</Text>
-                <Text style={styles.modalManualText}>아래의 정보를 작성해주세요.</Text>
-                <ScrollView >
-                {myMeet.length >= 0 ? (
-                    myMeet.map((item, idx) => (
-                        <TouchableOpacity key={item._id} onPress={() => { (handleCardPress(idx)) }}>
-                            <View style={styles.mercInviteCard}>
-                                <View style={styles.cardTextContainer}>
-                                    <View style={styles.cardTitleContainer}>
-                                        <Text style={styles.cardTitleText}>{item.title}</Text>
-                                        <Image source={check_no}></Image>
-                                    </View>
-                                    <View style={styles.cardContent}>
-                                        <Text style={[styles.cardContentText, {color: Colors.mainRed}]}>
-                                            {item.createdByNick}
-                                        </Text>
-                                        <Text style={styles.cardContentText}>
-                                            {item.place}
-                                        </Text>
-                                        <View style={{flexDirection: 'row', justifyContent: 'space-between', width: 240}}>
-                                          <Text style={styles.cardContentText}>
-                                              {DateParse(item.time)}
-                                          </Text>
-                                          <View style={{flexDirection: 'row'}}>
-                                            <Image source={person}></Image>
-                                            <Text style={styles.cardContentText}>
-                                                {item.count} / {item.maxPerson}
-                                            </Text>
-                                          </View>
-
+                                return (
+                                    <TouchableOpacity key={item._id} onPress={() => { (handleCardPress(idx))}} style={styles.mercInviteCard}>
+                                        <View>
+                                            <Text style={styles.title}>{processTitle}</Text>
+                                            <Text style={[styles.content, {color : Colors.mainRed}]}>{item.createdByNick}</Text>
+                                            <Text style={styles.content}>{item.place}</Text>
+                                            <Text style={styles.content}>{DateParse(item.time)}</Text>
+                                            <View style={styles.person}>
+                                                <Iconify icon='ion:person' size={20} color={Colors.mainRed} />
+                                                <Text style={styles.maxNum}>{item.count} / {item.maxPerson}</Text>
+                                            </View>
                                         </View>
-                                    </View>
+                                    </TouchableOpacity>
+                                )
+                            })
+                        ) : (
+                            <TouchableOpacity>
+                                <View style={styles.noDataCard}>
+                                    <Iconify icon='solar:basketball-bold-duotone' size={50}/>
+                                    <Text style={styles.noDataText}>데이터가 없습니다.</Text>
                                 </View>
-                            </View>
-                        </TouchableOpacity>
-                    )))
-                    : (
-                        <TouchableOpacity>
-                            <View style={styles.card}>
-                                <View style={styles.cardContentContainer}>
-                                    <Image source={ball}></Image>
-                                    <View style={styles.cardTextContainer}>
-                                        <Text style={styles.noDataText}>데이터가 없습니다.</Text>
-                                    </View>
-                                </View>
-                            </View>
-                        </TouchableOpacity>
-                    )}
+                            </TouchableOpacity>
+                        )
+                        }
+                    </View>
                 </ScrollView>
             </View>
         </View>
@@ -581,38 +530,26 @@ const RegisterCard = ({modalVisible, setModalVisible, modalData, basketData}) =>
           <View style={styles.modalCardOverlay}>
               <View style={styles.modalCardView}>
                   {modalData.createdByNick === user.nickname && (
-                    <View style={{alignItems: 'center', flexDirection: 'row', transform: [{ translateY: -12 }]}}>
-                      <Text style={{fontSize: 10, fontWeight: '500'}}>
-                        약속 시간 24시간 후 농구팟은 자동 삭제됩니다.
-                      </Text>
+                    <View style={{alignItems: 'center', flexDirection: 'row', marginBottom : 20,}}>
+                      <Text style={{fontSize: 12}}>약속 시간 24시간 후 농구팟은 자동 삭제됩니다.</Text>
                       <TouchableOpacity onPress={async ()=>{
                         setDeleteConfirmVisible(!deleteConfirmVisible)
                         }}>
-                        <Image source={deleteIcon} style={{width: 18, height: 18}}></Image>
+                        <Iconify icon='ic:baseline-auto-delete' size={20} color={Colors.mainRed}/>
                       </TouchableOpacity>
                     </View>
                   )}
-                  <Text style={[{fontSize: 16, textAlign: 'center'}]}>
-                      <Text style={styles.modalTextRed}>{modalData.createdByNick}</Text>
-                      님이 생성한{'\n'}농구팟에 참여하시겠습니까?
+                  <Text style={styles.modalText}>
+                      <Text style={{color : Colors.mainRed, fontSize : 20}}>{modalData.createdByNick}</Text>님이 생성한{'\n'}농구팟에 참여하시겠습니까?
                   </Text>
                   <View style={styles.modalMiddle}>
-                      <Text style={[styles.modalMiddleText, { marginBottom: 15 }]}>{'✔ '}
-                          <Text style={styles.modalTextRed}>장소, 시간, 인원</Text>을 확인해주세요.
+                      <Text style={styles.modalMiddleText}>{'✔ '}
+                          <Text style={{color : Colors.mainRed}}>장소, 시간, 인원</Text>을 확인해주세요.
                       </Text>
-                      <View style={{marginBottom : 10, width: 180}}>
-                          <Text style={styles.modalContent}>
-                              <Text style={styles.modalLabel}>장소 : </Text>
-                              {modalData.place}
-                          </Text>
-                          <Text style={styles.modalContent}>
-                              <Text style={styles.modalLabel}>시간 : </Text>
-                              {DateParse(modalData.time)}
-                          </Text>
-                          <Text style={styles.modalContent}>
-                              <Text style={styles.modalLabel}>인원 : </Text>
-                              {modalData.maxPerson}
-                          </Text>
+                      <View style={{width: '70%'}}>
+                          <Text style={styles.modalContent}>장소 : {modalData.place}</Text>
+                          <Text style={styles.modalContent}>시간 : {DateParse(modalData.time)}</Text>
+                          <Text style={styles.modalContent}>인원 : {modalData.maxPerson}</Text>
                       </View>
                   </View>
 
@@ -639,10 +576,8 @@ const RegisterCard = ({modalVisible, setModalVisible, modalData, basketData}) =>
                     modalVisible={deleteConfirmVisible}
                     setModalVisible={setDeleteConfirmVisible}
                     deleteHandle={handleDelete}
-                  ></PartyDeleteConfirmCard>
-                  
+                  />
               </View>
-              
           </View>
       </Modal>
   )
@@ -683,27 +618,17 @@ const InviteConfirmCard = ({modalVisible, setModalVisible, modalData, targetMerc
     >
         <View style={styles.modalCardOverlay}>
             <View style={styles.modalCardView}>
-                <Text style={[{fontSize: 16, textAlign: 'center'}]}>
-                    <Text style={styles.modalTextRed}>{modalData.createdByNick}</Text>
-                    님이 생성한{'\n'}농구팟에 초대하시겠습니까?
+                <Text style={styles.modalText}>
+                    <Text style={{color : Colors.mainRed, fontSize : 20}}>{modalData.createdByNick}</Text>님이 생성한{'\n'}농구팟에 초대하시겠습니까?
                 </Text>
                 <View style={styles.modalMiddle}>
-                    <Text style={[styles.modalMiddleText, { marginBottom: 15 }]}>{'✔ '}
-                        <Text style={styles.modalTextRed}>장소, 시간, 인원</Text>을 확인해주세요.
+                    <Text style={styles.modalMiddleText}>{'✔ '}
+                        <Text style={{color : Colors.mainRed}}>장소, 시간, 인원</Text>을 확인해주세요.
                     </Text>
-                    <View style={{marginBottom : 10, width: 180}}>
-                        <Text style={styles.modalContent}>
-                            <Text style={styles.modalLabel}>장소 : </Text>
-                            {modalData.place}
-                        </Text>
-                        <Text style={styles.modalContent}>
-                            <Text style={styles.modalLabel}>시간 : </Text>
-                            {DateParse(modalData.time)}
-                        </Text>
-                        <Text style={styles.modalContent}>
-                            <Text style={styles.modalLabel}>인원 : </Text>
-                            {modalData.maxPerson}
-                        </Text>
+                    <View style={{width: '70%'}}>
+                        <Text style={styles.modalContent}>장소 : {modalData.place}</Text>
+                        <Text style={styles.modalContent}>시간 : {DateParse(modalData.time)}</Text>
+                        <Text style={styles.modalContent}>인원 : {modalData.maxPerson}</Text>
                     </View>
                 </View>
 
@@ -769,21 +694,17 @@ const MercsDeleteConfirmModal = ({modalVisible, setModalVisible})=>{
     >
       <View style={styles.modalCardOverlay}>
           <View style={styles.modalCardView}>
-              <Text style={{fontSize: 20, textAlign: 'center', marginBottom: 12}}>
-                  등록된 용병을 삭제하시겠습니까??
-              </Text>
+              <Text style={{fontSize: 18, textAlign: 'center', marginBottom: 10}}>등록된 용병을 삭제하시겠습니까??</Text>
               {/* 추가적인 확인 모달의 내용 및 버튼 등을 여기에 추가 */}
               <View style={styles.buttonList}>
-                    <View style={{borderRadius: 5, backgroundColor: Colors.mainRed}}>
-                    <TouchableOpacity onPress={()=>{
-                        hanldeMercDelete()
-                    }}>
-                        <Text style={styles.button}>삭제하기</Text>
+                <View style={{borderRadius: 5, backgroundColor: Colors.mainRed}}>
+                    <TouchableOpacity onPress={()=>{hanldeMercDelete()}}>
+                        <Text style={styles.cardButton}>YES</Text>
                     </TouchableOpacity>
                 </View>
                 <View style={{borderRadius: 5, backgroundColor: Colors.black}}>
                     <TouchableOpacity onPress={closeModal}>
-                        <Text style={styles.button}>취소하기</Text>
+                        <Text style={styles.cardButton}>NO</Text>
                     </TouchableOpacity>
                 </View>
             </View>
@@ -813,21 +734,17 @@ const PartyDeleteConfirmCard = ({modalVisible, setModalVisible, deleteHandle})=>
     >
       <View style={styles.modalCardOverlay}>
           <View style={styles.modalCardView}>
-              <Text style={{fontSize: 20, textAlign: 'center', marginBottom: 12}}>
-                  등록된 파티를 삭제하시겠습니까??
-              </Text>
+              <Text style={{fontSize: 18, textAlign: 'center', marginBottom: 10}}>등록된 농구팟을 삭제하시겠습니까??</Text>
               {/* 추가적인 확인 모달의 내용 및 버튼 등을 여기에 추가 */}
               <View style={styles.buttonList}>
                     <View style={{borderRadius: 5, backgroundColor: Colors.mainRed}}>
-                    <TouchableOpacity onPress={async ()=>{
-                        await deleteHandle()
-                    }}>
-                        <Text style={styles.button}>삭제하기</Text>
+                    <TouchableOpacity onPress={async ()=>{await deleteHandle()}}>
+                        <Text style={styles.cardButton}>YES</Text>
                     </TouchableOpacity>
                 </View>
                 <View style={{borderRadius: 5, backgroundColor: Colors.black}}>
                     <TouchableOpacity onPress={closeModal}>
-                        <Text style={styles.button}>취소하기</Text>
+                        <Text style={styles.cardButton}>NO</Text>
                     </TouchableOpacity>
                 </View>
             </View>
@@ -837,288 +754,227 @@ const PartyDeleteConfirmCard = ({modalVisible, setModalVisible, deleteHandle})=>
   )
 }
 const styles = StyleSheet.create({
-  overlay: {
-    flex: 1,
-    backgroundColor: 'rgba(2, 2, 2, 0.5)',
-    justifyContent: 'flex-end',
-    alignItems: 'center',
-  },
-
-  modalView: {
-    width: '100%',
-    maxHeight: '90%',
-    backgroundColor: '#fff',
-    borderRadius: 18,
-    padding: 25,
-    paddingBottom: 90,
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    flexWrap: 'wrap',
-  },
-  modalHeader: {
-    display: 'flex',
-    flexDirection: 'row',
-    alignItems: 'center',
-    textAlign: 'left',
-    color: Colors.black,
-    width: '100%',
-    marginBottom: '9%',
-  },
-  modalHeaderText:{
-    fontSize: 18,
-    fontWeight: 'bold',
-  },
-  modalTitle: {
-    width: 280,
-    color: Colors.black,
-    fontSize: 30,
-    fontWeight: 'bold',
-  },
-
-  modalTitleRed : {
-    color: Colors.mainRed,
-  },
-
-  subContainer : {
-    margin : 10,
-    justifyContent : 'center',
+    overlay : {
+    flex : 1,
+    backgroundColor : 'rgba(2, 2, 2, 0.5)',
+    justifyContent : 'flex-end',
     alignItems : 'center',
   },
 
-  modalCreateTitle: {
-    width: 280,
-    color: Colors.black,
-    fontSize: 28,
-    fontWeight: 'bold',
-  },
-  modalCreateMiddle: {
-  width: 280,
-  marginBottom : 10,
-  color: Colors.black,
-  fontWeight: 'bold',
-  fontSize : 16,
-  },
-
-  modalTextRed : {
-    color : Colors.mainRed,
-    fontWeight: 'bold',
-    fontSize: 16,
-  },
-  input: {
-    width: 280,
-    padding : 15,
-    borderRadius : 5,
+  modalView : {
+    width : '100%',
+    maxHeight : '85%',
     backgroundColor : Colors.white,
-    marginBottom : 8,
+    borderRadius : 15,
+    padding : 25,
+    display : 'flex',
+    flexDirection : 'column',
+    alignItems : 'center',
+    flexWrap : 'wrap',
   },
-  determineText: {
-    fontWeight: 'bold',
-    color: Colors.black,
-    marginLeft: 3,
+
+  modalTitle : {
+    width : '90%',
+    color : Colors.black,
+    fontSize : 28,
+    fontWeight : 'bold',
   },
-  selectContainer : {
-    flexDirection : 'row',
-    justifyContent : 'space-between',
-    alignItems: 'center',
-  },
-  pickerContainer: {
-    backgroundColor: Colors.white,
-    borderRadius: 5,
-    padding: 20,
-    maxHeight: 300,
-    width: 200,
-  },
-  pickerItem: {
-    marginBottom : 10,
-  },
-  pickerItemText: {
-    textAlign: 'center',
-    fontSize: 20,
-  },
-  pickerUnderbar : {
-    marginTop : 10,
-    borderStyle : 'solid',
-    borderWidth : 0.5,
-    borderColor : Colors.gray
-  },
-  buttonList:{
-    width: 280,
-    marginTop: 10,
-    display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'center',
-    gap: 10,
-  },
-  button:{
-    paddingLeft: 40,
-    paddingRight: 40,
-    paddingTop: 17,
-    paddingBottom: 17,
-    color: Colors.white,
-    fontWeight: 'bold',
-    fontSize: 15,
-  },
-  cardButton:{
-    paddingLeft: 23,
-    paddingRight: 23,
-    paddingTop: 12,
-    paddingBottom: 12,
-    color: Colors.white,
-    fontWeight: 'bold',
-    fontSize: 12,
-  },
-  modalManualText :{
-    width: 280,
+
+  modalManualText : {
+    width : '90%',
     margin : 10,
-    color: Colors.black,
-    fontSize : 18,
+    color : Colors.black,
+    fontSize : 17,
   },
-  modalMiddleText: {
-    marginTop: 10,
-    marginBottom: 7,
-    width: 250,
-    fontSize: 17,
-    color: Colors.black,
-    textAlign: 'left',
+
+  modalMiddleText : {
+    width : '90%',
+    marginTop : 10,
+    marginBottom : 7,
+    fontSize : 15,
+    color : Colors.black,
+    textAlign : 'left',
   },
-  possessionPickerContainer: {
-    backgroundColor: Colors.white,
-    borderRadius: 5,
-    padding: 20,
-    maxHeight: 300,
-    width: 150,
+
+  input : {
+      width : '90%',
+      padding : 15,
+      borderRadius : 5,
+      backgroundColor : 'white',
+      marginBottom : 10,
   },
-  possessionOption: {
-    padding: 10,
-    justifyContent: 'center',
-    alignItems: 'center',
+
+  selectContainer : {
+      flexDirection : 'row',
+      justifyContent : 'space-between',
+      alignItems : 'center',
   },
-  possessionOptionText: {
-      fontSize: 18,
+
+  determineText : {
       fontWeight : 'bold',
+      color : Colors.black,
+      marginLeft : 3,
   },
-  modalMiddle : {
-    width : 260,
+
+  pickerContainer : {
+      width : '100%',
+      maxHeight : '85%',
+      backgroundColor : Colors.white,
+      borderRadius : 15,
+      padding : 30,
+  },
+
+  pickerItemText : {
+      textAlign : 'center',
+      fontSize : 20,
+  },
+
+  pickerUnderbar : {
+      margin : 25,
+      borderStyle : 'solid',
+      borderWidth : 0.5,
+      borderColor : Colors.gray
+  },
+
+  buttonList : {
+      width : '90%',
+      marginTop : 10,
+      display : 'flex',
+      flexDirection : 'row',
+      justifyContent : 'center',
+      gap : 10,
+  },
+
+  button : {
+      paddingLeft : 30,
+      paddingRight : 30,
+      paddingBottom : 15,
+      paddingTop : 15,
+      color : Colors.white,
+      fontWeight : 'bold',
+      fontSize : 16,
+  },
+
+  mercsCardContainer : {
+      width : '90%',
+      height : 500,
+      flexDirection : 'row',
+      justifyContent : 'space-between',
+      flexWrap : 'wrap',
+      marginLeft : 10,
+  },
+
+  mercenaryCard : {
+        width : '48%',
+        backgroundColor : 'white',
+        borderRadius : 5,
+        padding : 8,
+        marginBottom : 10,
+        flexDirection : 'column',
+        alignItems : 'center',
+        borderWidth : 1,
+  },
+
+  mercenaryText : {
+        fontSize : 15,
+        color : Colors.black,
+        marginTop : 8,
+        textAlign : 'center',
+  },
+
+  mercInviteCard : {
+        width : '100%',
+        padding : 15,
+        backgroundColor : 'white',
+        marginBottom : 10,
+        borderRadius : 5,
+        borderWidth : 1,
+  },
+
+  title : {
+        color : Colors.black,
+        fontSize : 17,
+        fontWeight : 'bold',
+        marginBottom : 10,
+  },
+
+  content : {
+        color : Colors.black,
+        fontSize : 15,
+        marginBottom : 8,
+  },
+
+  person : {
+        flexDirection : 'row',
+        alignItems : 'center',
+        marginTop : 15,
+  },
+
+  maxNum : {
+        width : 45,
+        fontSize : 15,
+        color : Colors.black,
+        textAlign : 'center',
+  },
+
+  noDataCard : {
+      width : '90%',
+      height : '30%',
+      justifyContent : 'center',
+      alignItems : 'center',
+      flexDirection : 'column',
+      marginTop : 30,
+  },
+
+    noDataText : {
+        textAlign : 'center',
+        fontSize : 17,
+        fontWeight : 'bold',
+        color : Colors.black,
+        marginTop : 15,
+    },
+
+  //카드 팝업 스타일
+  modalCardOverlay : {
+      flex : 1,
+      backgroundColor : 'rgba(2, 2, 2, 0.5)',
+      justifyContent : 'center',
+      alignItems : 'center',
+  },
+
+  modalCardView : {
+    width : '80%',
+    backgroundColor : Colors.white,
+    borderRadius : 8,
+    padding : 20,
     alignItems : 'center',
   },
-  mercsCardContainer:{
-    width: 330,
-    height: 600,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    flexWrap: 'wrap',
-    paddingHorizontal: 10, 
-  },
-  mercenaryCard: {
-    width: 150,
-    backgroundColor: 'white',
-    borderRadius: 5,
-    padding: 10,
-    marginBottom: 10,
-    flexDirection: 'column',
-    alignItems: 'center',
-    borderWidth: 1.5,
 
+  modalText : {
+     color : Colors.black,
+     fontSize : 17,
+     textAlign : 'center',
+     fontWeight : 'bold',
+  } ,
+
+  modalMiddle : {
+     width : '90%',
+     alignItems : 'center',
   },
-  mercContainer : {
-    padding: 4,
-  },
-  mercenaryName: {
-      fontSize: 20,
-      fontWeight: 'bold',
-      color: Colors.mainRed,
-      marginBottom : 5,
-      textAlign: 'center',
-  },
-  mercenaryDetail: {
-      fontSize: 18,
-      color: Colors.black,
-      marginTop : 6,
-      textAlign: 'center',
-  },
-  mercInviteCard : {
-    width: 280,
-    marginTop: 8,
-    padding: 14,
-    backgroundColor: 'white',
-    borderRadius: 5,
-    marginBottom: 10,
-    borderWidth: 1,
-},
-  cardContentContainer: {
-    
-  },
-  cardTextContainer: {
-    width : 195,
-    marginLeft: 10,
-  },
-  cardTitleContainer : {
-    width: 240,
-    display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-  },
-  cardTitleText: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    color: Colors.black,
-    marginBottom: 5,
-  },
-  titleUnderbar : {
-      borderStyle : 'solid',
-      borderTopWidth : 1.5,
-      borderTopColor : Colors.mainRed,
-  },
-  cardContent: {
-      marginTop: 5,
-  },
-  cardContentText: {
-      fontSize: 14,
-      color: Colors.black,
-      marginBottom : 5,
-  },
-  cardContentLabel : {
-      fontSize : 15,
-      fontWeight : 'bold',
-  },
-  card: {
-    backgroundColor: Colors.white,
-    borderRadius: 5,
-    width: 230,
-    height: 180,
-    marginRight: 10,
-    padding: 8,
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  noDataText: {
-    textAlign: 'center',
-    fontSize: 16,
-    fontWeight: 'bold',
-  },
-  //카드 팝업 스타일
-  modalCardOverlay: {
-    flex: 1,
-    backgroundColor: 'rgba(2, 2, 2, 0.5)',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  modalCardView: {
-    width : 290,
-    backgroundColor: Colors.white,
-    borderRadius: 8,
-    padding: 20,
-    alignItems: 'center',
-  },
-  modalLabel: {
-    fontSize: 16,
-    color: Colors.black,
-    fontWeight:'bold',
-  },
+
   modalContent: {
       fontSize: 15,
       marginBottom: 5,
+  },
+
+  cardButton:{
+      paddingLeft: 23,
+      paddingRight: 23,
+      paddingTop: 10,
+      paddingBottom: 10,
+      color: Colors.white,
+      fontWeight: 'bold',
+      fontSize: 12,
   },
 })
 
